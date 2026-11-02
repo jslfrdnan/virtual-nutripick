@@ -1,0 +1,8 @@
+newmtl BananaSkin
+Ka 0.150 0.120 0.020
+Kd 0.950 0.720 0.100
+Ks 0.250 0.220 0.120
+Ns 45.0
+d 1.0
+illum 2
+map_Kd banana_skin.png
