@@ -15,6 +15,7 @@ namespace NutriPick.Flow
     public class LevelFlowController : MonoBehaviour
     {
         public LevelDefinition level;
+        public string firstSceneName = "MainVR";
         public NutritionRules rules;
         public PlateController plate;
         public FoodStand[] stands;
@@ -286,7 +287,7 @@ namespace NutriPick.Flow
         {
             if (GameSession.Instance != null)
                 GameSession.Instance.ResetSession();
-            SceneLoader.Load("Level01_Warteg");
+            SceneLoader.Load(firstSceneName);
         }
 
         private void Pause(bool force, string message)

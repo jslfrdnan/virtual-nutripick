@@ -13,7 +13,7 @@ namespace NutriPick.Editor
     {
         private static readonly string[] Scenes =
         {
-            "Assets/Scenes/Level01_Warteg.unity",
+            "Assets/Scenes/MainVR.unity",
             "Assets/Scenes/Level02_Padang.unity",
             "Assets/Scenes/Level03_Bazaar.unity"
         };
@@ -79,6 +79,12 @@ namespace NutriPick.Editor
                 {
                     Debug.LogError($"[NutriPick] {path}: no main camera");
                     continue;
+                }
+
+                if (path.Contains("MainVR"))
+                {
+                    camera.transform.position = new Vector3(0f, 4f, -0.5f);
+                    camera.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
                 }
 
                 var rt = new RenderTexture(1280, 720, 24);

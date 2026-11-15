@@ -225,7 +225,7 @@ flowchart LR
 
 | Level | Scene | Foods | Min items | Drink | Min stands | Final |
 |-------|-------|------:|----------:|-------|-----------:|-------|
-| 1 | `Level01_Warteg` | 8 | 3 | No | 1 | No |
+| 1 | `MainVR` | 8 | 3 | No | 1 | No |
 | 2 | `Level02_Padang` | 7 | 3 | No | 1 | No |
 | 3 | `Level03_Bazaar` | 8 | 4 | Yes | 4 | Yes |
 

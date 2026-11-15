@@ -99,8 +99,7 @@ Assets/
 │   ├── Environment/              # FoodStand, BazaarStand, Canopy
 │   └── UI/                       # HUD, InfoCard, Report, Recap
 ├── Scenes/
-│   ├── MainVR.unity              # sandbox, not in build settings
-│   ├── Level01_Warteg.unity
+│   ├── MainVR.unity              # Level 1 tabletop scene (existing mockup)
 │   ├── Level02_Padang.unity
 │   └── Level03_Bazaar.unity
 ├── ScriptableObjects/
@@ -171,7 +170,7 @@ Fix the project and establish the gamepad-first input and HUD foundation.
 - Verify the Rexus gamepad is detected as a standard gamepad; test left stick, right stick, A/B/X, Start, and Select. If it is not detected, verify the fallback keyboard/mouse bindings and document the device name.
 - Configure the PC quality level: MSAA 4x, HDR off, render scale 1.0.
 - Confirm TextMeshPro essentials are imported and LiberationSans SDF renders Indonesian text.
-- Create empty `Level01_Warteg`, `Level02_Padang`, and `Level03_Bazaar` scenes and add them to Build Settings.
+- Keep the existing `MainVR` tabletop scene as Level 1, create `Level02_Padang` and `Level03_Bazaar`, and add `MainVR`, `Level02_Padang`, `Level03_Bazaar` to Build Settings in that order.
 - **Exit criteria**: project compiles with zero errors; input actions and the screen-space HUD skeleton exist; the Rexus gamepad is detected and the fallback bindings are verified; all three level scenes open. The player rig is created in M2 (US1).
 
 ### M1 — Nutrition Core
@@ -205,8 +204,8 @@ Build the loop with placeholder art if necessary.
 
 Make the first real level.
 
-- Build the warteg environment from `warteg_stall.fbx`, `display_counter.fbx`, `wooden_table.fbx`, and `wooden_chair.fbx`.
-- Add the eight Level 1 foods: rice, boiled egg, fried egg, tempeh, broccoli, banana, fried noodles, crackers. Use a placeholder rice prefab until the asset team delivers the final asset.
+- Use the existing `MainVR` tabletop mockup as Level 1: keep the table and decorative plates, use the empty `ceramic_plate (3)` as the serving `Plate`, and add a table-surface collider so the interactive food rests on the table.
+- Add the eight interactive Level 1 foods on the table: rice, boiled egg, fried egg, tempeh, broccoli, banana, fried noodles, crackers. Use a placeholder rice prefab until the asset team delivers the final asset.
 - Lay out the counter, plate, HUD, info card, and serve station for comfortable first-person reach.
 - Implement the Health Balance Bar and food information card (US2/US3): preview/final animation, counts, compact/full card, and inspect.
 - Wire the placeholder report and verify the Level 1 end-to-end loop; the full report content is implemented in M5 (US4).

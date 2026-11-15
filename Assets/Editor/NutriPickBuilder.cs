@@ -99,7 +99,7 @@ namespace NutriPick.Editor
 
             AssetDatabase.SaveAssets();
 
-            var level1 = CreateLevel("level_01_warteg", "Level 1 — Warteg", "Level01_Warteg", "Level02_Padang", 1,
+            var level1 = CreateLevel("level_01_warteg", "Level 1 — Warteg", "MainVR", "Level02_Padang", 1,
                 "Sarapan di warteg", new[] { "nasi_putih", "telur_rebus", "telur_ceplok", "tempe", "brokoli", "pisang", "mie_goreng", "kerupuk" },
                 3, false, 1, false, new[] { "piring dasar", "pilih sayur dan protein" }, foods);
             var level2 = CreateLevel("level_02_padang", "Level 2 — Padang", "Level02_Padang", "Level03_Bazaar", 2,
@@ -117,14 +117,13 @@ namespace NutriPick.Editor
             var standPrefab = CreateFoodStand();
             var servePrefab = CreateServeStation();
 
-            CreateLevelScene(level1, rules, foods, playerPrefab, hudPrefab, platePrefab, standPrefab, servePrefab);
             CreateLevelScene(level2, rules, foods, playerPrefab, hudPrefab, platePrefab, standPrefab, servePrefab);
             CreateLevelScene(level3, rules, foods, playerPrefab, hudPrefab, platePrefab, standPrefab, servePrefab);
 
             AddScenesToBuildSettings();
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            Debug.Log("[NutriPick] Build complete: 14 foods, 3 levels, 3 scenes.");
+            Debug.Log("[NutriPick] Build complete: 14 foods, 3 levels (MainVR + 2 generated scenes).");
         }
 
         [MenuItem("NutriPick/Build Windows")]
@@ -135,7 +134,7 @@ namespace NutriPick.Editor
             {
                 scenes = new[]
                 {
-                    $"{SceneFolder}/Level01_Warteg.unity",
+                    $"{SceneFolder}/MainVR.unity",
                     $"{SceneFolder}/Level02_Padang.unity",
                     $"{SceneFolder}/Level03_Bazaar.unity"
                 },
@@ -1133,7 +1132,7 @@ namespace NutriPick.Editor
         {
             EditorBuildSettings.scenes = new[]
             {
-                new EditorBuildSettingsScene($"{SceneFolder}/Level01_Warteg.unity", true),
+                new EditorBuildSettingsScene($"{SceneFolder}/MainVR.unity", true),
                 new EditorBuildSettingsScene($"{SceneFolder}/Level02_Padang.unity", true),
                 new EditorBuildSettingsScene($"{SceneFolder}/Level03_Bazaar.unity", true)
             };

@@ -42,7 +42,7 @@ Integration requirements are in `content/food-catalog.md`. Placeholder tasks: T0
 - [X] T004 [P] Create `Assets/Scripts/NutriPick.Runtime.asmdef`, `Assets/Editor/NutriPick.Editor.asmdef`, and `Assets/Tests/EditMode/NutriPick.Tests.EditMode.asmdef`; reference the runtime assembly from the editor and test assemblies.
 - [X] T005 [P] Create `Assets/Input/NutriPick.inputactions` with `Gameplay` and `Menu` action maps: left stick move, right stick look, A interact, B cancel, X inspect, Start serve, Select pause, D-pad/left stick navigate.
 - [X] T006 [P] Configure the PC quality level in `ProjectSettings/QualitySettings.asset`: MSAA 4x, HDR off, render scale 1.0; import TMP Essentials if `Assets/TextMesh Pro/Resources/TMP Settings.asset` is missing.
-- [X] T007 [P] Create empty scenes `Assets/Scenes/Level01_Warteg.unity`, `Assets/Scenes/Level02_Padang.unity`, and `Assets/Scenes/Level03_Bazaar.unity`; add them to Build Settings in that order; keep `MainVR` and `SampleScene` out.
+- [X] T007 [P] Keep `Assets/Scenes/MainVR.unity` as Level 1; create `Assets/Scenes/Level02_Padang.unity` and `Assets/Scenes/Level03_Bazaar.unity`; add `MainVR`, `Level02_Padang`, `Level03_Bazaar` to Build Settings in that order.
 - [X] T008 [P] Create `Assets/Scripts/UI/LevelTimerDisplay.cs`, `Assets/Scripts/UI/InteractionPrompt.cs`, and `Assets/Prefabs/UI/HUD.prefab` as a screen-space canvas at 1920×1080 with an EventSystem and `InputSystemUIInputModule`; add the center reticle, timer, bar, prompt, and info-card anchors.
 
 **Checkpoint**: Project compiles with Unity 6000.6.0f1 and the input/HUD skeleton exists.
@@ -95,7 +95,7 @@ Integration requirements are in `content/food-catalog.md`. Placeholder tasks: T0
 - [X] T033 [P] [US1] Create 5 placeholder food prefabs in `Assets/Prefabs/Food/` for `nasi_putih`, `kerupuk`, `sayur_singkong`, `air_putih`, and `teh_manis`; use primitive shapes with the same `FoodData`, collider, and pivot contract. Assign each placeholder to the matching `FoodData.prefab` field.
 - [X] T034 [US1] Create `Assets/Prefabs/Interaction/Plate.prefab` with four `PlateSlot` triggers, a `PlateController`, and a visible slot-highlight ring.
 - [X] T035 [P] [US1] Create `Assets/Prefabs/Environment/FoodStand.prefab` and `Assets/Prefabs/Interaction/ServeStation.prefab`.
-- [X] T036 [US1] Build `Assets/Scenes/Level01_Warteg.unity` with the warteg environment, `PlayerRig`, HUD, one `FoodStand`, plate, serve station, and lighting; configure `LD_Level01_Warteg` and spawn the 8 Level 1 foods.
+- [X] T036 [US1] Wire `Assets/Scenes/MainVR.unity` as Level 1: use the existing tabletop mockup, rename the empty `ceramic_plate (3)` to `Plate` with four slots, add the PlayerRig components, HUD, serve station, and 8 interactive Level 1 foods; configure `LD_Level01_Warteg` with `sceneName = MainVR`.
 - [X] T037 [US1] Implement serve gating, the "Tambahkan X makanan lagi" prompt, the 180-second timer, and the full time-out flow in `LevelFlowController`: at 0 s auto-serve if the minimum is met; otherwise enter a 30 s grace state with a visible countdown; at grace end auto-serve with `isIncomplete = true` and the "Piring belum lengkap" warning; if the plate is empty at grace end, reload the level without recording a result. Force-return any carried item to its stand before evaluation. Wire the timer to `LevelTimerDisplay` and the prompts to `InteractionPrompt`. Create `Assets/Prefabs/UI/PlaceholderReport.prefab`.
 - [ ] T038 [US1] Validate V1–V4 in `quickstart.md` with the Rexus gamepad: empty plate gate, move/look/reticle, pick/carry/place, drop, and serve.
 
@@ -132,7 +132,7 @@ Integration requirements are in `content/food-catalog.md`. Placeholder tasks: T0
 
 - [X] T045 [P] [US3] Create `Assets/Scripts/UI/FoodInfoCardPresenter.cs`; subscribe to `ReticleInteractor` hover, pick, and inspect events; show compact and full states.
 - [X] T046 [P] [US3] Create `Assets/Prefabs/UI/FoodInfoCard.prefab` with the compact label and full card; include name, portion, badge, calories, protein, fiber, added sugar, sodium, description, and "Nilai gizi adalah perkiraan."
-- [X] T047 [US3] Wire `ReticleInteractor` hover/pick/inspect/cancel events to `FoodInfoCardPresenter` in `Level01_Warteg` and the HUD prefab.
+- [X] T047 [US3] Wire `ReticleInteractor` hover/pick/inspect/cancel events to `FoodInfoCardPresenter` in `MainVR` and the HUD prefab.
 - [X] T048 [US3] Implement Indonesian nutrition formatting (comma decimals, "g", "mg", "kkal"), card positioning on the left, 0.2 s dismissal, and supportive copy in `FoodInfoCardPresenter`.
 - [ ] T049 [US3] Validate V6 in `quickstart.md`: compact label, full card, inspect without pickup, dismissal, and no overlap with the reticle or plate.
 
@@ -289,11 +289,11 @@ Task: "Create Assets/Prefabs/UI/HealthReport.prefab and Assets/Prefabs/UI/Recap.
 
 ## Implementation Notes (2026-11-16)
 
-- Implemented the runtime scripts, editor builder, 14 `FoodData` assets, 14 food prefabs, HUD, plate, stands, serve station, and the three level scenes.
+- Implemented the runtime scripts, editor builder, 14 `FoodData` assets, 14 food prefabs, HUD, plate, stands, serve station, and the three level scenes. **Level 1 is the existing `MainVR` tabletop scene**; `ceramic_plate (3)` is now the serving `Plate`, with a table-surface collider and 8 interactive foods.
 - **EditMode tests**: 22/22 passed.
 - **PlayMode smoke tests**: 4/4 passed (Level 1 spawn/wiring, plate-and-serve loop, Level 3 four-stand/drink setup, camera preview).
 - **Content validation**: `NutriPick/Validate All` and `NutriPick/Validate Scenes` passed.
-- **Windows build**: `Builds/Windows/NutriPick.exe` built successfully (about 146 MB).
+- **Windows build**: `Builds/Windows/NutriPick.exe` built successfully (about 147 MB). Build Settings order is `MainVR`, `Level02_Padang`, `Level03_Bazaar`.
 - **Input**: `GamepadInput` uses direct Input System polling; `Assets/Input/NutriPick.inputactions` is a documentation/remapping asset and is not required at runtime.
 - **Team assets**: the five missing foods and bazaar stand/canopy pieces are still placeholders; integration remains T057.
 - **Completion**: 63 of 71 tasks complete.

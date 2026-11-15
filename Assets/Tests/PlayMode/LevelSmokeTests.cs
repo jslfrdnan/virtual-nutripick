@@ -1,5 +1,4 @@
 using System.Collections;
-using System.IO;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,6 +6,7 @@ using UnityEngine.TestTools;
 using NutriPick.Content;
 using NutriPick.Flow;
 using NutriPick.Interaction;
+using NutriPick.Player;
 
 namespace NutriPick.Tests
 {
@@ -20,15 +20,17 @@ namespace NutriPick.Tests
         }
 
         [UnityTest]
-        public IEnumerator Level01SpawnsFoodAndWiresHud()
+        public IEnumerator MainVRSpawnsFoodAndWiresHud()
         {
-            SceneManager.LoadScene("Level01_Warteg");
+            SceneManager.LoadScene("MainVR");
             yield return null;
             yield return null;
 
-            var stands = Object.FindObjectsByType<FoodStand>(FindObjectsSortMode.None);
-            Assert.AreEqual(1, stands.Length, "Level 1 should have one stand.");
-            Assert.AreEqual(8, stands[0].Spawned.Count, "Level 1 should spawn 8 foods.");
+            var foods = Object.FindObjectsByType<FoodItem>(FindObjectsSortMode.None);
+            Assert.AreEqual(8, foods.Length, "MainVR should have 8 interactive foods.");
+            yield return new WaitForSeconds(0.5f);
+            foreach (var food in foods)
+                Assert.Greater(food.transform.position.y, 1.2f, "Food fell through the table.");
 
             var plate = Object.FindFirstObjectByType<PlateController>();
             Assert.IsNotNull(plate, "PlateController missing.");
@@ -46,23 +48,22 @@ namespace NutriPick.Tests
         }
 
         [UnityTest]
-        public IEnumerator Level01CanPlateAndServe()
+        public IEnumerator MainVRCanPlateAndServe()
         {
-            SceneManager.LoadScene("Level01_Warteg");
+            SceneManager.LoadScene("MainVR");
             yield return null;
             yield return null;
 
-            var stands = Object.FindObjectsByType<FoodStand>(FindObjectsSortMode.None);
+            var foods = Object.FindObjectsByType<FoodItem>(FindObjectsSortMode.None);
             var plate = Object.FindFirstObjectByType<PlateController>();
             var flow = Object.FindFirstObjectByType<LevelFlowController>();
-            Assert.IsNotNull(stands, "No stands.");
+            Assert.IsNotNull(foods, "No food.");
             Assert.IsNotNull(plate, "No plate.");
             Assert.IsNotNull(flow, "No flow.");
 
-            var spawned = stands[0].Spawned;
-            Assert.GreaterOrEqual(spawned.Count, 3, "Not enough food spawned.");
+            Assert.GreaterOrEqual(foods.Length, 3, "Not enough interactive food.");
             for (int i = 0; i < 3; i++)
-                Assert.IsTrue(plate.slots[i].TryPlace(spawned[i]), "Could not place food " + i);
+                Assert.IsTrue(plate.slots[i].TryPlace(foods[i]), "Could not place food " + i);
 
             yield return null;
             Assert.AreEqual(3, plate.Count, "Plate should contain 3 items.");
@@ -72,36 +73,6 @@ namespace NutriPick.Tests
             Assert.IsTrue(flow.IsReportOpen, "Report did not open.");
             Assert.IsNotNull(GameSession.Instance.GetResult(1), "Level 1 result was not recorded.");
             Assert.IsTrue(flow.report.root.activeSelf, "Report panel is not active.");
-        }
-
-        [UnityTest]
-        public IEnumerator CapturePlayModeCamera()
-        {
-            SceneManager.LoadScene("Level01_Warteg");
-            yield return null;
-            yield return null;
-            yield return new WaitForSeconds(0.5f);
-
-            var camera = Camera.main;
-            Assert.IsNotNull(camera, "No main camera.");
-            var rt = new RenderTexture(1280, 720, 24);
-            camera.targetTexture = rt;
-            camera.Render();
-            RenderTexture.active = rt;
-            var texture = new Texture2D(1280, 720, TextureFormat.RGB24, false);
-            texture.ReadPixels(new Rect(0, 0, 1280, 720), 0, 0);
-            texture.Apply();
-            RenderTexture.active = null;
-            camera.targetTexture = null;
-
-            var directory = Path.Combine(Path.GetTempPath(), "opencode");
-            Directory.CreateDirectory(directory);
-            var path = Path.Combine(directory, "playmode-camera-Level01.png");
-            File.WriteAllBytes(path, texture.EncodeToPNG());
-            Object.Destroy(texture);
-            rt.Release();
-            Object.Destroy(rt);
-            Assert.IsTrue(File.Exists(path), "Camera preview was not written.");
         }
 
         [UnityTest]

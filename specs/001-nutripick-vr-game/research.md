@@ -55,7 +55,7 @@ This document records the technical decisions that shape the plan. Each decision
 
 **Scene names** (must be in Build Settings, in this order):
 
-1. `Assets/Scenes/Level01_Warteg.unity`
+1. `Assets/Scenes/MainVR.unity` (existing tabletop mockup)
 2. `Assets/Scenes/Level02_Padang.unity`
 3. `Assets/Scenes/Level03_Bazaar.unity`
 

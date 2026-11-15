@@ -8,7 +8,7 @@ This contract defines scene names, the persistent session, the per-level state m
 
 | Order | Scene path | Level | Final |
 |------:|------------|-------|-------|
-| 1 | `Assets/Scenes/Level01_Warteg.unity` | 1 — Warteg breakfast | No |
+| 1 | `Assets/Scenes/MainVR.unity` | 1 - Warteg breakfast | No |
 | 2 | `Assets/Scenes/Level02_Padang.unity` | 2 — Padang lunch | No |
 | 3 | `Assets/Scenes/Level03_Bazaar.unity` | 3 — Bazaar dinner | Yes |
 
@@ -171,7 +171,7 @@ The bazaar path must be at least 1.2 m wide, with no collider blocking the playe
 
 Build Settings scene order must be:
 
-1. `Level01_Warteg`
+1. `MainVR`
 2. `Level02_Padang`
 3. `Level03_Bazaar`
 

@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Level01_Warteg.unity
-    guid: f47df7a935c04b242aa67188a1ae5272
+    path: Assets/Scenes/MainVR.unity
+    guid: 0ff241830396f64429dcdf243582a081
   - enabled: 1
     path: Assets/Scenes/Level02_Padang.unity
     guid: c99e2a976aead834b91cffa4019fd4d0

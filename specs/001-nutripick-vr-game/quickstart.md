@@ -26,9 +26,9 @@ This guide proves the gamepad-first build works end-to-end. It is a validation g
    - an EventSystem with `InputSystemUIInputModule`,
    - the test food/plate props.
 5. Press **Play** and confirm the gamepad is detected. If not, check the Input System debugger and the fallback keyboard/mouse bindings.
-6. Open `Assets/Scenes/Level01_Warteg.unity`.
+6. Open `Assets/Scenes/MainVR.unity` (Level 1). The existing `ceramic_plate (3)` object is now the serving `Plate`.
 7. Confirm Build Settings contains, in order:
-   - `Level01_Warteg`
+   - `MainVR`
    - `Level02_Padang`
    - `Level03_Bazaar`
 8. Press **Play** and run the Level 1 validation scenario.

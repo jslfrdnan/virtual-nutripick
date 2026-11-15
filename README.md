@@ -2,7 +2,7 @@
 
 NutriPick VR is an educational first-person nutrition game built in Unity 6. The player uses a **Rexus gamepad** to move, aim a reticle, pick up food, plate it, and serve a meal. A live Health Balance Bar and food information cards teach balanced choices across three levels:
 
-1. **Warteg** — breakfast
+1. **Warteg** — breakfast, built from the existing `MainVR` tabletop scene
 2. **RM Padang** — lunch
 3. **Bazaar** — dinner with four food stands
 
@@ -28,17 +28,19 @@ NutriPick VR is an educational first-person nutrition game built in Unity 6. The
 ## Open and Run
 
 1. Open the project with Unity 6000.6.0f1.
-2. Open `Assets/Scenes/Level01_Warteg.unity`.
+2. Open `Assets/Scenes/MainVR.unity`.
 3. Press **Play**.
 4. The game starts at Level 1. Complete the plate and serve; use the report buttons to retry, continue, or view the recap after Level 3.
 
-Build Settings contains exactly the three level scenes, in order. `MainVR.unity` is a sandbox and is not in the build.
+Build Settings contains exactly `MainVR`, `Level02_Padang`, and `Level03_Bazaar`, in that order. `MainVR` is the existing tabletop mockup; the `ceramic_plate (3)` object is now the serving `Plate`. `Level01_Warteg.unity` is an optional generated fallback and is not in the build.
 
 ## Generate or Refresh Content
 
 The project includes an editor builder that creates the ScriptableObjects, food prefabs, HUD, plate, stands, serve station, and the three level scenes:
 
-- Menu: **NutriPick → Build All**
+- Menu: **NutriPick → Build All** (generates foods, Level 2, Level 3)
+- Menu: **NutriPick → Build MainVR Level 1** (wires the existing tabletop scene)
+- Menu: **NutriPick → Fix MainVR Table Surface**
 - Menu: **NutriPick → Validate All**
 - Menu: **NutriPick → Validate Scenes**
 - Menu: **NutriPick → Capture Scene Previews**
@@ -49,7 +51,7 @@ The Windows build is written to `Builds/Windows/NutriPick.exe`.
 ## Tests
 
 - **EditMode**: 22 tests covering classification, meal evaluation, session state, and level validation.
-- **PlayMode**: 4 tests covering Level 1 food spawning/HUD wiring, the plate-and-serve loop, Level 3 four-stand/drink setup, and a camera preview capture.
+- **PlayMode**: 4 tests covering MainVR food spawning/HUD wiring, the MainVR plate-and-serve loop, Level 2 food spawning, and Level 3 four-stand/drink setup.
 
 Run them from **Window → General → Test Runner**, or headlessly:
 

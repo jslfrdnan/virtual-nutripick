@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.Content.LevelDefinition
   levelId: level_01_warteg
   displayName: "Level 1 \u2014 Warteg"
-  sceneName: Level01_Warteg
+  sceneName: MainVR
   nextSceneName: Level02_Padang
   levelIndex: 1
   settingDescription: Sarapan di warteg
