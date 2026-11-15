@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6456850054ca5674fb421d28d772767e, type: 3}
+  m_Name: NutritionRules
+  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.Nutrition.NutritionRules
+  itemWeight: 0.5
+  compositionWeight: 0.5
+  fiberTargetGrams: 8
+  proteinTargetGrams: 20
+  sugarTargetGrams: 15
+  sodiumTargetMg: 600
+  fiberWeight: 0.15
+  proteinWeight: 0.15
+  sugarWeight: 0.2
+  sodiumWeight: 0.15
+  processingWeight: 0.1
+  friedWeight: 0.05
+  unsweetenedDrinkBonus: 0.15
+  itemHealthMin: 0.05
+  itemHealthMax: 0.95
+  coreWeight: 0.7
+  varietyWeight: 0.3
+  missingCorePenalty: 0.15
+  emptyPlateValue: 50
+  healthySugarMax: 10
+  healthySodiumMax: 500
+  healthyDrinkSugarMax: 5
+  proteinStrengthMin: 20
+  fiberStrengthMin: 6
+  sugarStrengthMax: 5
+  sodiumStrengthMax: 600
+  varietyStrengthMin: 4
+  improvementSugarMax: 10
+  improvementSodiumMax: 800
+  improvementProteinMin: 15
+  improvementFiberMin: 5
+  calorieHigh: 800
+  energyLow: 400
+  energyHigh: 700
+  focusProteinMin: 20
+  focusFiberMin: 6
+  focusSugarMax: 10
+  longTermFiberMin: 6
+  longTermSodiumMax: 600
+  longTermUltraMax: 1
+  longTermSodiumHigh: 1000
+  longTermUltraHigh: 2
+  longTermSugarHigh: 20
+  bands:
+  - min: 0
+    max: 39
+    band: 1
+    label: Perlu perbaikan
+    color: {r: 0.776, g: 0.157, b: 0.157, a: 1}
+  - min: 40
+    max: 69
+    band: 2
+    label: Cukup
+    color: {r: 0.976, g: 0.659, b: 0.145, a: 1}
+  - min: 70
+    max: 100
+    band: 3
+    label: Seimbang
+    color: {r: 0.18, g: 0.49, b: 0.196, a: 1}

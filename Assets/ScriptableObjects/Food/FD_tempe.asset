@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d4b5ab6cca88af4cbf0a87068b95529, type: 3}
+  m_Name: FD_tempe
+  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.Nutrition.FoodData
+  id: tempe
+  displayName: Tempe
+  description: Protein nabati dari kedelai, kaya serat dan zat besi. Pilih yang tidak terlalu banyak minyak.
+  composition: 2
+  processing: 1
+  isFried: 0
+  isDrink: 0
+  healthyOverride: 0
+  calories: 100
+  protein: 9
+  carbs: 4
+  fat: 6
+  fiber: 1.5
+  addedSugar: 0
+  sodium: 120
+  portionLabel: 50 g
+  icon: {fileID: 0}
+  prefab: {fileID: 8092900662316202209, guid: 7244b51ae8845134cbab872828b78588, type: 3}

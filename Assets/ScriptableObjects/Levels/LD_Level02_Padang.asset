@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38e42016aaae29f4eb9f72aee723f326, type: 3}
+  m_Name: LD_Level02_Padang
+  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.Content.LevelDefinition
+  levelId: level_02_padang
+  displayName: "Level 2 \u2014 Padang"
+  sceneName: Level02_Padang
+  nextSceneName: Level03_Bazaar
+  levelIndex: 2
+  settingDescription: Makan siang di RM Padang
+  foodPool:
+  - {fileID: 11400000, guid: 357913ed32c4a134ea49e0ed16815ffb, type: 2}
+  - {fileID: 11400000, guid: f0b5a3980fba9ce439ac8eea306afc50, type: 2}
+  - {fileID: 11400000, guid: c8a0304d4ab792a4e9dd67f109ac4429, type: 2}
+  - {fileID: 11400000, guid: aa184732c302f99408bb00fded512297, type: 2}
+  - {fileID: 11400000, guid: 9aba7825da2a7b34aaf81ddf26ab09b7, type: 2}
+  - {fileID: 11400000, guid: 5dd1324f666d9fc4a881907b37eaf98e, type: 2}
+  - {fileID: 11400000, guid: b26e4c0a5e6f2a544aed9ff3a49fa3f0, type: 2}
+  minItems: 3
+  requiresDrink: 0
+  minimumStands: 1
+  timeLimitSeconds: 180
+  graceSeconds: 30
+  isFinalLevel: 0
+  learningFocus:
+  - porsi
+  - lemak
+  - natrium

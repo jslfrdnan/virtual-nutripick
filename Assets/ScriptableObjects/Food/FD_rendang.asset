@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d4b5ab6cca88af4cbf0a87068b95529, type: 3}
+  m_Name: FD_rendang
+  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.Nutrition.FoodData
+  id: rendang
+  displayName: Rendang
+  description: Protein dan rempah yang kaya rasa, tetapi tinggi lemak dan natrium. Cocok dalam porsi kecil.
+  composition: 2
+  processing: 1
+  isFried: 0
+  isDrink: 0
+  healthyOverride: 0
+  calories: 250
+  protein: 15
+  carbs: 5
+  fat: 19
+  fiber: 1
+  addedSugar: 2
+  sodium: 600
+  portionLabel: 100 g
+  icon: {fileID: 0}
+  prefab: {fileID: 5338048204723479014, guid: f60f2f8e44314b143a42587230c04d6b, type: 3}

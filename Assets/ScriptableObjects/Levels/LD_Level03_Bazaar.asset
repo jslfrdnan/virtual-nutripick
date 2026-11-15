@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38e42016aaae29f4eb9f72aee723f326, type: 3}
+  m_Name: LD_Level03_Bazaar
+  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.Content.LevelDefinition
+  levelId: level_03_bazaar
+  displayName: "Level 3 \u2014 Bazaar"
+  sceneName: Level03_Bazaar
+  nextSceneName: 
+  levelIndex: 3
+  settingDescription: Makan malam di bazaar
+  foodPool:
+  - {fileID: 11400000, guid: 16a254eb98f70d442a7460d4624b7e15, type: 2}
+  - {fileID: 11400000, guid: 7f5912e29c707184cba9bdd549cb2614, type: 2}
+  - {fileID: 11400000, guid: 9aba7825da2a7b34aaf81ddf26ab09b7, type: 2}
+  - {fileID: 11400000, guid: 6db1d7fc5c135a14eba4c643e22f0b8f, type: 2}
+  - {fileID: 11400000, guid: 5dd1324f666d9fc4a881907b37eaf98e, type: 2}
+  - {fileID: 11400000, guid: 4374dc21b8b4c1f4eb12dae00ca41225, type: 2}
+  - {fileID: 11400000, guid: 236b20001e907004e8a52e8e4e0898d4, type: 2}
+  - {fileID: 11400000, guid: 590222e25910c1441863f4decb7399a0, type: 2}
+  minItems: 4
+  requiresDrink: 1
+  minimumStands: 4
+  timeLimitSeconds: 180
+  graceSeconds: 30
+  isFinalLevel: 1
+  learningFocus:
+  - variasi
+  - minuman manis

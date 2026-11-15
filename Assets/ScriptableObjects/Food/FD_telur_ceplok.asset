@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d4b5ab6cca88af4cbf0a87068b95529, type: 3}
+  m_Name: FD_telur_ceplok
+  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.Nutrition.FoodData
+  id: telur_ceplok
+  displayName: Telur ceplok
+  description: Protein baik, tetapi digoreng sehingga lemak dan kalorinya lebih tinggi.
+  composition: 2
+  processing: 1
+  isFried: 1
+  isDrink: 0
+  healthyOverride: 0
+  calories: 110
+  protein: 6.5
+  carbs: 0.5
+  fat: 8.5
+  fiber: 0
+  addedSugar: 0
+  sodium: 170
+  portionLabel: 1 butir (60 g)
+  icon: {fileID: 0}
+  prefab: {fileID: 2065860473552233540, guid: e91a20a5c52106d4d845ea31bd96c820, type: 3}

@@ -31,7 +31,8 @@
 
 ## Notes
 
-- Platform constraints (existing Unity VR project, Blender-sourced models, desktop simulator) are recorded only in **Assumptions** and **Dependencies**, where they belong. Functional requirements stay technology-agnostic.
-- The spec resolves the source document's open "specified time" detail with a configurable three-minute per-level timer and a no-fail auto-serve rule (FR-026 to FR-028).
+- Platform constraints (existing Unity project, Rexus gamepad, Blender-sourced models, Windows PC) are recorded only in **Assumptions** and **Dependencies**, where they belong. Functional requirements stay technology-agnostic.
+- The spec resolves the source document's open "specified time" detail with a configurable three-minute per-level timer and a no-fail auto-serve rule (FR-031 to FR-033).
 - The single 0–100 Health Balance Bar plus healthy/less healthy counts reconciles the user's "status bar" request with the existing interaction plan's nutrition score.
-- All items pass. The spec is ready for `/speckit.clarify` (optional) or `/speckit.plan`.
+- Level 3 is a bazaar with four stands; the eight-food pool is distributed across Mie & Jajanan, Lauk, Sayur & Buah, and Minuman.
+- All items pass. The spec is ready for `/speckit.plan`.

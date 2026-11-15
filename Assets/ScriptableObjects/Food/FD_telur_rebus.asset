@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d4b5ab6cca88af4cbf0a87068b95529, type: 3}
+  m_Name: FD_telur_rebus
+  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.Nutrition.FoodData
+  id: telur_rebus
+  displayName: Telur rebus
+  description: Protein lengkap dengan lemak yang lebih rendah karena tidak digoreng.
+  composition: 2
+  processing: 0
+  isFried: 0
+  isDrink: 0
+  healthyOverride: 0
+  calories: 78
+  protein: 6.3
+  carbs: 0.6
+  fat: 5.3
+  fiber: 0
+  addedSugar: 0
+  sodium: 62
+  portionLabel: 1 butir (55 g)
+  icon: {fileID: 0}
+  prefab: {fileID: 1413986458639830788, guid: 301a9e27043bcd34eb4b5f9a5d7de6a5, type: 3}
