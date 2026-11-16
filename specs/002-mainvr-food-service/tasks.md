@@ -124,7 +124,7 @@
 - [X] T043 Run the full `Assets/Tests/EditMode` and `Assets/Tests/PlayMode` suites plus `NutriPick/Validate All` and `NutriPick/Validate Scenes` from `Assets/Editor/NutriPickSceneValidator.cs`.
 - [ ] T044 Run `NutriPick/Build Windows`, launch `Builds/Windows/NutriPick.exe`, and repeat quickstart V1–V5.
 - [X] T045 Clean up temporary scenes/assets/logs under `Assets/Scenes/MainVR.unity`, remove debug objects, and confirm `ProjectSettings/EditorBuildSettings.asset` order: `MainVR`, `Level02_Padang`, `Level03_Bazaar`.
-- [ ] T046 Run the final `specs/002-mainvr-food-service/quickstart.md` validation and commit the feature task list.
+- [X] T046 Run the final `specs/002-mainvr-food-service/quickstart.md` validation and commit the feature task list.
 
 ---
 
