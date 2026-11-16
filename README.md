@@ -32,7 +32,7 @@ NutriPick VR is an educational first-person nutrition game built in Unity 6. The
 3. Press **Play**.
 4. Scene 1 starts directly in gameplay. Pick up three foods, place them on the plate, and serve. Scene 1 shows the eight-card food grid, Status Makanan bar, and Final Result; Levels 2 and 3 retain the existing HUD/report fallback.
 
-Build Settings contains exactly `MainVR`, `Level02_Padang`, and `Level03_Bazaar`, in that order. `MainVR` is the existing tabletop mockup; its `Plate` now uses `Assets/Prefabs/Interaction/ServingPlate.prefab` with `Assets/Models/Props/ceramic_plate.fbx`. Scene 1 uses `Assets/Prefabs/UI/FigmaHUD.prefab`; `Level01_Warteg.unity` is an optional generated fallback and is not in the build.
+Build Settings contains exactly `MainVR`, `Level02_Padang`, and `Level03_Bazaar`, in that order. `MainVR` is the existing tabletop mockup; its `Plate` now uses `Assets/Prefabs/Interaction/ServingPlate.prefab` with `Assets/Models/Props/ceramic_plate.fbx`. Scene 1 uses `Assets/Prefabs/UI/FigmaHUD.prefab`.
 
 ## Generate or Refresh Content
 
@@ -44,8 +44,6 @@ The project includes an editor builder that creates the ScriptableObjects, food 
 - Menu: **NutriPick → Build Serving Plate**
 - Menu: **NutriPick → Build Figma HUD**
 - Menu: **NutriPick → Build Scene 1 Figma Setup**
-- Menu: **NutriPick → Build MainVR Level 1** (legacy automated wiring)
-- Menu: **NutriPick → Fix MainVR Table Surface**
 - Menu: **NutriPick → Validate All**
 - Menu: **NutriPick → Validate Scenes**
 - Menu: **NutriPick → Capture Scene Previews**
