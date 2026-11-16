@@ -19,7 +19,7 @@ namespace NutriPick.Tests
         }
 
         [UnityTest]
-        public IEnumerator MainVRHasEightFoodsAndStartScreen()
+        public IEnumerator MainVRHasEightFoodsAndStartsImmediately()
         {
             SceneManager.LoadScene("MainVR");
             yield return null;
@@ -28,31 +28,13 @@ namespace NutriPick.Tests
             var foods = Object.FindObjectsByType<FoodItem>(FindObjectsSortMode.None);
             Assert.AreEqual(8, foods.Length, "MainVR should have exactly 8 interactive foods.");
 
-            var startScreen = Object.FindFirstObjectByType<StartScreenPresenter>();
-            Assert.IsNotNull(startScreen, "StartScreenPresenter missing.");
-            Assert.IsTrue(startScreen.root.activeSelf, "Start screen should be visible before Start.");
+            var startScreen = GameObject.Find("StartScreen");
+            Assert.IsNull(startScreen, "Start screen should not exist in Scene 1.");
 
             var flow = Object.FindFirstObjectByType<LevelFlowController>();
             Assert.IsNotNull(flow, "LevelFlowController missing.");
+            Assert.IsTrue(flow.IsLevelStarted, "Scene 1 should start immediately.");
             Assert.IsFalse(flow.IsReportOpen, "Report should be closed at scene start.");
-        }
-
-        [UnityTest]
-        public IEnumerator StartButtonEntersGameplay()
-        {
-            SceneManager.LoadScene("MainVR");
-            yield return null;
-            yield return null;
-
-            var startScreen = Object.FindFirstObjectByType<StartScreenPresenter>();
-            Assert.IsNotNull(startScreen, "StartScreenPresenter missing.");
-            Assert.IsTrue(startScreen.root.activeSelf, "Start screen should be visible before Start.");
-
-            startScreen.startButton.onClick.Invoke();
-            yield return null;
-            yield return null;
-
-            Assert.IsFalse(startScreen.root.activeSelf, "Start screen should hide after Start.");
         }
 
         [UnityTest]
@@ -60,11 +42,6 @@ namespace NutriPick.Tests
         {
             SceneManager.LoadScene("MainVR");
             yield return null;
-            yield return null;
-
-            var startScreen = Object.FindFirstObjectByType<StartScreenPresenter>();
-            Assert.IsNotNull(startScreen, "StartScreenPresenter missing.");
-            startScreen.startButton.onClick.Invoke();
             yield return null;
 
             var foods = Object.FindObjectsByType<FoodItem>(FindObjectsSortMode.None);

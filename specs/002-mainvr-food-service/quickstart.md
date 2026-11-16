@@ -19,9 +19,8 @@
 
 1. Open `Assets/Scenes/MainVR.unity`.
 2. Confirm Build Settings order: `MainVR`, `Level02_Padang`, `Level03_Bazaar`.
-3. Press **Play**.
-4. Press **Start** on the start screen.
-5. Use the gamepad:
+3. Press **Play**. Scene 1 starts directly in gameplay; there is no Start screen.
+4. Use the gamepad:
    - Left stick: move
    - Right stick: look
    - `A`: pick up / place / interact
@@ -32,14 +31,13 @@
 
 ## 3. Validation scenarios
 
-### V1 — Start screen
+### V1 — Direct start
 
-- Start screen appears before gameplay.
-- Start enters the table scene.
-- Player and reticle are inactive until Start.
-- `Profil Dev` opens a simple optional panel and can be closed.
+- Scene 1 starts immediately after Play.
+- No Start screen or `Profil Dev` panel appears.
+- Player movement, reticle, food cards, and Status Makanan are active immediately.
 
-**Expected**: no console errors; the table scene is interactive after Start.
+**Expected**: no console errors; the table scene is interactive without pressing Start.
 
 ### V2 — Food card grid
 
@@ -116,7 +114,7 @@ Run from Unity Test Runner:
 
 **Phase 4 validation (2026-11-17)**: PlayMode **9/9 passed**, EditMode **26/26 passed**, and scene validation passed. `MainVR` now binds 8 food cards and updates the Status Makanan bar when food is plated.
 
-**Phase 5 validation (2026-11-17)**: PlayMode **11/11 passed**, including Final Result panels and the replication smoke test. Final Result shows both panels, three points per panel, and Retry/Next actions.
+**Phase 5 validation (2026-11-17)**: PlayMode **10/10 passed** after removing the Start screen, including Final Result panels and the replication smoke test. Final Result shows both panels, three points per panel, and Retry/Next actions.
 
 - **EditMode**
   - `FoodData` protein type validation.
@@ -124,7 +122,7 @@ Run from Unity Test Runner:
   - `FoodCardModel` formatting and placeholders.
   - `LevelDefinition` still validates the eight-food pool.
 - **PlayMode**
-  - Start screen appears and Start enters gameplay.
+  - Scene 1 starts immediately with no Start screen.
   - Food card grid binds eight cards.
   - Plate accepts three foods and locks on serve.
   - Status Makanan updates on plate change.
@@ -157,16 +155,10 @@ The preferred path is the editor-generated `FigmaHUD.prefab`. If the UI must be 
 ```text
 FigmaHUD (Canvas, Screen Space Overlay, 1920×1080, Match 0.5)
 ├── EventSystem
-├── StartScreen (full-screen)
-│   ├── Backdrop
-│   ├── Title
-│   ├── StartButton
-│   ├── ProfileButton
-│   └── ProfilePanel
 ├── GameplayHUD
 │   ├── Reticle (center, 8×8)
 │   ├── FoodCardGrid (right side, 2×4 cards)
-│   ├── StatusMakanan (bottom center, 720×64)
+│   ├── StatusMakanan (bottom center, 720×80)
 │   ├── Prompt (bottom center above status)
 │   └── PausePanel
 └── FinalResult (full-screen)
@@ -186,17 +178,15 @@ Manual wiring:
 - `FoodCardGridPresenter.cardContainer` → `FoodCardGrid`
 - `FoodCardGridPresenter.cardPrefab` → `FoodCard.prefab`
 - `FoodCardGridPresenter.rules` → `NutritionRules.asset`
-- `StartScreenPresenter.startButton` → `StartButton`
-- `StartScreenPresenter.profileButton` → `ProfileButton`
 - `FinalResultPresenter` fields → the corresponding panel texts/buttons
-- `LevelFlowController` references → the four new presenters
+- `LevelFlowController` references → `foodCards`, `mealStatus`, `finalResult`, `prompt`, and pause
 - `ReticleInteractor.foodCards` → `FoodCardGridPresenter`
 
 ## 7. Troubleshooting
 
 | Symptom | Check |
 |---------|-------|
-| Start screen does not appear | `LevelFlow.startScreen` assigned; StartScreen root active at start |
+| Scene does not start | `LevelFlowController.startScreen` must be null; check Console for missing references |
 | Cards are blank | `FoodData.icon` or placeholder sprite assigned; `FoodCardGridPresenter.Bind` called |
 | Protein type shows `—` | `FoodData.hasProteinType` is false |
 | Card grid overlaps the plate | Move the grid to the right side; check CanvasScaler |

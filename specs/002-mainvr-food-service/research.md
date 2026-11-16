@@ -108,6 +108,8 @@ Extend `MealEvaluator` to build these arrays from existing nutrition/composition
 
 ## 6. Start screen and level flow
 
+> **Update 2026-11-17**: The Start screen was removed by user request. Scene 1 starts immediately; the `StartScreenPresenter` code remains as optional legacy support only.
+
 **Decision**: Add `StartScreenPresenter` and an optional `startScreen` reference in `LevelFlowController`. `Start()` prepares the level, disables player/reticle input, and shows the start screen. `StartLevel()` hides the start screen, enables input, and starts the timer. `Profil Dev` is an optional simple information panel; it does not block Start.
 
 **Rationale**: The Figma board includes a start screen. Adding it to the existing flow avoids a separate bootstrap scene and keeps Scene 1 self-contained.

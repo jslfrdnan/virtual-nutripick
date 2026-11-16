@@ -25,12 +25,6 @@ namespace NutriPick.Tests
             yield return null;
             yield return null;
 
-            var start = Object.FindFirstObjectByType<StartScreenPresenter>();
-            Assert.IsNotNull(start, "StartScreenPresenter missing.");
-            start.startButton.onClick.Invoke();
-            yield return null;
-            yield return null;
-
             var grid = Object.FindFirstObjectByType<FoodCardGridPresenter>();
             Assert.IsNotNull(grid, "FoodCardGridPresenter missing.");
             Assert.AreEqual(8, grid.CardCount, "Food card grid should contain 8 cards.");
@@ -47,11 +41,6 @@ namespace NutriPick.Tests
         public IEnumerator FoodCardFocusAndStatusUpdate()
         {
             SceneManager.LoadScene("MainVR");
-            yield return null;
-            yield return null;
-
-            var start = Object.FindFirstObjectByType<StartScreenPresenter>();
-            start.startButton.onClick.Invoke();
             yield return null;
             yield return null;
 

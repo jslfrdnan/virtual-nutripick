@@ -29,7 +29,6 @@ namespace NutriPick.Flow
         public FoodInfoCardPresenter infoCard;
         public FoodCardGridPresenter foodCards;
         public MealStatusBarPresenter mealStatus;
-        public StartScreenPresenter startScreen;
         public HealthReportPresenter report;
         public FinalResultPresenter finalResult;
         public RecapPresenter recap;
@@ -40,6 +39,7 @@ namespace NutriPick.Flow
 
         public bool IsPaused { get; private set; }
         public bool IsReportOpen { get; private set; }
+        public bool IsLevelStarted => levelStarted;
         public GamepadInput Input => input;
 
         private float timeLeft;
@@ -115,18 +115,7 @@ namespace NutriPick.Flow
             if (bar != null)
                 bar.SetNeutral();
 
-            if (startScreen != null)
-            {
-                if (player != null)
-                    player.SetControlEnabled(false);
-                if (reticle != null)
-                    reticle.enabled = false;
-                startScreen.Show(StartLevel, null);
-            }
-            else
-            {
-                StartLevel();
-            }
+            StartLevel();
         }
 
         public void StartLevel()
@@ -135,8 +124,6 @@ namespace NutriPick.Flow
                 return;
 
             levelStarted = true;
-            if (startScreen != null)
-                startScreen.Hide();
             if (player != null)
                 player.SetControlEnabled(true);
             if (reticle != null)
@@ -152,6 +139,24 @@ namespace NutriPick.Flow
             if (mealStatus != null)
                 mealStatus.SetNeutral();
 
+            OnPlateChanged();
+        }
+
+        public void RebindLevel(LevelDefinition definition)
+        {
+            if (definition == null)
+                return;
+
+            level = definition;
+            if (plate != null)
+            {
+                plate.minItems = definition.minItems;
+                plate.requiresDrink = definition.requiresDrink;
+            }
+            if (foodCards != null)
+                foodCards.Bind(definition.foodPool, rules);
+            if (mealStatus != null)
+                mealStatus.SetNeutral();
             OnPlateChanged();
         }
 

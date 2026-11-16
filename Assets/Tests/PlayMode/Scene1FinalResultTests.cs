@@ -25,11 +25,6 @@ namespace NutriPick.Tests
             yield return null;
             yield return null;
 
-            var start = Object.FindFirstObjectByType<StartScreenPresenter>();
-            Assert.IsNotNull(start, "StartScreenPresenter missing.");
-            start.startButton.onClick.Invoke();
-            yield return null;
-
             var foods = Object.FindObjectsByType<FoodItem>(FindObjectsSortMode.None);
             var plate = Object.FindFirstObjectByType<PlateController>();
             var flow = Object.FindFirstObjectByType<LevelFlowController>();

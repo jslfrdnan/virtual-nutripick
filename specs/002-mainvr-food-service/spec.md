@@ -12,7 +12,7 @@ Additional design reference: [Game UI – Scene 1 & 2](https://www.figma.com/des
 
 ## Overview
 
-Scene 1 (`MainVR`) becomes the reference implementation for the rest of NutriPick VR. The player starts from a simple start screen, enters the table scene, aims at food with a center reticle, picks food up with a gamepad, and places it onto a single ceramic serving plate. When enough food is on the plate, the player serves the meal and receives a final result.
+Scene 1 (`MainVR`) becomes the reference implementation for the rest of NutriPick VR. The player enters the table scene directly, aims at food with a center reticle, picks food up with a gamepad, and places it onto a single ceramic serving plate. When enough food is on the plate, the player serves the meal and receives a final result.
 
 The food information is presented through a UI Canvas that follows the public Figma board **"Game UI – Scene 1 & 2"**: a food card grid with food images, names, protein type, calories, and nutrition values; a **Status Makanan** bar; and a **Final Result** screen with balanced and less balanced panels. Only the public thumbnail of the Figma board is currently readable; exact text, spacing, and typography may be approximated until a higher-resolution export is provided.
 
@@ -24,21 +24,21 @@ The most important architectural outcome is reuse. The serving plate, food inter
 
 - Q: How many foods should the plate require before serving, and how many placement positions should it have? → A: 3 foods required, 4 placement positions.
 - Q: Which protein type categories should the food information card use? → A: Hewani and Nabati only; the card still shows calories, protein, carbohydrates, and fat.
-- Q: Should Scene 1 keep the existing HUD/report or follow the Figma UI? → A: Follow the full Figma direction: start screen, food card grid, Status Makanan bar, and Final Result panels; use placeholders where exact assets, text, or fonts are unavailable.
+- Q: Should Scene 1 keep the existing HUD/report or follow the Figma UI? → A: Follow the Figma direction: food card grid, Status Makanan bar, and Final Result panels; the Start screen was removed by a later user request.
 
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Start, plate, and serve food in MainVR (Priority: P1)
 
-A player opens Scene 1, sees a simple start screen, presses Start, and enters the table scene. The player sees eight food items and one ceramic serving plate, aims at a food item, picks it up, and places it onto the plate. The player can remove or replace food before serving. A Status Makanan bar updates as food is added or removed. Once at least three foods are on the plate, the player serves the meal; the plate locks and the existing report/fallback appears until the Figma Final Result is delivered in US3.
+A player opens Scene 1 and enters the table scene immediately. The player sees eight food items and one ceramic serving plate, aims at a food item, picks it up, and places it onto the plate. The player can remove or replace food before serving. A Status Makanan bar updates as food is added or removed. Once at least three foods are on the plate, the player serves the meal; the plate locks and the existing report/fallback appears until the Figma Final Result is delivered in US3.
 
 **Why this priority**: Starting, plating, and serving are the core interaction of Scene 1. Without them, the food information UI has no purpose and the level cannot be completed.
 
-**Independent Test**: A tester can open `MainVR`, press Start, pick up three different foods, place them on the ceramic plate, serve, and confirm the plate locks and the existing report/fallback appears using only a gamepad.
+**Independent Test**: A tester can open `MainVR`, pick up three different foods, place them on the ceramic plate, serve, and confirm the plate locks and the existing report/fallback appears using only a gamepad.
 
 **Acceptance Scenarios**:
 
-1. **Given** Scene 1 is opened, **When** the start screen appears, **Then** the player can press Start to enter the table scene.
+1. **Given** Scene 1 is opened, **When** the scene loads, **Then** the table scene is playable immediately with no Start screen.
 2. **Given** Scene 1 has started, **When** the player looks at the table, **Then** eight food items and one ceramic serving plate are visible at a believable dining scale and reachable.
 3. **Given** the reticle is over a non-food prop, **When** the player presses interact, **Then** nothing is picked up and no placement prompt appears.
 4. **Given** the reticle is over a food item, **When** the player presses the interact button, **Then** the food attaches to the carry position in front of the camera.
@@ -94,7 +94,7 @@ After serving, the player sees a Final Result screen with a balanced panel and a
 
 ### Edge Cases
 
-- **Start screen is skipped or dismissed**: The player enters the table scene without a broken state; Start remains the only required action.
+- **Scene loads directly**: Gameplay starts immediately; no Start screen or extra confirmation is required.
 - **Plate is full**: Placement is refused with a short prompt; the player can remove a food first.
 - **Food is dropped outside the table**: The food returns to its starting position and remains recoverable.
 - **Food falls through or leaves the play area**: The food is restored automatically; the player is never permanently stuck.
@@ -163,7 +163,7 @@ The table defines the initial card classification. Burger and fried noodles foll
 
 **Figma-style UI and food information**
 
-- **FR-021**: Scene 1 MUST present a start screen with a Start action before gameplay begins. A `Profil Dev` action MAY be included as a simple optional information action.
+- **FR-021**: Scene 1 MUST start directly in gameplay; no Start screen is required. The `Profil Dev` action is out of scope.
 - **FR-022**: During gameplay, the UI MUST show a food card grid containing a card for each of the eight foods.
 - **FR-023**: Each food card MUST show a food image, food name, protein type, calories, protein, carbohydrates, and fat.
 - **FR-024**: Protein type MUST use one of two values: `Hewani` or `Nabati`. Foods with no meaningful protein in later scenes MUST show a neutral placeholder rather than a third category.
@@ -207,7 +207,7 @@ The table defines the initial card classification. Burger and fried noodles foll
 
 ### Measurable Outcomes
 
-- **SC-001**: A first-time player can press Start, pick up three foods, place them on the plate, and serve in under three minutes using a gamepad.
+- **SC-001**: A first-time player can pick up three foods, place them on the plate, and serve in under three minutes using a gamepad.
 - **SC-002**: All eight food items can be picked up, placed on the plate, removed, and served with zero unrecoverable failures.
 - **SC-003**: Placed food remains stable for at least ten seconds without falling through the plate, floating, or overlapping another food.
 - **SC-004**: The food card grid shows the correct image, name, protein type, calories, protein, carbohydrates, and fat for all eight foods, with 100% accuracy against the stored food data.
@@ -218,7 +218,7 @@ The table defines the initial card classification. Burger and fried noodles foll
 - **SC-009**: A food dropped outside the play area returns to its starting position 100% of the time.
 - **SC-010**: Existing Level 2 and Level 3 scenes still load and build without new blocking errors after the Scene 1 changes.
 - **SC-011**: At least 90% of testers can correctly explain the protein type (`Hewani` or `Nabati`) of two foods after using the food cards.
-- **SC-012**: The Start action enters the table scene in under five seconds.
+- **SC-012**: Scene 1 enters gameplay within five seconds of load, with no Start action.
 - **SC-013**: The Status Makanan bar updates within 0.5 seconds of a food being added to or removed from the plate.
 - **SC-014**: The Final Result screen shows both panels, three feedback points per panel, the correct highlighted outcome, and both Retry and Next actions.
 - **SC-015**: At least 90% of testers can identify the balanced panel, the less balanced panel, and the next action without assistance.
@@ -235,7 +235,7 @@ The table defines the initial card classification. Burger and fried noodles foll
 - The food card UI is presented through the project's existing UI Canvas. If manual scene assembly is required, a concise manual guide is an acceptable and required deliverable.
 - The card is intentionally simple: image, name, protein type, calories, protein, carbohydrates, and fat. Fiber, added sugar, and sodium are not required on the card in this iteration.
 - The existing level flow, timer, health bar, and end-of-level report may be reused as a base, but the visible HUD and result screen are adapted to the Figma direction: a food card grid, a Status Makanan bar, and a two-panel Final Result. The visible timer may be hidden in Scene 1.
-- The start screen includes Start; `Profil Dev` may be a simple optional information action.
+- Scene 1 starts immediately; the Start screen and `Profil Dev` action were removed by user request.
 - The target display is 1920×1080 on Windows, played with a Rexus gamepad; keyboard and mouse remain available as a fallback.
 - No VR headset or motion controller is required.
 - Scenes 2 and 3 are out of scope for content creation, but their existing scenes and build entries must remain functional.
@@ -257,7 +257,7 @@ The table defines the initial card classification. Burger and fried noodles foll
 - `Assets/Models/Props/ceramic_plate.fbx` must be available and importable.
 - The existing eight food items, food images, and nutrition data must be available.
 - The `MainVR` table environment and player rig must be usable.
-- The existing HUD must provide, or allow the addition of, the UI Canvas start screen, food card grid, Status Makanan bar, and Final Result screen.
+- The existing HUD must provide, or allow the addition of, the UI Canvas food card grid, Status Makanan bar, and Final Result screen.
 - The Figma board or a higher-resolution export must be available for exact visual review; the public thumbnail is sufficient for the initial direction.
 - Unity 6000.6.0f1 must open the project without blocking compile errors.
 - A Rexus gamepad must be recognized as a standard gamepad; keyboard and mouse are the fallback.

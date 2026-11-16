@@ -133,7 +133,6 @@ namespace NutriPick.Editor
             flow.plate = plate;
             flow.stands = new[] { stand };
             flow.serveStation = serveStation;
-            flow.startScreen = newHud.GetComponentInChildren<StartScreenPresenter>(true);
             flow.foodCards = newHud.GetComponentInChildren<FoodCardGridPresenter>(true);
             flow.mealStatus = newHud.GetComponentInChildren<MealStatusBarPresenter>(true);
             flow.bar = newHud.GetComponentInChildren<NutritionBar>(true);
@@ -165,7 +164,7 @@ namespace NutriPick.Editor
             };
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            Debug.Log("[Scene1Figma] Scene 1 wired with ServingPlate, FigmaHUD, StartScreen, and 8 foods.");
+            Debug.Log("[Scene1Figma] Scene 1 wired with ServingPlate, FigmaHUD (no StartScreen), 8 foods, card grid, Status Makanan, and Final Result.");
         }
 
         private static Transform FindDeepChild(Transform parent, string name)

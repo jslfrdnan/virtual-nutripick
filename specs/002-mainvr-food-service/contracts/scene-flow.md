@@ -14,7 +14,7 @@ This contract defines the reusable Scene 1 wiring and the minimum steps to repro
 | `ServingPlate` | `PlateController` + 4 `PlateSlot` | Plate and placement positions |
 | `TableFoodStand` | `FoodStand` | Food source / anchors |
 | `ServeStation` | `ServeStation` | Serve interaction |
-| `FigmaHUD` | Canvas + presenters | Start screen, card grid, Status Makanan, Final Result, prompt, pause |
+| `FigmaHUD` | Canvas + presenters | Card grid, Status Makanan, Final Result, prompt, pause |
 | `LevelFlow` | `LevelFlowController` | Level orchestration |
 | `TableSurfaceCollider` | `BoxCollider` | Keeps food on the table |
 
@@ -44,8 +44,6 @@ This contract defines the reusable Scene 1 wiring and the minimum steps to repro
 ```text
 Scene loads
   → LevelFlow.Start()
-  → FigmaHUD/StartScreen.Show()
-  → player presses Start
   → LevelFlow.StartLevel()
   → FoodCardGrid.Bind(level.foodPool)
   → StatusMakanan.SetNeutral()
@@ -70,7 +68,7 @@ Scene loads
 4. Add `ServeStation.prefab`.
 5. Add `FigmaHUD.prefab`.
 6. Add `LevelFlow` and assign the new `LevelDefinition`.
-7. Assign `startScreen`, `foodCards`, `mealStatus`, `finalResult`, `prompt`, and pause references.
+7. Assign `foodCards`, `mealStatus`, `finalResult`, `prompt`, and pause references. Do not assign `startScreen`; Scene 1 starts immediately.
 8. Assign `plate`, `stands`, `serveStation`, `player`, `reticle`, and `input`.
 9. Set the level's `foodPool`, `minItems`, `sceneName`, and `nextSceneName`.
 10. Add the scene to Build Settings in the correct order.
@@ -80,6 +78,7 @@ Scene loads
 ## 6. Backward-compatibility contract
 
 - Existing `HUD.prefab`, `Plate.prefab`, `HealthReportPresenter`, `FoodInfoCardPresenter`, and `NutritionBar` remain available for Levels 2 and 3.
+- Scene 1 has no Start screen; `LevelFlowController.startScreen` is null and the level starts immediately.
 - `LevelFlowController` uses the new presenters only when their references are assigned; otherwise it falls back to the old behavior.
 - `ReticleInteractor` uses `FoodCardGridPresenter` only when assigned; otherwise it falls back to `FoodInfoCardPresenter`.
 - No existing scene, prefab, or ScriptableObject is deleted.

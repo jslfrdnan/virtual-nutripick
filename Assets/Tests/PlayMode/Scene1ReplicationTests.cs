@@ -28,11 +28,9 @@ namespace NutriPick.Tests
             yield return null;
 
             var flow = Object.FindFirstObjectByType<LevelFlowController>();
-            var start = Object.FindFirstObjectByType<StartScreenPresenter>();
             var plate = Object.FindFirstObjectByType<PlateController>();
             var finalResult = Object.FindFirstObjectByType<FinalResultPresenter>(FindObjectsInactive.Include);
             Assert.IsNotNull(flow, "LevelFlowController missing.");
-            Assert.IsNotNull(start, "StartScreenPresenter missing.");
             Assert.IsNotNull(plate, "PlateController missing.");
             Assert.IsNotNull(finalResult, "FinalResultPresenter missing.");
 
@@ -49,10 +47,9 @@ namespace NutriPick.Tests
             temp.minimumStands = 1;
             temp.timeLimitSeconds = 180f;
             temp.graceSeconds = 30f;
-            flow.level = temp;
+            flow.RebindLevel(temp);
 
             plate.transform.position += new Vector3(0.05f, 0f, 0f);
-            start.startButton.onClick.Invoke();
             yield return null;
             yield return null;
 

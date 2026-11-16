@@ -52,7 +52,6 @@ namespace NutriPick.Editor
 
                 if (path.Contains("MainVR"))
                 {
-                    if (flow.startScreen == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing StartScreenPresenter"); }
                     if (flow.foodCards == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing FoodCardGridPresenter"); }
                     if (flow.mealStatus == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing MealStatusBarPresenter"); }
                     if (flow.finalResult == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing FinalResultPresenter"); }

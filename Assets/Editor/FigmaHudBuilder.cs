@@ -40,7 +40,6 @@ namespace NutriPick.Editor
             DestroyChild(root.transform, "StatusMakanan");
             DestroyChild(root.transform, "FinalResult");
 
-            var startScreen = CreateStartScreen(root.transform, font);
             var grid = (GameObject)PrefabUtility.InstantiatePrefab(gridPrefab, root.transform);
             grid.name = "FoodCardGrid";
             var gridRect = grid.GetComponent<RectTransform>();
@@ -66,8 +65,6 @@ namespace NutriPick.Editor
             var prompt = FindDeepChild(root.transform, "Prompt") as RectTransform;
             if (prompt != null)
                 prompt.anchoredPosition = new Vector2(0f, 120f);
-
-            startScreen.transform.SetAsLastSibling();
 
             PrefabUtility.SaveAsPrefabAsset(root, TargetHudPath);
             PrefabUtility.UnloadPrefabContents(root);
@@ -339,72 +336,6 @@ namespace NutriPick.Editor
             }
 
             return panel;
-        }
-
-        private static GameObject CreateStartScreen(Transform parent, TMP_FontAsset font)
-        {
-            var startRoot = new GameObject("StartScreen", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(StartScreenPresenter));
-            var startRect = startRoot.GetComponent<RectTransform>();
-            startRect.SetParent(parent, false);
-            Stretch(startRect);
-
-            var background = startRoot.GetComponent<Image>();
-            background.color = new Color(0.97f, 0.97f, 0.95f, 0.96f);
-            background.raycastTarget = true;
-
-            var title = CreateText("Title", startRoot.transform, "NUTRiPICK", 64f, new Color(0.16f, 0.35f, 0.18f), TextAlignmentOptions.Center, font);
-            PlaceAnchored(title.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 150f), new Vector2(900f, 100f));
-
-            var subtitle = CreateText("Subtitle", startRoot.transform, "Scene 1 — Warteg", 28f, new Color(0.32f, 0.32f, 0.30f), TextAlignmentOptions.Center, font);
-            PlaceAnchored(subtitle.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 80f), new Vector2(900f, 50f));
-
-            var startButton = CreateButton("StartButton", startRoot.transform, "Start", new Vector2(0f, -20f), new Vector2(320f, 64f), new Color(0.30f, 0.69f, 0.31f), Color.white, font);
-            var profileButton = CreateButton("ProfileButton", startRoot.transform, "Profil Dev", new Vector2(0f, -110f), new Vector2(320f, 56f), Color.white, new Color(0.20f, 0.20f, 0.20f), font);
-            var profilePanel = CreateProfilePanel(startRoot.transform, font, out var closeButton);
-
-            var presenter = startRoot.GetComponent<StartScreenPresenter>();
-            presenter.root = startRoot;
-            presenter.startButton = startButton;
-            presenter.profileButton = profileButton;
-            presenter.profilePanel = profilePanel;
-            presenter.profileCloseButton = closeButton;
-
-            return startRoot;
-        }
-
-        private static GameObject CreateProfilePanel(Transform parent, TMP_FontAsset font, out Button closeButton)
-        {
-            var panelRoot = new GameObject("ProfilePanel", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
-            var panelRect = panelRoot.GetComponent<RectTransform>();
-            panelRect.SetParent(parent, false);
-            Stretch(panelRect);
-            var dim = panelRoot.GetComponent<Image>();
-            dim.color = new Color(0f, 0f, 0f, 0.55f);
-            dim.raycastTarget = true;
-
-            var panel = new GameObject("Panel", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
-            var panelInnerRect = panel.GetComponent<RectTransform>();
-            panelInnerRect.SetParent(panelRoot.transform, false);
-            PlaceAnchored(panelInnerRect, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(560f, 320f));
-            panel.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.98f);
-
-            var title = CreateText("Title", panel.transform, "Profil Dev", 32f, new Color(0.16f, 0.35f, 0.18f), TextAlignmentOptions.Center, font);
-            PlaceAnchored(title.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 100f), new Vector2(500f, 50f));
-
-            var body = CreateText(
-                "Body",
-                panel.transform,
-                "NutriPick VR — Scene 1\nPilih makanan, susun piring, lalu sajikan.\n\nGame edukasi, bukan nasihat medis.",
-                20f,
-                new Color(0.30f, 0.30f, 0.30f),
-                TextAlignmentOptions.Center,
-                font);
-            PlaceAnchored(body.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 0f), new Vector2(500f, 150f));
-
-            closeButton = CreateButton("CloseButton", panel.transform, "Tutup", new Vector2(0f, -115f), new Vector2(200f, 48f), new Color(0.30f, 0.69f, 0.31f), Color.white, font);
-
-            panelRoot.SetActive(false);
-            return panelRoot;
         }
 
         private static TextMeshProUGUI CreateText(

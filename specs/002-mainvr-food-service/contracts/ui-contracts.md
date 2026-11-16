@@ -96,11 +96,13 @@ void SetFinal(MealResult result);
 - The label must always accompany the color.
 - The presenter reads only `MealResult`; it must not re-evaluate nutrition.
 
-## 4. StartScreenPresenter
+## 4. StartScreenPresenter (legacy — not used in Scene 1)
 
-**Prefab**: `Assets/Prefabs/UI/StartScreen.prefab` (child of `FigmaHUD`)
+> **Removed from Scene 1 by user request (2026-11-17).** The presenter is retained only as optional legacy support; Scene 1 has no Start screen and `LevelFlowController.startScreen` is null.
 
-**Purpose**: Present the Figma start screen before gameplay.
+**Prefab**: not instantiated in `FigmaHUD.prefab`
+
+**Purpose**: Legacy optional start screen; not used in Scene 1.
 
 **Inspector bindings**:
 - `GameObject root`
@@ -159,7 +161,7 @@ void Hide();
 **Controller**: `LevelFlowController`
 
 **New optional references**:
-- `StartScreenPresenter startScreen`
+- `StartScreenPresenter startScreen` (legacy; `null` in Scene 1)
 - `FoodCardGridPresenter foodCards`
 - `MealStatusBarPresenter mealStatus`
 - `FinalResultPresenter finalResult`
@@ -174,11 +176,10 @@ void Hide();
 ```text
 Start()
   → prepare level
-  → show start screen (if assigned)
-  → wait for Start
+  → StartLevel() immediately (no Start screen)
 
 StartLevel()
-  → hide start screen
+  → hide legacy Start screen if assigned
   → enable player/reticle
   → start timer
   → bind food cards from level.foodPool
@@ -211,7 +212,7 @@ FinalResult Next
 - `player`: `PlayerRig` → `FirstPersonController`
 - `reticle`: `PlayerRig` → `ReticleInteractor`
 - `input`: `PlayerRig` → `GamepadInput`
-- `startScreen`: `FigmaHUD/StartScreen`
+- `startScreen`: `null` (legacy optional; Scene 1 starts immediately)
 - `foodCards`: `FigmaHUD/GameplayHUD/FoodCardGrid`
 - `mealStatus`: `FigmaHUD/GameplayHUD/StatusMakanan`
 - `finalResult`: `FigmaHUD/FinalResult`

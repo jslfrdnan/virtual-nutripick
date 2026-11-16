@@ -694,74 +694,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &222186632
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2226886919222785822, guid: 9aee985eb756fd44aacf09cdbf02b89c, type: 3}
-      propertyPath: m_Name
-      value: Plate
-      objectReference: {fileID: 0}
-    - target: {fileID: 2367847867508593331, guid: 9aee985eb756fd44aacf09cdbf02b89c, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2367847867508593331, guid: 9aee985eb756fd44aacf09cdbf02b89c, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.34
-      objectReference: {fileID: 0}
-    - target: {fileID: 2367847867508593331, guid: 9aee985eb756fd44aacf09cdbf02b89c, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.55
-      objectReference: {fileID: 0}
-    - target: {fileID: 2367847867508593331, guid: 9aee985eb756fd44aacf09cdbf02b89c, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2367847867508593331, guid: 9aee985eb756fd44aacf09cdbf02b89c, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2367847867508593331, guid: 9aee985eb756fd44aacf09cdbf02b89c, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2367847867508593331, guid: 9aee985eb756fd44aacf09cdbf02b89c, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2367847867508593331, guid: 9aee985eb756fd44aacf09cdbf02b89c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2367847867508593331, guid: 9aee985eb756fd44aacf09cdbf02b89c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2367847867508593331, guid: 9aee985eb756fd44aacf09cdbf02b89c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 9aee985eb756fd44aacf09cdbf02b89c, type: 3}
---- !u!114 &222186633 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3758452782214164856, guid: 9aee985eb756fd44aacf09cdbf02b89c, type: 3}
-  m_PrefabInstance: {fileID: 222186632}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b018b6dc379fb64097a1dcf1dc9ea9b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.Interaction.PlateController
 --- !u!1001 &255718160
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2772,6 +2704,240 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: fbf757bcf0ad4174bbe3f94061e37ab6, type: 3}
   m_PrefabInstance: {fileID: 864622672}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &867585802
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5901557370305454030, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
+      propertyPath: m_Name
+      value: FigmaHUD
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
+--- !u!114 &867585803 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2042046323253566292, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
+  m_PrefabInstance: {fileID: 867585802}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 353cc19bac9c12047a94920e1a70bc4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.UI.FinalResultPresenter
+--- !u!114 &867585804 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7219499386503732337, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
+  m_PrefabInstance: {fileID: 867585802}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cfe23f60fe527c4ba27c90f50887a84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.UI.MealStatusBarPresenter
+--- !u!114 &867585805 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5488216661631975184, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
+  m_PrefabInstance: {fileID: 867585802}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fb31d4bdd38cb545a3948076d3bf96c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.UI.FoodCardGridPresenter
+--- !u!114 &867585806 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8178832918513876831, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
+  m_PrefabInstance: {fileID: 867585802}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+--- !u!114 &867585807 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7620323981736618275, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
+  m_PrefabInstance: {fileID: 867585802}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+--- !u!114 &867585808 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8837204298358977960, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
+  m_PrefabInstance: {fileID: 867585802}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+--- !u!1 &867585809 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8136713776900211267, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
+  m_PrefabInstance: {fileID: 867585802}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &867585810 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2158483968414228958, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
+  m_PrefabInstance: {fileID: 867585802}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b67c26e927a78345b6afcd60843fe1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.UI.RecapPresenter
+--- !u!114 &867585811 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 169137871138760051, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
+  m_PrefabInstance: {fileID: 867585802}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 452b98de03ad82943bc4820a652e5ea1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.UI.HealthReportPresenter
+--- !u!114 &867585812 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4344078375836835522, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
+  m_PrefabInstance: {fileID: 867585802}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd1fdcaac317c694d8f625b4a1cf946e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.UI.FoodInfoCardPresenter
+--- !u!114 &867585813 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7503802333608125472, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
+  m_PrefabInstance: {fileID: 867585802}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 282087341cafb344490548e0e1a432ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.UI.InteractionPrompt
+--- !u!114 &867585814 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8118410626288481251, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
+  m_PrefabInstance: {fileID: 867585802}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f558ab507274e44c9ad9c4b1c1e4474, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.UI.LevelTimerDisplay
+--- !u!114 &867585815 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4818183024183046831, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
+  m_PrefabInstance: {fileID: 867585802}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 016f2dc000995414e868e1c3499322e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.UI.NutritionBar
 --- !u!1001 &871317688
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4255,6 +4421,74 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 41b66420db99f88458e700c30abe8ea7, type: 3}
+--- !u!1001 &1399667346
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2226886919222785822, guid: 9aee985eb756fd44aacf09cdbf02b89c, type: 3}
+      propertyPath: m_Name
+      value: Plate
+      objectReference: {fileID: 0}
+    - target: {fileID: 2367847867508593331, guid: 9aee985eb756fd44aacf09cdbf02b89c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2367847867508593331, guid: 9aee985eb756fd44aacf09cdbf02b89c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.34
+      objectReference: {fileID: 0}
+    - target: {fileID: 2367847867508593331, guid: 9aee985eb756fd44aacf09cdbf02b89c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.55
+      objectReference: {fileID: 0}
+    - target: {fileID: 2367847867508593331, guid: 9aee985eb756fd44aacf09cdbf02b89c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2367847867508593331, guid: 9aee985eb756fd44aacf09cdbf02b89c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2367847867508593331, guid: 9aee985eb756fd44aacf09cdbf02b89c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2367847867508593331, guid: 9aee985eb756fd44aacf09cdbf02b89c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2367847867508593331, guid: 9aee985eb756fd44aacf09cdbf02b89c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2367847867508593331, guid: 9aee985eb756fd44aacf09cdbf02b89c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2367847867508593331, guid: 9aee985eb756fd44aacf09cdbf02b89c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9aee985eb756fd44aacf09cdbf02b89c, type: 3}
+--- !u!114 &1399667347 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3758452782214164856, guid: 9aee985eb756fd44aacf09cdbf02b89c, type: 3}
+  m_PrefabInstance: {fileID: 1399667346}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b018b6dc379fb64097a1dcf1dc9ea9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.Interaction.PlateController
 --- !u!1001 &1406605733
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4731,27 +4965,26 @@ MonoBehaviour:
   level: {fileID: 11400000, guid: 580d14938ce107f41a003aaa5ba2f784, type: 2}
   firstSceneName: MainVR
   rules: {fileID: 11400000, guid: 1559856ab93f15f45ad09e0ef35669db, type: 2}
-  plate: {fileID: 222186633}
+  plate: {fileID: 1399667347}
   stands:
   - {fileID: 202256294}
   serveStation: {fileID: 2031878968}
   player: {fileID: 1924632160}
   reticle: {fileID: 1924632158}
   input: {fileID: 1924632157}
-  bar: {fileID: 2103312395}
-  timer: {fileID: 2103312394}
-  prompt: {fileID: 2103312393}
-  infoCard: {fileID: 2103312392}
-  foodCards: {fileID: 2103312385}
-  mealStatus: {fileID: 2103312384}
-  startScreen: {fileID: 2103312382}
-  report: {fileID: 2103312391}
-  finalResult: {fileID: 2103312383}
-  recap: {fileID: 2103312390}
-  pausePanel: {fileID: 2103312389}
-  pauseMessage: {fileID: 2103312388}
-  pauseResumeButton: {fileID: 2103312387}
-  pauseQuitButton: {fileID: 2103312386}
+  bar: {fileID: 867585815}
+  timer: {fileID: 867585814}
+  prompt: {fileID: 867585813}
+  infoCard: {fileID: 867585812}
+  foodCards: {fileID: 867585805}
+  mealStatus: {fileID: 867585804}
+  report: {fileID: 867585811}
+  finalResult: {fileID: 867585803}
+  recap: {fileID: 867585810}
+  pausePanel: {fileID: 867585809}
+  pauseMessage: {fileID: 867585808}
+  pauseResumeButton: {fileID: 867585807}
+  pauseQuitButton: {fileID: 867585806}
 --- !u!4 &1507972395
 Transform:
   m_ObjectHideFlags: 0
@@ -5528,10 +5761,10 @@ MonoBehaviour:
   interactionCamera: {fileID: 305326857}
   carrier: {fileID: 1924632159}
   flow: {fileID: 1507972394}
-  infoCard: {fileID: 2103312392}
-  foodCards: {fileID: 2103312385}
-  prompt: {fileID: 2103312393}
-  plate: {fileID: 222186633}
+  infoCard: {fileID: 867585812}
+  foodCards: {fileID: 867585805}
+  prompt: {fileID: 867585813}
+  plate: {fileID: 1399667347}
   serveStation: {fileID: 2031878968}
   maxDistance: 3
 --- !u!114 &1924632159
@@ -6166,251 +6399,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 0877c98f790dd454c8b739811e69ed84, type: 3}
   m_PrefabInstance: {fileID: 2066634720}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &2103312381
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-      propertyPath: m_Pivot.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-      propertyPath: m_Pivot.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 404186701511933584, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5901557370305454030, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-      propertyPath: m_Name
-      value: FigmaHUD
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
---- !u!114 &2103312382 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7563351891774420032, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-  m_PrefabInstance: {fileID: 2103312381}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d8c6dc8ee60d4464b8389c5d38244ad5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.UI.StartScreenPresenter
---- !u!114 &2103312383 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2042046323253566292, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-  m_PrefabInstance: {fileID: 2103312381}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 353cc19bac9c12047a94920e1a70bc4c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.UI.FinalResultPresenter
---- !u!114 &2103312384 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7219499386503732337, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-  m_PrefabInstance: {fileID: 2103312381}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9cfe23f60fe527c4ba27c90f50887a84, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.UI.MealStatusBarPresenter
---- !u!114 &2103312385 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5488216661631975184, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-  m_PrefabInstance: {fileID: 2103312381}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1fb31d4bdd38cb545a3948076d3bf96c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.UI.FoodCardGridPresenter
---- !u!114 &2103312386 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8178832918513876831, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-  m_PrefabInstance: {fileID: 2103312381}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
---- !u!114 &2103312387 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7620323981736618275, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-  m_PrefabInstance: {fileID: 2103312381}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
---- !u!114 &2103312388 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8837204298358977960, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-  m_PrefabInstance: {fileID: 2103312381}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
---- !u!1 &2103312389 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8136713776900211267, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-  m_PrefabInstance: {fileID: 2103312381}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2103312390 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2158483968414228958, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-  m_PrefabInstance: {fileID: 2103312381}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b67c26e927a78345b6afcd60843fe1b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.UI.RecapPresenter
---- !u!114 &2103312391 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 169137871138760051, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-  m_PrefabInstance: {fileID: 2103312381}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 452b98de03ad82943bc4820a652e5ea1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.UI.HealthReportPresenter
---- !u!114 &2103312392 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4344078375836835522, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-  m_PrefabInstance: {fileID: 2103312381}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd1fdcaac317c694d8f625b4a1cf946e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.UI.FoodInfoCardPresenter
---- !u!114 &2103312393 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7503802333608125472, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-  m_PrefabInstance: {fileID: 2103312381}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 282087341cafb344490548e0e1a432ed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.UI.InteractionPrompt
---- !u!114 &2103312394 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8118410626288481251, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-  m_PrefabInstance: {fileID: 2103312381}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f558ab507274e44c9ad9c4b1c1e4474, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.UI.LevelTimerDisplay
---- !u!114 &2103312395 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4818183024183046831, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-  m_PrefabInstance: {fileID: 2103312381}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 016f2dc000995414e868e1c3499322e0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.UI.NutritionBar
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -6443,5 +6431,5 @@ SceneRoots:
   - {fileID: 1781726458}
   - {fileID: 903997911}
   - {fileID: 202256295}
-  - {fileID: 222186632}
-  - {fileID: 2103312381}
+  - {fileID: 1399667346}
+  - {fileID: 867585802}

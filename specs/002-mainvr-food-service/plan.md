@@ -4,6 +4,8 @@
 
 **Input**: Feature specification from `specs/002-mainvr-food-service/spec.md`
 
+> **Update 2026-11-17**: The Start screen was removed by user request. Scene 1 now starts immediately; `StartScreenPresenter` remains as optional legacy support only.
+
 ## Summary
 
 Rebuild Scene 1 (`MainVR`) as the reference NutriPick level: a start screen, a ceramic serving plate using `Assets/Models/Props/ceramic_plate.fbx`, eight existing food prefabs, a UI Canvas food card grid, a Status Makanan bar, and a two-panel Final Result screen. The interaction, plate, food cards, status bar, and result screen must be reusable in Scenes 2 and 3 through prefabs and ScriptableObject configuration, without scene-specific code.

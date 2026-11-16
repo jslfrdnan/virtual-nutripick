@@ -1,6 +1,6 @@
 # NutriPick VR
 
-NutriPick VR is an educational first-person nutrition game built in Unity 6. The player uses a **Rexus gamepad** to move, aim a reticle, pick up food, plate it, and serve a meal. Scene 1 now uses a Figma-style UI Canvas: a Start screen, an eight-card food grid, a Status Makanan bar, and a two-panel Final Result. A live health balance and food information cards teach balanced choices across three levels:
+NutriPick VR is an educational first-person nutrition game built in Unity 6. The player uses a **Rexus gamepad** to move, aim a reticle, pick up food, plate it, and serve a meal. Scene 1 now uses a Figma-style UI Canvas: an eight-card food grid, a Status Makanan bar, and a two-panel Final Result. A live health balance and food information cards teach balanced choices across three levels:
 
 1. **Warteg** — breakfast, built from the existing `MainVR` tabletop scene
 2. **RM Padang** — lunch
@@ -30,7 +30,7 @@ NutriPick VR is an educational first-person nutrition game built in Unity 6. The
 1. Open the project with Unity 6000.6.0f1.
 2. Open `Assets/Scenes/MainVR.unity`.
 3. Press **Play**.
-4. Press **Start** on the Start screen. Pick up three foods, place them on the plate, and serve. Scene 1 shows the eight-card food grid, Status Makanan bar, and Final Result; Levels 2 and 3 retain the existing HUD/report fallback.
+4. Scene 1 starts directly in gameplay. Pick up three foods, place them on the plate, and serve. Scene 1 shows the eight-card food grid, Status Makanan bar, and Final Result; Levels 2 and 3 retain the existing HUD/report fallback.
 
 Build Settings contains exactly `MainVR`, `Level02_Padang`, and `Level03_Bazaar`, in that order. `MainVR` is the existing tabletop mockup; its `Plate` now uses `Assets/Prefabs/Interaction/ServingPlate.prefab` with `Assets/Models/Props/ceramic_plate.fbx`. Scene 1 uses `Assets/Prefabs/UI/FigmaHUD.prefab`; `Level01_Warteg.unity` is an optional generated fallback and is not in the build.
 
@@ -56,7 +56,7 @@ The Windows build is written to `Builds/Windows/NutriPick.exe`.
 ## Tests
 
 - **EditMode**: 26 tests covering classification, meal evaluation, session state, level validation, protein types, Final Result points, and food-card formatting.
-- **PlayMode**: 11 tests covering Scene 1 Start/card grid/Status Makanan/Final Result/replication, MainVR plate-and-serve, Level 2 food spawning, and Level 3 four-stand/drink setup.
+- **PlayMode**: 10 tests covering Scene 1 direct start/card grid/Status Makanan/Final Result/replication, MainVR plate-and-serve, Level 2 food spawning, and Level 3 four-stand/drink setup.
 
 Run them from **Window → General → Test Runner**, or headlessly:
 

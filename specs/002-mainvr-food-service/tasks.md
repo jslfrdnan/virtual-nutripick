@@ -8,6 +8,8 @@
 
 **Organization**: Tasks are grouped by user story so each story can be implemented and validated as an independent increment.
 
+> **Update 2026-11-17**: The Start screen was removed by user request. T013–T016 are retained as completed historical tasks; Scene 1 now starts immediately and `StartScreenPresenter` is legacy optional.
+
 ## Format: `[ID] [P?] [Story] Description`
 
 - **[P]**: Can run in parallel (different files, no dependency on an incomplete task)
