@@ -61,6 +61,9 @@ namespace NutriPick.Tests
             Assert.IsNotNull(plate, "No plate.");
             Assert.IsNotNull(flow, "No flow.");
 
+            flow.StartLevel();
+            yield return null;
+
             Assert.GreaterOrEqual(foods.Length, 3, "Not enough interactive food.");
             for (int i = 0; i < 3; i++)
                 Assert.IsTrue(plate.slots[i].TryPlace(foods[i]), "Could not place food " + i);
@@ -72,7 +75,8 @@ namespace NutriPick.Tests
 
             Assert.IsTrue(flow.IsReportOpen, "Report did not open.");
             Assert.IsNotNull(GameSession.Instance.GetResult(1), "Level 1 result was not recorded.");
-            Assert.IsTrue(flow.report.root.activeSelf, "Report panel is not active.");
+            var resultRoot = flow.finalResult != null ? flow.finalResult.root : flow.report.root;
+            Assert.IsTrue(resultRoot.activeSelf, "Result panel is not active.");
         }
 
         [UnityTest]

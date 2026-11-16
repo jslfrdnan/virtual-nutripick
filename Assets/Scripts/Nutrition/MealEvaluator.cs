@@ -133,6 +133,13 @@ namespace NutriPick.Nutrition
 
             result.strengths = BuildStrengths(result, totalFiber, totalProtein, totalSugar, totalSodium, distinct, ultraProcessedCount, covered);
             result.improvement = BuildImprovement(result, totalFiber, totalProtein, totalSugar, totalSodium, totalCalories, ultraProcessedCount, friedCount, covered);
+            result.positivePoints = BuildPositivePoints(result, totalFiber, totalProtein, totalSugar, totalSodium, distinct, ultraProcessedCount, covered);
+            result.improvementPoints = BuildImprovementPoints(result, totalFiber, totalProtein, totalSugar, totalSodium, totalCalories, ultraProcessedCount, friedCount, covered);
+            result.isBalanced = result.band == ScoreBand.Balanced;
+            result.statusBadge = result.isBalanced ? "LEBIH SEHAT" : "PERLU DIUBAH";
+            result.statusSummary = result.isBalanced
+                ? "Pilihan yang mendukung tubuh seimbang."
+                : "Pilihan kurang seimbang.";
             result.dimensions = BuildDimensions(result, totalFiber, totalProtein, totalSugar, totalSodium, totalCalories, ultraProcessedCount, rules);
 
             return result;
@@ -175,6 +182,95 @@ namespace NutriPick.Nutrition
             }
 
             return new[] { candidates[0], candidates[1] };
+        }
+
+        private static string[] BuildPositivePoints(
+            MealResult result,
+            float fiber,
+            float protein,
+            float sugar,
+            float sodium,
+            int distinct,
+            int ultraProcessedCount,
+            FoodCompositionCategory covered)
+        {
+            var candidates = new List<string>();
+
+            if ((covered & FoodCompositionCategory.Vegetable) != 0)
+                candidates.Add("Sayur hadir di piring.");
+            if (protein >= 20f)
+                candidates.Add("Protein cukup untuk kebutuhan harian.");
+            if (fiber >= 6f)
+                candidates.Add("Serat cukup untuk pencernaan.");
+            if (sugar <= 5f)
+                candidates.Add("Gula tambahan rendah.");
+            if (sodium <= 600f)
+                candidates.Add("Natrium terkendali.");
+            if (distinct >= 4)
+                candidates.Add("Piring beragam.");
+            if (ultraProcessedCount == 0)
+                candidates.Add("Pilihan minim proses.");
+            if ((covered & FoodCompositionCategory.Fruit) != 0)
+                candidates.Add("Ada buah segar.");
+            if (result.healthyCount >= 2)
+                candidates.Add("Setengah piring berisi pilihan sehat.");
+
+            var fallbacks = new[]
+            {
+                "Kamu sudah menyusun piring sendiri.",
+                "Kamu bisa mengulang level untuk mencoba kombinasi lain.",
+                "Setiap pilihan adalah langkah belajar."
+            };
+            for (int i = 0; candidates.Count < 3; i++)
+                candidates.Add(fallbacks[i % fallbacks.Length]);
+
+            return new[] { candidates[0], candidates[1], candidates[2] };
+        }
+
+        private static string[] BuildImprovementPoints(
+            MealResult result,
+            float fiber,
+            float protein,
+            float sugar,
+            float sodium,
+            float calories,
+            int ultraProcessedCount,
+            int friedCount,
+            FoodCompositionCategory covered)
+        {
+            var candidates = new List<string>();
+
+            if ((covered & FoodCompositionCategory.Vegetable) == 0)
+                candidates.Add("Tambahkan sayur.");
+            if (sugar > 10f)
+                candidates.Add("Kurangi gula tambahan.");
+            if (sodium > 800f)
+                candidates.Add("Kurangi natrium.");
+            if (protein < 15f)
+                candidates.Add("Tambahkan protein.");
+            if (fiber < 5f)
+                candidates.Add("Tambahkan serat.");
+            if (friedCount > 0)
+                candidates.Add("Kurangi gorengan.");
+            if (ultraProcessedCount > 0)
+                candidates.Add("Kurangi makanan ultra-proses.");
+            if ((covered & FoodCompositionCategory.Carbohydrate) == 0)
+                candidates.Add("Tambahkan karbohidrat.");
+            if ((covered & FoodCompositionCategory.Fruit) == 0 && result.score < 70)
+                candidates.Add("Tambahkan buah.");
+            if (calories > 800f)
+                candidates.Add("Jaga porsi makan.");
+
+            var fallbacks = new[]
+            {
+                "Coba variasi makanan lain.",
+                "Perhatikan porsi berikutnya.",
+                "Tambahkan sayur atau buah jika memungkinkan."
+            };
+            for (int i = 0; candidates.Count < 3; i++)
+                candidates.Add(fallbacks[i % fallbacks.Length]);
+
+            return new[] { candidates[0], candidates[1], candidates[2] };
         }
 
         private static string BuildImprovement(

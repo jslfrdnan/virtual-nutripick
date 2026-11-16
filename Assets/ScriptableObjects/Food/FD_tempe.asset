@@ -28,5 +28,7 @@ MonoBehaviour:
   addedSugar: 0
   sodium: 120
   portionLabel: 50 g
-  icon: {fileID: 0}
+  proteinType: 1
+  hasProteinType: 1
+  icon: {fileID: 21300000, guid: ffe1933dafa7b124fbd4bbbca4cc00fd, type: 3}
   prefab: {fileID: 8092900662316202209, guid: 7244b51ae8845134cbab872828b78588, type: 3}

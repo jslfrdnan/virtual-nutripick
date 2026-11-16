@@ -27,7 +27,11 @@ namespace NutriPick.Flow
         public LevelTimerDisplay timer;
         public InteractionPrompt prompt;
         public FoodInfoCardPresenter infoCard;
+        public FoodCardGridPresenter foodCards;
+        public MealStatusBarPresenter mealStatus;
+        public StartScreenPresenter startScreen;
         public HealthReportPresenter report;
+        public FinalResultPresenter finalResult;
         public RecapPresenter recap;
         public GameObject pausePanel;
         public TMP_Text pauseMessage;
@@ -44,6 +48,7 @@ namespace NutriPick.Flow
         private bool timerRunning;
         private bool isServing;
         private bool disconnectPaused;
+        private bool levelStarted;
 
         private void Start()
         {
@@ -99,6 +104,8 @@ namespace NutriPick.Flow
                 pausePanel.SetActive(false);
             if (report != null)
                 report.Hide();
+            if (finalResult != null)
+                finalResult.Hide();
             if (recap != null)
                 recap.Hide();
             if (infoCard != null)
@@ -108,16 +115,50 @@ namespace NutriPick.Flow
             if (bar != null)
                 bar.SetNeutral();
 
+            if (startScreen != null)
+            {
+                if (player != null)
+                    player.SetControlEnabled(false);
+                if (reticle != null)
+                    reticle.enabled = false;
+                startScreen.Show(StartLevel, null);
+            }
+            else
+            {
+                StartLevel();
+            }
+        }
+
+        public void StartLevel()
+        {
+            if (levelStarted || level == null)
+                return;
+
+            levelStarted = true;
+            if (startScreen != null)
+                startScreen.Hide();
+            if (player != null)
+                player.SetControlEnabled(true);
+            if (reticle != null)
+                reticle.enabled = true;
+
             timeLeft = level.timeLimitSeconds;
             timerRunning = true;
             if (timer != null)
                 timer.SetTime(timeLeft);
+
+            if (foodCards != null)
+                foodCards.Bind(level.foodPool, rules);
+            if (mealStatus != null)
+                mealStatus.SetNeutral();
 
             OnPlateChanged();
         }
 
         private void Update()
         {
+            if (!levelStarted)
+                return;
             if (input == null)
                 return;
 
@@ -200,15 +241,20 @@ namespace NutriPick.Flow
 
         private void OnPlateChanged()
         {
-            if (plate == null || bar == null || rules == null)
+            if (plate == null || rules == null)
                 return;
 
             var result = MealEvaluator.Evaluate(plate.Foods, rules, level.minItems, level.requiresDrink);
-            bar.SetPreview(result);
+            if (mealStatus != null)
+                mealStatus.SetPreview(result);
+            else if (bar != null)
+                bar.SetPreview(result);
         }
 
         public void TryServe()
         {
+            if (!levelStarted)
+                return;
             ServeInternal(false);
         }
 
@@ -237,7 +283,9 @@ namespace NutriPick.Flow
 
             var result = MealEvaluator.Evaluate(plate.Foods, rules, level.minItems, level.requiresDrink);
             GameSession.Instance.RecordResult(level.levelIndex, result);
-            if (bar != null)
+            if (mealStatus != null)
+                mealStatus.SetFinal(result);
+            else if (bar != null)
                 bar.SetFinal(result);
 
             SfxPlayer.Instance?.PlayServe();
@@ -254,7 +302,11 @@ namespace NutriPick.Flow
                 player.SetControlEnabled(false);
             if (reticle != null)
                 reticle.enabled = false;
-            if (report != null)
+            if (finalResult != null)
+            {
+                finalResult.Show(result, level, Retry, Next);
+            }
+            else if (report != null)
             {
                 System.Action recapAction = level.isFinalLevel ? (System.Action)Recap : null;
                 report.Show(result, level, Retry, Next, recapAction);

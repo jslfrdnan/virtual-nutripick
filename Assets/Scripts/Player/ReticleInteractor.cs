@@ -11,6 +11,7 @@ namespace NutriPick.Player
         public HeldFoodCarrier carrier;
         public LevelFlowController flow;
         public FoodInfoCardPresenter infoCard;
+        public FoodCardGridPresenter foodCards;
         public InteractionPrompt prompt;
         public PlateController plate;
         public ServeStation serveStation;
@@ -106,16 +107,21 @@ namespace NutriPick.Player
 
             if (food != null && !food.InteractionLocked)
             {
+                foodCards?.Highlight(food.data.id);
                 infoCard?.ShowCompact(food.data);
                 prompt?.Show("A: Ambil · X: Info");
 
                 if (flow.Input.InteractPressed)
                     PickUp(food);
                 else if (flow.Input.InspectPressed)
+                {
+                    foodCards?.Focus(food.data.id);
                     infoCard?.ShowFull(food.data);
+                }
                 return;
             }
 
+            foodCards?.ClearHighlight();
             infoCard?.Hide();
 
             if (serve != null)
@@ -138,6 +144,7 @@ namespace NutriPick.Player
                 food.PlatedSlot.Remove(food);
 
             carrier.Hold(food);
+            foodCards?.Focus(food.data.id);
             infoCard?.ShowFull(food.data);
             flow.PlayPickup();
         }
@@ -151,6 +158,8 @@ namespace NutriPick.Player
             carrier.Release();
             if (slot.TryPlace(item))
             {
+                foodCards?.ClearFocus();
+                foodCards?.ClearHighlight();
                 infoCard?.Hide();
                 prompt?.Hide();
                 flow.PlayPlace();
@@ -169,6 +178,8 @@ namespace NutriPick.Player
 
             carrier.Release();
             item.Drop();
+            foodCards?.ClearFocus();
+            foodCards?.ClearHighlight();
             infoCard?.Hide();
             prompt?.Hide();
             flow.PlayDrop();
@@ -189,6 +200,8 @@ namespace NutriPick.Player
         private void ClearTargets()
         {
             SetHighlightedSlot(null);
+            foodCards?.ClearFocus();
+            foodCards?.ClearHighlight();
             infoCard?.Hide();
             prompt?.Hide();
         }

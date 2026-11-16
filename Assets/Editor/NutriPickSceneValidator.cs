@@ -2,6 +2,7 @@ using System.IO;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using NutriPick.Content;
 using NutriPick.Flow;
 using NutriPick.Interaction;
@@ -48,6 +49,26 @@ namespace NutriPick.Editor
                 if (flow.report == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing HealthReportPresenter"); }
                 if (flow.recap == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing RecapPresenter"); }
                 if (flow.pausePanel == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing PausePanel"); }
+
+                if (path.Contains("MainVR"))
+                {
+                    if (flow.startScreen == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing StartScreenPresenter"); }
+                    if (flow.foodCards == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing FoodCardGridPresenter"); }
+                    if (flow.mealStatus == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing MealStatusBarPresenter"); }
+                    if (flow.finalResult == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing FinalResultPresenter"); }
+
+                    var eventSystems = Object.FindObjectsByType<EventSystem>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+                    if (eventSystems.Length != 1) { errors++; Debug.LogError($"[NutriPick] {path}: expected 1 EventSystem, found {eventSystems.Length}"); }
+
+                    var plates = Object.FindObjectsByType<PlateController>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+                    if (plates.Length != 1) { errors++; Debug.LogError($"[NutriPick] {path}: expected 1 serving plate, found {plates.Length}"); }
+
+                    var grids = Object.FindObjectsByType<FoodCardGridPresenter>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+                    if (grids.Length != 1) { errors++; Debug.LogError($"[NutriPick] {path}: expected 1 FoodCardGridPresenter, found {grids.Length}"); }
+
+                    var finalResults = Object.FindObjectsByType<FinalResultPresenter>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+                    if (finalResults.Length != 1) { errors++; Debug.LogError($"[NutriPick] {path}: expected 1 FinalResultPresenter, found {finalResults.Length}"); }
+                }
 
                 Debug.Log($"[NutriPick] {path}: flow OK, stands={flow.stands?.Length}, plateSlots={flow.plate?.slots?.Length}");
             }

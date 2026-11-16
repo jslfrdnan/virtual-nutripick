@@ -31,6 +31,13 @@ namespace NutriPick.Nutrition
         public bool isIncomplete;
         public string[] warnings = Array.Empty<string>();
 
+        [Header("Figma Final Result")]
+        public string[] positivePoints = Array.Empty<string>();
+        public string[] improvementPoints = Array.Empty<string>();
+        public string statusBadge = string.Empty;
+        public string statusSummary = string.Empty;
+        public bool isBalanced;
+
         public bool IsNeutral => band == ScoreBand.Neutral;
     }
 

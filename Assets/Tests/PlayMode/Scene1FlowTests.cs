@@ -1,0 +1,91 @@
+using System.Collections;
+using NUnit.Framework;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.TestTools;
+using NutriPick.Flow;
+using NutriPick.Interaction;
+using NutriPick.UI;
+
+namespace NutriPick.Tests
+{
+    public class Scene1FlowTests
+    {
+        [SetUp]
+        public void SetUp()
+        {
+            if (GameSession.Instance != null)
+                GameSession.Instance.ResetSession();
+        }
+
+        [UnityTest]
+        public IEnumerator MainVRHasEightFoodsAndStartScreen()
+        {
+            SceneManager.LoadScene("MainVR");
+            yield return null;
+            yield return null;
+
+            var foods = Object.FindObjectsByType<FoodItem>(FindObjectsSortMode.None);
+            Assert.AreEqual(8, foods.Length, "MainVR should have exactly 8 interactive foods.");
+
+            var startScreen = Object.FindFirstObjectByType<StartScreenPresenter>();
+            Assert.IsNotNull(startScreen, "StartScreenPresenter missing.");
+            Assert.IsTrue(startScreen.root.activeSelf, "Start screen should be visible before Start.");
+
+            var flow = Object.FindFirstObjectByType<LevelFlowController>();
+            Assert.IsNotNull(flow, "LevelFlowController missing.");
+            Assert.IsFalse(flow.IsReportOpen, "Report should be closed at scene start.");
+        }
+
+        [UnityTest]
+        public IEnumerator StartButtonEntersGameplay()
+        {
+            SceneManager.LoadScene("MainVR");
+            yield return null;
+            yield return null;
+
+            var startScreen = Object.FindFirstObjectByType<StartScreenPresenter>();
+            Assert.IsNotNull(startScreen, "StartScreenPresenter missing.");
+            Assert.IsTrue(startScreen.root.activeSelf, "Start screen should be visible before Start.");
+
+            startScreen.startButton.onClick.Invoke();
+            yield return null;
+            yield return null;
+
+            Assert.IsFalse(startScreen.root.activeSelf, "Start screen should hide after Start.");
+        }
+
+        [UnityTest]
+        public IEnumerator ServeThreeFoodsShowsReport()
+        {
+            SceneManager.LoadScene("MainVR");
+            yield return null;
+            yield return null;
+
+            var startScreen = Object.FindFirstObjectByType<StartScreenPresenter>();
+            Assert.IsNotNull(startScreen, "StartScreenPresenter missing.");
+            startScreen.startButton.onClick.Invoke();
+            yield return null;
+
+            var foods = Object.FindObjectsByType<FoodItem>(FindObjectsSortMode.None);
+            var plate = Object.FindFirstObjectByType<PlateController>();
+            var flow = Object.FindFirstObjectByType<LevelFlowController>();
+            Assert.IsNotNull(plate, "PlateController missing.");
+            Assert.IsNotNull(flow, "LevelFlowController missing.");
+            Assert.IsNotNull(flow.report, "HealthReportPresenter missing.");
+            Assert.GreaterOrEqual(foods.Length, 3, "Not enough food for the test.");
+
+            for (int i = 0; i < 3; i++)
+                Assert.IsTrue(plate.slots[i].TryPlace(foods[i]), "Could not place food " + i);
+
+            Assert.AreEqual(3, plate.Count);
+            flow.TryServe();
+            yield return new WaitForSeconds(1.2f);
+
+            Assert.IsTrue(plate.IsLocked, "Plate should lock after serving.");
+            Assert.IsTrue(flow.IsReportOpen, "Report should open after serving.");
+            var resultRoot = flow.finalResult != null ? flow.finalResult.root : flow.report.root;
+            Assert.IsTrue(resultRoot.activeSelf, "Result root should be visible.");
+        }
+    }
+}

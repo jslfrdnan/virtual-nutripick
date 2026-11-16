@@ -27,6 +27,10 @@ namespace NutriPick.Nutrition
         public float sodium;
         public string portionLabel;
 
+        [Header("Protein")]
+        public ProteinType proteinType;
+        public bool hasProteinType;
+
         [Header("Presentation")]
         public Sprite icon;
         public GameObject prefab;
@@ -127,5 +131,11 @@ namespace NutriPick.Nutrition
     {
         Healthy,
         LessHealthy
+    }
+
+    public enum ProteinType
+    {
+        Hewani,
+        Nabati
     }
 }

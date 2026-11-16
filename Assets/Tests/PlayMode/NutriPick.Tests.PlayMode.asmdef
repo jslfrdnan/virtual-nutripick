@@ -2,7 +2,8 @@
     "name": "NutriPick.Tests.PlayMode",
     "rootNamespace": "NutriPick.Tests",
     "references": [
-        "NutriPick.Runtime"
+        "NutriPick.Runtime",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
