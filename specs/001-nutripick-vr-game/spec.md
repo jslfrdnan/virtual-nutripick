@@ -191,8 +191,8 @@ The player completes three levels, each set in a different everyday eating situa
 
 | Level | Setting | Learning focus | Food pool | Minimum items |
 |-------|---------|----------------|-----------|---------------|
-| 1 | Warteg, breakfast | Building a basic balanced plate | Rice, boiled egg, fried egg, tempeh, broccoli, banana, fried noodles, crackers | 3 |
-| 2 | Padang restaurant, lunch | Portion, fat, and sodium | Rice, rendang, fried chicken, cassava-leaf vegetables, boiled egg, broccoli, crackers | 3 |
+| 1 | Warteg, breakfast | Building a basic balanced plate | Rendang, burger, boiled egg, fried egg, tempeh, broccoli, banana, fried noodles | 3 |
+| 2 | Padang restaurant, lunch | Portion, fat, and sodium | Rendang, fried chicken, boiled egg, fried egg, tempeh, broccoli, burger | 3 |
 | 3 | Bazaar, dinner — multiple stands | Everyday habits, variety, and sweet drinks | Fried noodles, burger, boiled egg, tempeh, broccoli, banana, water, sweet tea | 4, including one drink |
 
 Each level's pool MUST contain at least two clearly healthy options and at least two clearly less healthy options so that a meaningful choice always exists.

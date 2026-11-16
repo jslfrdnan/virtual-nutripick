@@ -205,7 +205,7 @@ Build the loop with placeholder art if necessary.
 Make the first real level.
 
 - Use the existing `MainVR` tabletop mockup as Level 1: keep the table and decorative plates, use the empty `ceramic_plate (3)` as the serving `Plate`, and add a table-surface collider so the interactive food rests on the table.
-- Add the eight interactive Level 1 foods on the table: rice, boiled egg, fried egg, tempeh, broccoli, banana, fried noodles, crackers. Use a placeholder rice prefab until the asset team delivers the final asset.
+- Add the eight interactive Level 1 foods on the table using the available FBX models: rendang, burger, boiled egg, fried egg, tempeh, broccoli, banana, fried noodles.
 - Lay out the counter, plate, HUD, info card, and serve station for comfortable first-person reach.
 - Implement the Health Balance Bar and food information card (US2/US3): preview/final animation, counts, compact/full card, and inspect.
 - Wire the placeholder report and verify the Level 1 end-to-end loop; the full report content is implemented in M5 (US4).
@@ -217,7 +217,7 @@ Make the first real level.
 
 Reuse the architecture; add content only.
 
-- Level 2: Padang environment from `Wrng_padangggg.fbx`, `PadangPNG.png`, table, and chairs; seven foods: rice, rendang, fried chicken, cassava leaves, boiled egg, broccoli, crackers. Use the placeholder rice and cassava-leaf prefabs until team assets arrive.
+- Level 2: Padang environment from `Wrng_padangggg.fbx`, `PadangPNG.png`, table, and chairs; seven foods using available FBX models: rendang, fried chicken, boiled egg, fried egg, tempeh, broccoli, burger.
 - Level 3: bazaar environment with at least four stands and a central serving table. Distribute the eight foods:
   - Mie & Jajanan: fried noodles, burger.
   - Lauk: boiled egg, tempeh.

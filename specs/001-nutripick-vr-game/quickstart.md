@@ -124,9 +124,9 @@ If the gamepad is not detected, the game shows a notice and falls back to keyboa
 
 ### V10 — Healthy and less healthy routes
 
-1. Build a mostly healthy plate: rice, boiled egg, tempeh, broccoli.
+1. Build a mostly healthy plate: boiled egg, tempeh, broccoli, banana.
 2. Serve and note the score.
-3. Retry and build a mostly fried plate: fried egg, fried noodles, crackers.
+3. Retry and build a mostly fried plate: fried egg, fried noodles, burger.
 4. Serve and note the score.
 
 **Expected**: The healthy plate scores at least 70 (Seimbang). The fried plate scores below 50 (Perlu perbaikan). Both produce a complete report; neither is blocked.

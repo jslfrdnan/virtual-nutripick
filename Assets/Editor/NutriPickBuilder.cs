@@ -100,10 +100,10 @@ namespace NutriPick.Editor
             AssetDatabase.SaveAssets();
 
             var level1 = CreateLevel("level_01_warteg", "Level 1 — Warteg", "MainVR", "Level02_Padang", 1,
-                "Sarapan di warteg", new[] { "nasi_putih", "telur_rebus", "telur_ceplok", "tempe", "brokoli", "pisang", "mie_goreng", "kerupuk" },
+                "Sarapan di warteg", new[] { "rendang", "burger", "telur_rebus", "telur_ceplok", "tempe", "brokoli", "pisang", "mie_goreng" },
                 3, false, 1, false, new[] { "piring dasar", "pilih sayur dan protein" }, foods);
             var level2 = CreateLevel("level_02_padang", "Level 2 — Padang", "Level02_Padang", "Level03_Bazaar", 2,
-                "Makan siang di RM Padang", new[] { "nasi_putih", "rendang", "ayam_goreng", "sayur_singkong", "telur_rebus", "brokoli", "kerupuk" },
+                "Makan siang di RM Padang", new[] { "rendang", "ayam_goreng", "telur_rebus", "telur_ceplok", "tempe", "brokoli", "burger" },
                 3, false, 1, false, new[] { "porsi", "lemak", "natrium" }, foods);
             var level3 = CreateLevel("level_03_bazaar", "Level 3 — Bazaar", "Level03_Bazaar", string.Empty, 3,
                 "Makan malam di bazaar", new[] { "mie_goreng", "burger", "telur_rebus", "tempe", "brokoli", "pisang", "air_putih", "teh_manis" },
@@ -332,8 +332,6 @@ namespace NutriPick.Editor
                         UnityEngine.Object.DestroyImmediate(collider);
                     foreach (var rb in visual.GetComponentsInChildren<Rigidbody>())
                         UnityEngine.Object.DestroyImmediate(rb);
-                    foreach (var renderer in visual.GetComponentsInChildren<Renderer>())
-                        renderer.sharedMaterial = material;
                     NormalizeVisual(visual, spec.targetSize);
                 }
                 else

@@ -134,7 +134,7 @@ namespace NutriPick.Editor
             var tableBox = tableSurface.AddComponent<BoxCollider>();
             tableBox.size = new Vector3(2.0f, 0.02f, 1.88f);
 
-            var level = AssetDatabase.LoadAssetAtPath<LevelDefinition>("Assets/ScriptableObjects/Levels/LD_Level01_Warteg.asset");
+            var level = AssetDatabase.LoadAssetAtPath<LevelDefinition>("Assets/ScriptableObjects/Levels/LD_MainVR.asset");
             var rules = AssetDatabase.LoadAssetAtPath<NutritionRules>("Assets/ScriptableObjects/Rules/NutritionRules.asset");
             if (level == null || rules == null)
             {

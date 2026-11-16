@@ -8,18 +8,18 @@ Approximate nutrition values per portion. These are game values for education, n
 
 | ID | Name | Level(s) | Existing asset | Team-provided asset |
 |----|------|----------|----------------|-------------------|
-| `nasi_putih` | Nasi putih | 1, 2 | — | Yes |
+| `nasi_putih` | Nasi putih | — reserved | — | Yes |
 | `telur_rebus` | Telur rebus | 1, 2, 3 | `telur.fbx` | No |
-| `telur_ceplok` | Telur ceplok | 1 | `telur ceplok.fbx` | No |
-| `tempe` | Tempe | 1, 3 | `tempe.fbx` | No |
+| `telur_ceplok` | Telur ceplok | 1, 2 | `telur ceplok.fbx` | No |
+| `tempe` | Tempe | 1, 2, 3 | `tempe.fbx` | No |
 | `brokoli` | Brokoli | 1, 2, 3 | `brokoli.fbx` | No |
 | `pisang` | Pisang | 1, 3 | `pisang.fbx` or banana OBJ | No |
 | `mie_goreng` | Mie goreng | 1, 3 | `mie.fbx` | No |
-| `kerupuk` | Kerupuk | 1, 2 | `Kerupuk.jpg` texture | Yes |
-| `rendang` | Rendang | 2 | `rendang.fbx`, `Rendang.jpg` | No |
+| `kerupuk` | Kerupuk | — reserved | `Kerupuk.jpg` texture | Yes |
+| `rendang` | Rendang | 1, 2 | `rendang.fbx`, `Rendang.jpg` | No |
 | `ayam_goreng` | Ayam goreng | 2 | `yamgoreng.fbx` | No |
-| `sayur_singkong` | Sayur singkong | 2 | `Sayursingkong1.jpg` texture | Yes |
-| `burger` | Burger | 3 | `BURGER.fbx` | No |
+| `sayur_singkong` | Sayur singkong | — reserved | `Sayursingkong1.jpg` texture | Yes |
+| `burger` | Burger | 1, 2, 3 | `BURGER.fbx` | No |
 | `air_putih` | Air putih | 3 | — | Yes |
 | `teh_manis` | Teh manis | 3 | — | Yes |
 
@@ -159,8 +159,8 @@ Approximate nutrition values per portion. These are game values for education, n
 
 | Level | Healthy | Less healthy | Total | Meets "at least 2 each" |
 |-------|--------:|-------------:|------:|-------------------------|
-| 1 — Warteg | 5 | 3 | 8 | Yes |
-| 2 — Padang | 4 | 3 | 7 | Yes |
+| 1 — Warteg | 4 | 4 | 8 | Yes |
+| 2 — Padang | 3 | 4 | 7 | Yes |
 | 3 — Bazaar | 5 | 3 | 8 | Yes |
 
 ## Level 3 Stand Distribution

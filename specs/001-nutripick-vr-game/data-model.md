@@ -468,8 +468,8 @@ Approximate values per portion. These are game values, not medical advice; revie
 
 | Level | Food IDs / stands |
 |-------|-------------------|
-| 1 — Warteg breakfast | One stand: `nasi_putih`, `telur_rebus`, `telur_ceplok`, `tempe`, `brokoli`, `pisang`, `mie_goreng`, `kerupuk` |
-| 2 — Padang lunch | One stand: `nasi_putih`, `rendang`, `ayam_goreng`, `sayur_singkong`, `telur_rebus`, `brokoli`, `kerupuk` |
+| 1 — Warteg breakfast | One stand: `rendang`, `burger`, `telur_rebus`, `telur_ceplok`, `tempe`, `brokoli`, `pisang`, `mie_goreng` |
+| 2 — Padang lunch | One stand: `rendang`, `ayam_goreng`, `telur_rebus`, `telur_ceplok`, `tempe`, `brokoli`, `burger` |
 | 3 — Bazaar dinner | Mie & Jajanan: `mie_goreng`, `burger`; Lauk: `telur_rebus`, `tempe`; Sayur & Buah: `brokoli`, `pisang`; Minuman: `air_putih`, `teh_manis` |
 
 ## Derived Rules
