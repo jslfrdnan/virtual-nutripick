@@ -1,10 +1,10 @@
 # NutriPick VR
 
-NutriPick VR is an educational first-person nutrition game built in Unity 6. The player uses a **Rexus gamepad** to move, aim a reticle, pick up food, plate it, and serve a meal. Scene 1 now uses a Figma-style UI Canvas: an eight-card food grid, a Status Makanan bar, and a two-panel Final Result. A live health balance and food information cards teach balanced choices across three levels:
+NutriPick VR is an educational first-person nutrition game built in Unity 6. The player uses a **Rexus gamepad** to move, aim a reticle, pick up food, plate it, and serve a meal. Scene 1 is a **home kitchen and dining room**: two serving platters hold eight foods, the player plates a meal on the dining table, and a Figma-style UI Canvas shows the eight-card food grid, Status Makanan bar, and two-panel Final Result. A live health balance and food information cards teach balanced choices.
 
-1. **Warteg** — breakfast, built from the existing `MainVR` tabletop scene
-2. **RM Padang** — lunch
-3. **Bazaar** — dinner with four food stands
+1. **Rumah** — breakfast at home (`MainVR`)
+2. **RM Padang** — lunch (not present in the current working tree)
+3. **Bazaar** — dinner with four food stands (not present in the current working tree)
 
 ## Requirements
 
@@ -30,9 +30,9 @@ NutriPick VR is an educational first-person nutrition game built in Unity 6. The
 1. Open the project with Unity 6000.6.0f1.
 2. Open `Assets/Scenes/MainVR.unity`.
 3. Press **Play**.
-4. Scene 1 starts directly in gameplay. Pick up three foods, place them on the plate, and serve. Scene 1 shows the eight-card food grid, Status Makanan bar, and Final Result; Levels 2 and 3 retain the existing HUD/report fallback.
+4. Scene 1 starts directly in gameplay. Pick up three foods from the two platters on the kitchen island, place them on the serving plate on the dining table, and press **Start** to serve. The eight-card food grid, Status Makanan bar, and Final Result stay visible.
 
-Build Settings contains exactly `MainVR`, `Level02_Padang`, and `Level03_Bazaar`, in that order. `MainVR` is the existing tabletop mockup; its `Plate` now uses `Assets/Prefabs/Interaction/ServingPlate.prefab` with `Assets/Models/Props/ceramic_plate.fbx`. Scene 1 uses `Assets/Prefabs/UI/FigmaHUD.prefab`.
+Build Settings currently contains `MainVR` only; `Level02_Padang` and `Level03_Bazaar` are intentionally absent from the current working tree. Scene 1 uses `Assets/Models/Environment/Home/` (kitchen, island, dining, decor), `Assets/Models/Food/Plating/` (platters, plates, bowls), and `Assets/Prefabs/Interaction/ServingPlate.prefab` with `Assets/Models/Props/ceramic_plate.fbx`.
 
 ## Generate or Refresh Content
 
@@ -44,6 +44,7 @@ The project includes an editor builder that creates the ScriptableObjects, food 
 - Menu: **NutriPick → Build Serving Plate**
 - Menu: **NutriPick → Build Figma HUD**
 - Menu: **NutriPick → Build Scene 1 Figma Setup**
+- Menu: **NutriPick → Build Scene 1 Home** (kitchen + dining + platters)
 - Menu: **NutriPick → Validate All**
 - Menu: **NutriPick → Validate Scenes**
 - Menu: **NutriPick → Capture Scene Previews**
@@ -54,7 +55,7 @@ The Windows build is written to `Builds/Windows/NutriPick.exe`.
 ## Tests
 
 - **EditMode**: 26 tests covering classification, meal evaluation, session state, level validation, protein types, Final Result points, and food-card formatting.
-- **PlayMode**: 10 tests covering Scene 1 direct start/card grid/Status Makanan/Final Result/replication, MainVR plate-and-serve, Level 2 food spawning, and Level 3 four-stand/drink setup.
+- **PlayMode**: 11 tests covering Scene 1 home layout/platters/direct start/card grid/Status Makanan/Final Result/replication, MainVR plate-and-serve, and Level 2/3 smoke tests (skipped when those scenes are absent).
 
 Run them from **Window → General → Test Runner**, or headlessly:
 
@@ -82,6 +83,15 @@ The asset team supplies these assets; the implementation currently uses placehol
 | `bazaar_canopy` | Environment — canopy/tent |
 
 Integration requirements are in `specs/001-nutripick-vr-game/content/food-catalog.md`. The integration task is T057 in `specs/001-nutripick-vr-game/tasks.md`.
+
+## MCP Integration
+
+Both MCP servers are configured globally in `~/.config/opencode/opencode.json`:
+
+- **Blender MCP** — `blender-mcp` (uv tool) plus the `blender_mcp.py` addon; server entry `blender` connects to `localhost:9876`.
+- **Unity MCP** — `mcpforunityserver` (uv tool) as `unity`, using `--transport stdio`; the Unity package is embedded at `Packages/com.coplaydev.unity-mcp` (v10.0.0). `McpAutoStartOnce` selects the stdio bridge and starts it when the Editor loads.
+
+Open Blender and Unity, then run `opencode mcp list`; both should report `connected`. The Unity bridge listens on port `6400`.
 
 ## Nutrition Disclaimer
 

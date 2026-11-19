@@ -1,3 +1,4 @@
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace NutriPick.Flow
@@ -8,6 +9,12 @@ namespace NutriPick.Flow
         {
             if (string.IsNullOrWhiteSpace(sceneName))
                 return;
+
+            if (!Application.CanStreamedLevelBeLoaded(sceneName))
+            {
+                Debug.LogWarning($"[NutriPick] Scene '{sceneName}' is not in the build settings. Staying in the current scene.");
+                return;
+            }
 
             SceneManager.LoadScene(sceneName);
         }

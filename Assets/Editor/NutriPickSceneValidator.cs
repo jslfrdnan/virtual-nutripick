@@ -1,4 +1,5 @@
 using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -12,18 +13,23 @@ namespace NutriPick.Editor
 {
     public static class NutriPickSceneValidator
     {
-        private static readonly string[] Scenes =
+        private static readonly string[] SceneCandidates =
         {
             "Assets/Scenes/MainVR.unity",
             "Assets/Scenes/Level02_Padang.unity",
             "Assets/Scenes/Level03_Bazaar.unity"
         };
 
+        private static string[] ExistingScenes()
+        {
+            return SceneCandidates.Where(File.Exists).ToArray();
+        }
+
         [MenuItem("NutriPick/Validate Scenes")]
         public static void ValidateScenes()
         {
             int errors = 0;
-            foreach (var path in Scenes)
+            foreach (var path in ExistingScenes())
             {
                 var scene = EditorSceneManager.OpenScene(path);
                 var flow = Object.FindFirstObjectByType<LevelFlowController>();
@@ -67,6 +73,12 @@ namespace NutriPick.Editor
 
                     var finalResults = Object.FindObjectsByType<FinalResultPresenter>(FindObjectsInactive.Include, FindObjectsSortMode.None);
                     if (finalResults.Length != 1) { errors++; Debug.LogError($"[NutriPick] {path}: expected 1 FinalResultPresenter, found {finalResults.Length}"); }
+
+                    var foods = Object.FindObjectsByType<FoodItem>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+                    if (foods.Length != 8) { errors++; Debug.LogError($"[NutriPick] {path}: expected 8 food items, found {foods.Length}"); }
+
+                    if (flow.stands == null || flow.stands.Length != 2) { errors++; Debug.LogError($"[NutriPick] {path}: expected 2 platters, found {flow.stands?.Length ?? 0}"); }
+                    if (GameObject.Find("Scene1Home") == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing Scene1Home environment"); }
                 }
 
                 Debug.Log($"[NutriPick] {path}: flow OK, stands={flow.stands?.Length}, plateSlots={flow.plate?.slots?.Length}");
@@ -91,7 +103,7 @@ namespace NutriPick.Editor
             var output = Path.Combine(Path.GetTempPath(), "opencode");
             Directory.CreateDirectory(output);
 
-            foreach (var path in Scenes)
+            foreach (var path in ExistingScenes())
             {
                 EditorSceneManager.OpenScene(path);
                 var camera = Camera.main;
@@ -103,28 +115,57 @@ namespace NutriPick.Editor
 
                 if (path.Contains("MainVR"))
                 {
-                    camera.transform.position = new Vector3(0f, 4f, -0.5f);
-                    camera.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+                    Capture(camera, output, "MainVR_FirstPerson", new Vector3(0.4f, 1.6f, -2f), Quaternion.Euler(8f, -20f, 0f));
+                    Capture(camera, output, "MainVR_Buffet", new Vector3(0.4f, 1.5f, -1.2f), Quaternion.Euler(15f, -30f, 0f));
+                    Capture(camera, output, "MainVR_PlattersTop", new Vector3(-1.0f, 1.4f, -1.1f), Quaternion.Euler(90f, 0f, 0f));
+
+                    var ceiling = FindSceneObject("Ceiling");
+                    var ceilingActive = ceiling != null && ceiling.activeSelf;
+                    if (ceiling != null)
+                        ceiling.SetActive(false);
+                    Capture(camera, output, "MainVR_Top", new Vector3(0f, 4f, 0f), Quaternion.Euler(90f, 0f, 0f));
+                    if (ceiling != null)
+                        ceiling.SetActive(ceilingActive);
                 }
-
-                var rt = new RenderTexture(1280, 720, 24);
-                camera.targetTexture = rt;
-                camera.Render();
-                RenderTexture.active = rt;
-                var tex = new Texture2D(1280, 720, TextureFormat.RGB24, false);
-                tex.ReadPixels(new Rect(0, 0, 1280, 720), 0, 0);
-                tex.Apply();
-                RenderTexture.active = null;
-                camera.targetTexture = null;
-
-                var name = Path.GetFileNameWithoutExtension(path);
-                var file = Path.Combine(output, name + ".png");
-                File.WriteAllBytes(file, tex.EncodeToPNG());
-                Object.DestroyImmediate(tex);
-                rt.Release();
-                Object.DestroyImmediate(rt);
-                Debug.Log($"[NutriPick] Captured {file}");
+                else
+                {
+                    Capture(camera, output, Path.GetFileNameWithoutExtension(path), camera.transform.position, camera.transform.rotation);
+                }
             }
+        }
+
+        private static GameObject FindSceneObject(string name)
+        {
+            foreach (var transform in Object.FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            {
+                if (transform != null && transform.name == name)
+                    return transform.gameObject;
+            }
+
+            return null;
+        }
+
+        private static void Capture(Camera camera, string output, string name, Vector3 position, Quaternion rotation)
+        {
+            camera.transform.position = position;
+            camera.transform.rotation = rotation;
+
+            var rt = new RenderTexture(1280, 720, 24);
+            camera.targetTexture = rt;
+            camera.Render();
+            RenderTexture.active = rt;
+            var tex = new Texture2D(1280, 720, TextureFormat.RGB24, false);
+            tex.ReadPixels(new Rect(0, 0, 1280, 720), 0, 0);
+            tex.Apply();
+            RenderTexture.active = null;
+            camera.targetTexture = null;
+
+            var file = Path.Combine(output, name + ".png");
+            File.WriteAllBytes(file, tex.EncodeToPNG());
+            Object.DestroyImmediate(tex);
+            rt.Release();
+            Object.DestroyImmediate(rt);
+            Debug.Log($"[NutriPick] Captured {file}");
         }
     }
 }

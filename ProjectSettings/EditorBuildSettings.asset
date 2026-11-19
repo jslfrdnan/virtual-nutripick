@@ -8,12 +8,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MainVR.unity
     guid: 0ff241830396f64429dcdf243582a081
-  - enabled: 1
-    path: Assets/Scenes/Level02_Padang.unity
-    guid: c99e2a976aead834b91cffa4019fd4d0
-  - enabled: 1
-    path: Assets/Scenes/Level03_Bazaar.unity
-    guid: e9ffa82cb78b3ab4fa1d20e6e73d420d
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 5641cc6de2f3f01468d616dc58d1f5e0, type: 2}

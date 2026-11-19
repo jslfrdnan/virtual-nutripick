@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: LD_MainVR
   m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.Content.LevelDefinition
   levelId: level_01_warteg
-  displayName: "Level 1 \u2014 Warteg"
+  displayName: "Level 1 \u2014 Rumah"
   sceneName: MainVR
   nextSceneName: Level02_Padang
   levelIndex: 1
-  settingDescription: Sarapan di warteg
+  settingDescription: Sarapan di rumah
   foodPool:
   - {fileID: 11400000, guid: f0b5a3980fba9ce439ac8eea306afc50, type: 2}
   - {fileID: 11400000, guid: 7f5912e29c707184cba9bdd549cb2614, type: 2}

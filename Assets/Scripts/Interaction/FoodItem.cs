@@ -44,7 +44,11 @@ namespace NutriPick.Interaction
                     PlatedSlot.Remove(this);
 
                 if (body != null)
+                {
+                    body.linearVelocity = Vector3.zero;
+                    body.angularVelocity = Vector3.zero;
                     body.isKinematic = true;
+                }
                 if (itemCollider != null)
                     itemCollider.enabled = false;
 
@@ -71,7 +75,11 @@ namespace NutriPick.Interaction
             transform.localRotation = Quaternion.identity;
 
             if (body != null)
+            {
+                body.linearVelocity = Vector3.zero;
+                body.angularVelocity = Vector3.zero;
                 body.isKinematic = true;
+            }
             if (itemCollider != null)
                 itemCollider.enabled = true;
         }
@@ -136,9 +144,9 @@ namespace NutriPick.Interaction
 
             if (body != null)
             {
-                body.isKinematic = false;
                 body.linearVelocity = Vector3.zero;
                 body.angularVelocity = Vector3.zero;
+                body.isKinematic = true;
             }
 
             if (itemCollider != null)

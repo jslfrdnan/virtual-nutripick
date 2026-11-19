@@ -18,8 +18,8 @@
 ## 2. Open and run
 
 1. Open `Assets/Scenes/MainVR.unity`.
-2. Confirm Build Settings order: `MainVR`, `Level02_Padang`, `Level03_Bazaar`.
-3. Press **Play**. Scene 1 starts directly in gameplay; there is no Start screen.
+2. Confirm Build Settings currently contains `MainVR`; `Level02_Padang` and `Level03_Bazaar` are absent from the working tree.
+3. Press **Play**. Scene 1 starts directly in gameplay in the home kitchen and dining room; there is no Start screen.
 4. Use the gamepad:
    - Left stick: move
    - Right stick: look
@@ -35,9 +35,10 @@
 
 - Scene 1 starts immediately after Play.
 - No Start screen or `Profil Dev` panel appears.
+- The home kitchen, dining table, two platters, and eight foods are visible.
 - Player movement, reticle, food cards, and Status Makanan are active immediately.
 
-**Expected**: no console errors; the table scene is interactive without pressing Start.
+**Expected**: no console errors; the kitchen scene is interactive without pressing Start.
 
 ### V2 — Food card grid
 
@@ -51,8 +52,9 @@
 
 ### V3 — Plate and placement
 
-- The serving plate uses `ceramic_plate.fbx` and looks like a plate on the table.
+- The serving plate uses `ceramic_plate.fbx` and sits on the dining table.
 - Four placement positions exist.
+- Foods are picked from the two platters on the dining table.
 - Repeat pickup/place/remove for all eight foods.
 - Carrying food over a free position highlights it.
 - `A` places food; food snaps into the position and stays stable for at least 10 seconds.
