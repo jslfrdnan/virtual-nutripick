@@ -12,8 +12,9 @@ PLATE_DIR = ROOT / "Assets/Models/Food/Plating"
 FOOD_DIR = ROOT / "Assets/Models/Food/Home"
 BLEND_DIR = ROOT / "Blender/Scene1_Home"
 PREVIEW_DIR = ROOT / "References/Scene1_Home"
+TEXTURE_DIR = ROOT / "Assets/Textures/Food/Home"
 
-for folder in (ENV_DIR, PLATE_DIR, FOOD_DIR, BLEND_DIR, PREVIEW_DIR):
+for folder in (ENV_DIR, PLATE_DIR, FOOD_DIR, BLEND_DIR, PREVIEW_DIR, TEXTURE_DIR):
     folder.mkdir(parents=True, exist_ok=True)
 
 bpy.ops.wm.read_factory_settings(use_empty=True)
@@ -81,6 +82,63 @@ M_FOOD_BANANA = mat("M_Food_Banana", (0.95, 0.78, 0.18), roughness=0.5)
 M_FOOD_BANANA_TIP = mat("M_Food_BananaTip", (0.34, 0.22, 0.10), roughness=0.8)
 M_FOOD_NOODLE = mat("M_Food_Noodle", (0.80, 0.58, 0.25), roughness=0.55)
 M_FOOD_ONION = mat("M_Food_GreenOnion", (0.30, 0.60, 0.20), roughness=0.6)
+
+FOOD_TEXTURES = {
+    "M_Food_Rendang": "M_Food_Rendang_Albedo.png",
+    "M_Food_RendangSauce": "M_Food_RendangSauce_Albedo.png",
+    "M_Food_Bun": "M_Food_Bun_Albedo.png",
+    "M_Food_Patty": "M_Food_Patty_Albedo.png",
+    "M_Food_Cheese": "M_Food_Cheese_Albedo.png",
+    "M_Food_Lettuce": "M_Food_Lettuce_Albedo.png",
+    "M_Food_Tomato": "M_Food_Tomato_Albedo.png",
+    "M_Food_EggWhite": "M_Food_EggWhite_Albedo.png",
+    "M_Food_Yolk": "M_Food_Yolk_Albedo.png",
+    "M_Food_Tempeh": "M_Food_Tempeh_Albedo.png",
+    "M_Food_TempehDark": "M_Food_TempehDark_Albedo.png",
+    "M_Food_Broccoli": "M_Food_Broccoli_Albedo.png",
+    "M_Food_Stem": "M_Food_Stem_Albedo.png",
+    "M_Food_Banana": "M_Food_Banana_Albedo.png",
+    "M_Food_BananaTip": "M_Food_BananaTip_Albedo.png",
+    "M_Food_Noodle": "M_Food_Noodle_Albedo.png",
+    "M_Food_GreenOnion": "M_Food_GreenOnion_Albedo.png",
+}
+
+
+def add_food_texture(material_name, filename):
+    material = MATS.get(material_name)
+    if material is None:
+        print("missing material", material_name)
+        return
+
+    image_path = TEXTURE_DIR / filename
+    if not image_path.exists():
+        print("missing texture", image_path)
+        return
+
+    material.use_nodes = True
+    nodes = material.node_tree.nodes
+    links = material.node_tree.links
+    bsdf = next((node for node in nodes if node.type == "BSDF_PRINCIPLED"), None)
+    if bsdf is None:
+        return
+
+    for node in list(nodes):
+        if node.type == "TEX_IMAGE":
+            nodes.remove(node)
+
+    image = bpy.data.images.load(str(image_path), check_existing=True)
+    image.colorspace_settings.name = "sRGB"
+    texture = nodes.new("ShaderNodeTexImage")
+    texture.image = image
+    texture.interpolation = "Linear"
+    texture.extension = "REPEAT"
+    texture.location = (-420, 260)
+    links.new(texture.outputs["Color"], bsdf.inputs["Base Color"])
+    bsdf.inputs["Base Color"].default_value = (1.0, 1.0, 1.0, 1.0)
+
+
+for material_name, filename in FOOD_TEXTURES.items():
+    add_food_texture(material_name, filename)
 
 
 # ---------------------------------------------------------------------------
@@ -251,6 +309,16 @@ def origin_bottom_center(obj):
     obj.location = (0, 0, 0)
     bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
     return obj
+
+
+def unwrap(obj):
+    bpy.ops.object.select_all(action="DESELECT")
+    obj.select_set(True)
+    bpy.context.view_layer.objects.active = obj
+    bpy.ops.object.mode_set(mode="EDIT")
+    bpy.ops.mesh.select_all(action="SELECT")
+    bpy.ops.uv.smart_project(angle_limit=1.15, island_margin=0.02)
+    bpy.ops.object.mode_set(mode="OBJECT")
 
 
 def export_fbx(objects, path):
@@ -694,6 +762,9 @@ food_objects = [
     build_mie_goreng(),
 ]
 
+for food in food_objects:
+    unwrap(food)
+
 export_fbx(room_objects, ENV_DIR / "KitchenRoom.fbx")
 export_fbx(island_objects, ENV_DIR / "KitchenIsland.fbx")
 export_fbx(dining_objects, ENV_DIR / "DiningSet.fbx")
@@ -725,7 +796,7 @@ def setup_render():
     scene.render.resolution_percentage = 100
     scene.render.image_settings.file_format = "PNG"
     try:
-        scene.render.engine = "BLENDER_EEVEE_NEXT"
+        scene.render.engine = "BLENDER_EEVEE"
     except Exception:
         scene.render.engine = "BLENDER_WORKBENCH"
     world = bpy.data.worlds.new("PreviewWorld")

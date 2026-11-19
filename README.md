@@ -54,7 +54,7 @@ The Windows build is written to `Builds/Windows/NutriPick.exe`.
 
 ## Tests
 
-- **EditMode**: 26 tests covering classification, meal evaluation, session state, level validation, protein types, Final Result points, and food-card formatting.
+- **EditMode**: 27 tests covering classification, meal evaluation, session state, level validation, protein types, Final Result points, food-card formatting, and food texture assignment.
 - **PlayMode**: 11 tests covering Scene 1 home layout/platters/direct start/card grid/Status Makanan/Final Result/replication, MainVR plate-and-serve, and Level 2/3 smoke tests (skipped when those scenes are absent).
 
 Run them from **Window → General → Test Runner**, or headlessly:
@@ -83,6 +83,10 @@ The asset team supplies these assets; the implementation currently uses placehol
 | `bazaar_canopy` | Environment — canopy/tent |
 
 Integration requirements are in `specs/001-nutripick-vr-game/content/food-catalog.md`. The integration task is T057 in `specs/001-nutripick-vr-game/tasks.md`.
+
+## Food Textures
+
+Scene 1 foods use **17 albedo textures** cropped from the reference photos in `References/Scene1_Home/foods/`. The reproducible crop manifest is at `Blender/Scene1_Home/textures/food/texture_manifest.json`, the preparation script is `Blender/Scene1_Home/scripts/prepare_food_textures.py`, and the final PNGs live in `Assets/Textures/Food/Home/`. Food materials stay **URP Unlit** so the photo-derived colors remain consistent under the room lighting. Attribution and share-alike notes are in `Assets/Textures/Food/Home/ATTRIBUTION.md`.
 
 ## MCP Integration
 

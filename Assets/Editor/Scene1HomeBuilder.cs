@@ -103,9 +103,31 @@ namespace NutriPick.Editor
 
         private static readonly Dictionary<string, Material> Materials = new();
 
+        private static readonly Dictionary<string, string> FoodTextures = new()
+        {
+            { "M_Food_Rendang", "M_Food_Rendang_Albedo.png" },
+            { "M_Food_RendangSauce", "M_Food_RendangSauce_Albedo.png" },
+            { "M_Food_Bun", "M_Food_Bun_Albedo.png" },
+            { "M_Food_Patty", "M_Food_Patty_Albedo.png" },
+            { "M_Food_Cheese", "M_Food_Cheese_Albedo.png" },
+            { "M_Food_Lettuce", "M_Food_Lettuce_Albedo.png" },
+            { "M_Food_Tomato", "M_Food_Tomato_Albedo.png" },
+            { "M_Food_EggWhite", "M_Food_EggWhite_Albedo.png" },
+            { "M_Food_Yolk", "M_Food_Yolk_Albedo.png" },
+            { "M_Food_Tempeh", "M_Food_Tempeh_Albedo.png" },
+            { "M_Food_TempehDark", "M_Food_TempehDark_Albedo.png" },
+            { "M_Food_Broccoli", "M_Food_Broccoli_Albedo.png" },
+            { "M_Food_Stem", "M_Food_Stem_Albedo.png" },
+            { "M_Food_Banana", "M_Food_Banana_Albedo.png" },
+            { "M_Food_BananaTip", "M_Food_BananaTip_Albedo.png" },
+            { "M_Food_Noodle", "M_Food_Noodle_Albedo.png" },
+            { "M_Food_GreenOnion", "M_Food_GreenOnion_Albedo.png" },
+        };
+
         [MenuItem("NutriPick/Build Scene 1 Home")]
         public static void Build()
         {
+            AssetDatabase.Refresh();
             ConfigureModelImporters();
             EnsureMaterials();
             CreateFoodPrefabs();
@@ -177,6 +199,16 @@ namespace NutriPick.Editor
 
                 material.shader = shader;
                 material.SetColor("_BaseColor", pair.Value.color);
+                if (isUnlit && FoodTextures.TryGetValue(pair.Key, out var textureFile))
+                {
+                    var texture = LoadFoodTexture(pair.Key, textureFile);
+                    if (texture != null)
+                    {
+                        material.SetTexture("_BaseMap", texture);
+                        material.SetColor("_BaseColor", Color.white);
+                    }
+                }
+
                 if (!isUnlit)
                 {
                     material.SetFloat("_Metallic", pair.Value.metallic);
@@ -195,6 +227,32 @@ namespace NutriPick.Editor
             }
 
             AssetDatabase.SaveAssets();
+        }
+
+        private static Texture2D LoadFoodTexture(string materialName, string fileName)
+        {
+            var path = $"Assets/Textures/Food/Home/{fileName}";
+            if (!File.Exists(path))
+            {
+                Debug.LogWarning($"[Scene1Home] Missing food texture for {materialName}: {path}");
+                return null;
+            }
+
+            var importer = AssetImporter.GetAtPath(path) as TextureImporter;
+            if (importer != null)
+            {
+                importer.textureType = TextureImporterType.Default;
+                importer.sRGBTexture = true;
+                importer.mipmapEnabled = true;
+                importer.maxTextureSize = 1024;
+                importer.wrapMode = TextureWrapMode.Repeat;
+                importer.textureCompression = TextureImporterCompression.CompressedHQ;
+                importer.alphaSource = TextureImporterAlphaSource.None;
+                importer.isReadable = false;
+                importer.SaveAndReimport();
+            }
+
+            return AssetDatabase.LoadAssetAtPath<Texture2D>(path);
         }
 
         private static string NormalizeMaterialName(string name)

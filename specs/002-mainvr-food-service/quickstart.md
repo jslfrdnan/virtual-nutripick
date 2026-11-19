@@ -55,6 +55,7 @@
 - The serving plate uses `ceramic_plate.fbx` and sits on the dining table.
 - Four placement positions exist.
 - Foods are picked from the two platters on the dining table.
+- Each food shows its reference-derived albedo texture; no pink or missing materials.
 - Repeat pickup/place/remove for all eight foods.
 - Carrying food over a free position highlights it.
 - `A` places food; food snaps into the position and stays stable for at least 10 seconds.

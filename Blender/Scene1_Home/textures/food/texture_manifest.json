@@ -1,0 +1,257 @@
+[
+  {
+    "material": "M_Food_Rendang",
+    "source": "References/Scene1_Home/foods/beef_rendang.jpg",
+    "crop": [
+      480,
+      320,
+      780,
+      620
+    ],
+    "output": "Assets/Textures/Food/Home/M_Food_Rendang_Albedo.png",
+    "size": 1024,
+    "wrap": "Repeat",
+    "license": "CC0",
+    "note": "rendang chunk surface"
+  },
+  {
+    "material": "M_Food_RendangSauce",
+    "source": "References/Scene1_Home/foods/beef_rendang.jpg",
+    "crop": [
+      580,
+      540,
+      740,
+      670
+    ],
+    "output": "Assets/Textures/Food/Home/M_Food_RendangSauce_Albedo.png",
+    "size": 512,
+    "wrap": "Repeat",
+    "license": "CC0",
+    "note": "dark rendang sauce"
+  },
+  {
+    "material": "M_Food_Bun",
+    "source": "References/Scene1_Home/foods/big_mac_hamburger.jpg",
+    "crop": [
+      420,
+      120,
+      830,
+      280
+    ],
+    "output": "Assets/Textures/Food/Home/M_Food_Bun_Albedo.png",
+    "size": 1024,
+    "wrap": "Repeat",
+    "license": "CC0",
+    "note": "sesame bun crust"
+  },
+  {
+    "material": "M_Food_Patty",
+    "source": "References/Scene1_Home/foods/big_mac_hamburger.jpg",
+    "crop": [
+      360,
+      490,
+      780,
+      540
+    ],
+    "output": "Assets/Textures/Food/Home/M_Food_Patty_Albedo.png",
+    "size": 1024,
+    "wrap": "Repeat",
+    "license": "CC0",
+    "note": "grilled beef patty"
+  },
+  {
+    "material": "M_Food_Cheese",
+    "source": "References/Scene1_Home/foods/big_mac_hamburger.jpg",
+    "crop": [
+      500,
+      800,
+      720,
+      845
+    ],
+    "output": "Assets/Textures/Food/Home/M_Food_Cheese_Albedo.png",
+    "size": 512,
+    "wrap": "Repeat",
+    "license": "CC0",
+    "note": "melted cheese"
+  },
+  {
+    "material": "M_Food_Lettuce",
+    "source": "References/Scene1_Home/foods/big_mac_hamburger.jpg",
+    "crop": [
+      300,
+      480,
+      480,
+      555
+    ],
+    "output": "Assets/Textures/Food/Home/M_Food_Lettuce_Albedo.png",
+    "size": 512,
+    "wrap": "Repeat",
+    "license": "CC0",
+    "note": "lettuce"
+  },
+  {
+    "material": "M_Food_Tomato",
+    "source": "References/Scene1_Home/foods/mi_goreng_gm.jpg",
+    "crop": [
+      300,
+      540,
+      410,
+      640
+    ],
+    "output": "Assets/Textures/Food/Home/M_Food_Tomato_Albedo.png",
+    "size": 512,
+    "wrap": "Repeat",
+    "license": "CC BY-SA 3.0",
+    "note": "tomato slice"
+  },
+  {
+    "material": "M_Food_EggWhite",
+    "source": "References/Scene1_Home/foods/boiled_egg_crossection.jpg",
+    "crop": [
+      330,
+      270,
+      430,
+      380
+    ],
+    "output": "Assets/Textures/Food/Home/M_Food_EggWhite_Albedo.png",
+    "size": 1024,
+    "wrap": "Repeat",
+    "license": "CC BY-SA 2.0",
+    "note": "boiled egg white"
+  },
+  {
+    "material": "M_Food_Yolk",
+    "source": "References/Scene1_Home/foods/boiled_egg_crossection.jpg",
+    "crop": [
+      245,
+      455,
+      500,
+      690
+    ],
+    "output": "Assets/Textures/Food/Home/M_Food_Yolk_Albedo.png",
+    "size": 1024,
+    "wrap": "Repeat",
+    "license": "CC BY-SA 2.0",
+    "note": "boiled egg yolk"
+  },
+  {
+    "material": "M_Food_Tempeh",
+    "source": "References/Scene1_Home/foods/sliced_tempeh.jpg",
+    "crop": [
+      550,
+      300,
+      850,
+      480
+    ],
+    "output": "Assets/Textures/Food/Home/M_Food_Tempeh_Albedo.png",
+    "size": 1024,
+    "wrap": "Repeat",
+    "license": "CC BY-SA 2.0",
+    "note": "tempeh bean surface"
+  },
+  {
+    "material": "M_Food_TempehDark",
+    "source": "References/Scene1_Home/foods/sliced_tempeh.jpg",
+    "crop": [
+      550,
+      300,
+      850,
+      480
+    ],
+    "output": "Assets/Textures/Food/Home/M_Food_TempehDark_Albedo.png",
+    "size": 512,
+    "wrap": "Repeat",
+    "license": "CC BY-SA 2.0",
+    "note": "dark tempeh edge"
+  },
+  {
+    "material": "M_Food_Broccoli",
+    "source": "References/Scene1_Home/foods/broccoli_and_cross_section_edit.jpg",
+    "crop": [
+      270,
+      190,
+      500,
+      330
+    ],
+    "output": "Assets/Textures/Food/Home/M_Food_Broccoli_Albedo.png",
+    "size": 1024,
+    "wrap": "Repeat",
+    "license": "GFDL 1.2",
+    "note": "broccoli florets"
+  },
+  {
+    "material": "M_Food_Stem",
+    "source": "References/Scene1_Home/foods/broccoli_and_cross_section_edit.jpg",
+    "crop": [
+      900,
+      470,
+      1020,
+      660
+    ],
+    "output": "Assets/Textures/Food/Home/M_Food_Stem_Albedo.png",
+    "size": 512,
+    "wrap": "Repeat",
+    "license": "GFDL 1.2",
+    "note": "broccoli stem"
+  },
+  {
+    "material": "M_Food_Banana",
+    "source": "References/Scene1_Home/foods/banana_sitia_crete.jpg",
+    "crop": [
+      360,
+      440,
+      720,
+      540
+    ],
+    "output": "Assets/Textures/Food/Home/M_Food_Banana_Albedo.png",
+    "size": 1024,
+    "wrap": "Repeat",
+    "license": "CC BY-SA 4.0",
+    "note": "banana peel"
+  },
+  {
+    "material": "M_Food_BananaTip",
+    "source": "References/Scene1_Home/foods/banana_sitia_crete.jpg",
+    "crop": [
+      290,
+      675,
+      400,
+      745
+    ],
+    "output": "Assets/Textures/Food/Home/M_Food_BananaTip_Albedo.png",
+    "size": 512,
+    "wrap": "Repeat",
+    "license": "CC BY-SA 4.0",
+    "note": "banana tip"
+  },
+  {
+    "material": "M_Food_Noodle",
+    "source": "References/Scene1_Home/foods/mi_goreng_gm.jpg",
+    "crop": [
+      520,
+      250,
+      860,
+      500
+    ],
+    "output": "Assets/Textures/Food/Home/M_Food_Noodle_Albedo.png",
+    "size": 1024,
+    "wrap": "Repeat",
+    "license": "CC BY-SA 3.0",
+    "note": "fried noodles"
+  },
+  {
+    "material": "M_Food_GreenOnion",
+    "source": "References/Scene1_Home/foods/mi_goreng_gm.jpg",
+    "crop": [
+      700,
+      180,
+      770,
+      230
+    ],
+    "output": "Assets/Textures/Food/Home/M_Food_GreenOnion_Albedo.png",
+    "size": 512,
+    "wrap": "Repeat",
+    "license": "CC BY-SA 3.0",
+    "note": "green onion"
+  }
+]
