@@ -102,5 +102,37 @@ namespace NutriPick.Tests
                     $"{stall.name} must not carry food.");
             }
         }
+
+        [UnityTest]
+        public IEnumerator Level03CanServeAtPanggungBazaar()
+        {
+            SceneManager.LoadScene("Level03_Bazaar");
+            yield return null;
+            yield return null;
+
+            var foods = Object.FindObjectsByType<FoodItem>(FindObjectsSortMode.None);
+            var plate = Object.FindFirstObjectByType<PlateController>();
+            var flow = Object.FindFirstObjectByType<LevelFlowController>();
+            Assert.IsNotNull(plate, "Serving plate missing.");
+            Assert.IsNotNull(flow, "LevelFlowController missing.");
+
+            flow.StartLevel();
+            yield return null;
+
+            var picks = new[] { "air_putih", "mie_goreng", "telur_rebus", "tempe" }
+                .Select(id => foods.First(food => food.data.id == id))
+                .ToArray();
+
+            for (int i = 0; i < picks.Length; i++)
+                Assert.IsTrue(plate.slots[i].TryPlace(picks[i]), $"Could not place {picks[i].data.id}.");
+
+            yield return null;
+            Assert.AreEqual(4, plate.Count, "Plate should contain four items.");
+            flow.TryServe();
+            yield return new WaitForSeconds(1.4f);
+
+            Assert.IsTrue(flow.IsReportOpen, "Report did not open after serving at the stage.");
+            Assert.IsNotNull(GameSession.Instance.GetResult(3), "Level 3 result was not recorded.");
+        }
     }
 }

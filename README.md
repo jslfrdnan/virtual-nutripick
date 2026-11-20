@@ -57,7 +57,7 @@ The Windows build is written to `Builds/Windows/NutriPick.exe`.
 ## Tests
 
 - **EditMode**: 27 tests covering classification, meal evaluation, session state, level validation, protein types, Final Result points, food-card formatting, and food texture assignment.
-- **PlayMode**: 14 tests covering Scene 1 food plates/table layout/direct start/card grid/Status Makanan/Final Result/replication, MainVR plate-and-serve, Scene 3 stall layout/decorative stalls/stage service, and Level 2/3 smoke tests. The missing Level 2 scene causes one skip; the current run is 13 passed, 1 skipped, 0 failed.
+- **PlayMode**: 15 tests covering Scene 1 food plates/table layout/direct start/card grid/Status Makanan/Final Result/replication, MainVR plate-and-serve, Scene 3 stall layout/decorative stalls/stage service, and Level 2/3 smoke tests. The missing Level 2 scene causes one skip; the current run is 14 passed, 1 skipped, 0 failed.
 
 Run them from **Window → General → Test Runner**, or headlessly:
 
