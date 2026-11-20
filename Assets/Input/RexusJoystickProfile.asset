@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eea7156adc5d5f74fb259a8de0e3cd1c, type: 3}
+  m_Name: RexusJoystickProfile
+  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.Player.JoystickProfile
+  deviceNameContains: 
+  moveStickPath: stick
+  moveXPath: 
+  moveYPath: 
+  lookStickPath: 
+  lookXPath: 
+  lookYPath: 
+  interactButtonPath: button1
+  cancelButtonPath: button2
+  inspectButtonPath: button3
+  serveButtonPath: button9
+  pauseButtonPath: button8

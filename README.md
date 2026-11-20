@@ -25,6 +25,15 @@ NutriPick VR is an educational first-person nutrition game built in Unity 6. The
 | Select / Escape | Pause/resume |
 | D-pad / left stick | Navigate report and recap buttons |
 
+## Rexus Gamepad
+
+The player uses the new Input System. An XInput, PS4, or Switch Pro-style Rexus pad is read as a `Gamepad`; a pad in DirectInput or Android mode is read through the generic `Joystick` fallback.
+
+- Connect the controller before pressing Play. If Windows exposes it as a generic gamepad, open `Assets/Input/RexusJoystickProfile.asset` and fill the stick, axis, and button paths.
+- In Play mode, press **F9** to open the controller diagnostics overlay. It lists the detected devices, layouts, live stick/button values, and can copy a report to the clipboard.
+- Default mapping: left stick moves, right stick looks, A/Cross interacts, B/Circle cancels, X/Square inspects, Start/Options serves, Select/Share pauses.
+- Keyboard and mouse remain available as a fallback.
+
 ## Open and Run
 
 1. Open the project with Unity 6000.6.0f1.
@@ -57,7 +66,7 @@ The Windows build is written to `Builds/Windows/NutriPick.exe`.
 ## Tests
 
 - **EditMode**: 27 tests covering classification, meal evaluation, session state, level validation, protein types, Final Result points, food-card formatting, and food texture assignment.
-- **PlayMode**: 15 tests covering Scene 1 food plates/table layout/direct start/card grid/Status Makanan/Final Result/replication, MainVR plate-and-serve, Scene 3 stall layout/decorative stalls/stage service, and Level 2/3 smoke tests. The missing Level 2 scene causes one skip; the current run is 14 passed, 1 skipped, 0 failed.
+- **PlayMode**: 19 tests covering Scene 1 food plates/table layout/direct start/card grid/Status Makanan/Final Result/replication, MainVR plate-and-serve, Scene 3 stall layout/decorative stalls/stage service, Level 2/3 smoke tests, and gamepad/generic-joystick/keyboard input. The missing Level 2 scene causes one skip; the current run is 18 passed, 1 skipped, 0 failed.
 
 Run them from **Window → General → Test Runner**, or headlessly:
 
@@ -105,3 +114,4 @@ This is an educational course project, not medical advice. Nutrition values are 
 - Scene 1 quickstart: `specs/002-mainvr-food-service/quickstart.md`
 - Scene 1 contracts: `specs/002-mainvr-food-service/contracts/`
 - Scene 3 plan: `specs/006-scene3-flamboyant-bazaar/plan.mdx`
+- Rexus gamepad plan: `specs/007-rexus-gamepad/plan.mdx`

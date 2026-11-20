@@ -138,6 +138,7 @@ GameObject:
   - component: {fileID: 6642951389438039469}
   - component: {fileID: 7632654363579658228}
   - component: {fileID: 1900561418970202454}
+  - component: {fileID: 8306388942673375349}
   m_Layer: 0
   m_Name: PlayerRig
   m_TagString: Untagged
@@ -198,6 +199,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1807986f8c4f1f94cb2880376635d35b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.Player.GamepadInput
+  joystickProfile: {fileID: 11400000, guid: 89c27f93aa0acae439ab527d17d1f858, type: 2}
+  moveDeadzone: 0.15
+  lookDeadzone: 0.15
+  invertLookY: 0
+  mouseLookSensitivity: 0.05
 --- !u!114 &6642951389438039469
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -245,10 +251,25 @@ MonoBehaviour:
   carrier: {fileID: 7632654363579658228}
   flow: {fileID: 0}
   infoCard: {fileID: 0}
+  foodCards: {fileID: 0}
   prompt: {fileID: 0}
   plate: {fileID: 0}
   serveStation: {fileID: 0}
   maxDistance: 3
+--- !u!114 &8306388942673375349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3229918459461458936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa339fe7bee734449bfae86d0d76a54c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.Player.ControllerDiagnostics
+  visible: 0
+  toggleKey: 102
 --- !u!1 &8646336865764481813
 GameObject:
   m_ObjectHideFlags: 0

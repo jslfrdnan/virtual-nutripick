@@ -8,8 +8,10 @@ namespace NutriPick.Player
         public CharacterController controller;
         public Transform cameraPivot;
         public GamepadInput input;
-        public float moveSpeed = 2.0f;
-        public float lookSpeed = 120f;
+        [Header("Movement")]
+        [Range(0.5f, 6f)] public float moveSpeed = 2.0f;
+        [Header("Look")]
+        [Range(30f, 360f)] public float lookSpeed = 120f;
         public float gravity = -9.81f;
 
         private float pitch;
