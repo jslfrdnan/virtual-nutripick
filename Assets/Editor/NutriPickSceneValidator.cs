@@ -96,6 +96,34 @@ namespace NutriPick.Editor
                         }
                     }
                 }
+                else if (path.Contains("Level03_Bazaar"))
+                {
+                    if (flow.foodCards == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing FoodCardGridPresenter"); }
+                    if (flow.mealStatus == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing MealStatusBarPresenter"); }
+                    if (flow.finalResult == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing FinalResultPresenter"); }
+
+                    var eventSystems = Object.FindObjectsByType<EventSystem>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+                    if (eventSystems.Length != 1) { errors++; Debug.LogError($"[NutriPick] {path}: expected 1 EventSystem, found {eventSystems.Length}"); }
+
+                    var foods = Object.FindObjectsByType<FoodItem>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+                    if (foods.Length != 8) { errors++; Debug.LogError($"[NutriPick] {path}: expected 8 food items, found {foods.Length}"); }
+
+                    if (flow.stands == null || flow.stands.Length != 8) { errors++; Debug.LogError($"[NutriPick] {path}: expected 8 bazaar stands, found {flow.stands?.Length ?? 0}"); }
+                    if (flow.stands != null && flow.stands.Any(stand => stand == null || stand.foods == null || stand.foods.Length != 1)) { errors++; Debug.LogError($"[NutriPick] {path}: every bazaar stand must hold exactly one food"); }
+
+                    var decorStalls = Object.FindObjectsByType<DecorStall>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+                    if (decorStalls.Length != 4) { errors++; Debug.LogError($"[NutriPick] {path}: expected 4 decorative stalls, found {decorStalls.Length}"); }
+                    if (decorStalls.Any(stall => stall.GetComponentInChildren<FoodItem>(true) != null)) { errors++; Debug.LogError($"[NutriPick] {path}: a decorative stall carries food"); }
+
+                    if (GameObject.Find("Scene3Bazaar") == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing Scene3Bazaar environment"); }
+                    if (GameObject.Find("SchoolCampus") == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing SchoolCampus backdrop"); }
+                    if (GameObject.Find("Cafe_Kopi") == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing Cafe_Kopi"); }
+                    if (GameObject.Find("Cafe_Bakar") == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing Cafe_Bakar"); }
+                    if (GameObject.Find("PanggungBazaar") == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing PanggungBazaar"); }
+
+                    if (flow.serveStation != null && flow.serveStation.transform.position.x > 2f) { errors++; Debug.LogError($"[NutriPick] {path}: serve station is inside the school campus"); }
+                    if (flow.player != null && flow.player.transform.position.x > -6f) { errors++; Debug.LogError($"[NutriPick] {path}: player does not spawn on Jl. Flamboyant"); }
+                }
 
                 Debug.Log($"[NutriPick] {path}: flow OK, stands={flow.stands?.Length}, plateSlots={flow.plate?.slots?.Length}");
             }
@@ -149,6 +177,23 @@ namespace NutriPick.Editor
                     Capture(camera, output, "MainVR_Top", new Vector3(0f, 4f, 0f), Quaternion.Euler(90f, 0f, 0f));
                     if (ceiling != null)
                         ceiling.SetActive(ceilingActive);
+                }
+                else if (path.Contains("Level03_Bazaar"))
+                {
+                    Capture(camera, output, "Level03_Spawn", new Vector3(-9f, 1.65f, 41.5f), Quaternion.Euler(4f, 180f, 0f));
+                    Capture(camera, output, "Level03_WestRow", new Vector3(-7f, 1.7f, 18f), Quaternion.Euler(4f, -90f, 0f));
+                    Capture(camera, output, "Level03_EastRow", new Vector3(-11f, 1.7f, 13f), Quaternion.Euler(4f, 90f, 0f));
+                    Capture(camera, output, "Level03_Stage", new Vector3(-8f, 2.8f, 15f), Quaternion.Euler(8f, 180f, 0f));
+                    Capture(camera, output, "Level03_School", new Vector3(-8f, 2f, 8f), Quaternion.Euler(5f, 90f, 0f));
+                    Capture(camera, output, "Level03_Pramuka", new Vector3(-9f, 1.65f, -31f), Quaternion.Euler(4f, 95f, 0f));
+
+                    var wasOrthographic = camera.orthographic;
+                    var previousSize = camera.orthographicSize;
+                    camera.orthographic = true;
+                    camera.orthographicSize = 38f;
+                    Capture(camera, output, "Level03_Top", new Vector3(-9f, 60f, -2f), Quaternion.Euler(90f, 0f, 0f));
+                    camera.orthographic = wasOrthographic;
+                    camera.orthographicSize = previousSize;
                 }
                 else
                 {

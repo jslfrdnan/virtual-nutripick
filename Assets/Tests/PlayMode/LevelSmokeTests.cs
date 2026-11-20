@@ -102,7 +102,7 @@ namespace NutriPick.Tests
         }
 
         [UnityTest]
-        public IEnumerator Level03HasFourStandsAndDrinkRequirement()
+        public IEnumerator Level03HasEightStandsAndDrinkRequirement()
         {
             if (!Application.CanStreamedLevelBeLoaded("Level03_Bazaar"))
             {
@@ -115,12 +115,13 @@ namespace NutriPick.Tests
             yield return null;
 
             var stands = Object.FindObjectsByType<FoodStand>(FindObjectsSortMode.None);
-            Assert.AreEqual(4, stands.Length, "Level 3 should have four stands.");
+            Assert.AreEqual(8, stands.Length, "Level 3 should have eight interactive stands.");
 
-            int spawned = 0;
-            foreach (var stand in stands)
-                spawned += stand.Spawned.Count;
-            Assert.AreEqual(8, spawned, "Level 3 should spawn 8 foods across the stands.");
+            var foods = Object.FindObjectsByType<FoodItem>(FindObjectsSortMode.None);
+            Assert.AreEqual(8, foods.Length, "Level 3 should spawn 8 foods across the stands.");
+
+            var decor = Object.FindObjectsByType<DecorStall>(FindObjectsSortMode.None);
+            Assert.AreEqual(4, decor.Length, "Level 3 should have four decorative stalls.");
 
             var flow = Object.FindFirstObjectByType<LevelFlowController>();
             Assert.IsNotNull(flow, "LevelFlowController missing.");
