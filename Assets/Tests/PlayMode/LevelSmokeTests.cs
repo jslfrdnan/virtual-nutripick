@@ -30,7 +30,7 @@ namespace NutriPick.Tests
             Assert.AreEqual(8, foods.Length, "MainVR should have 8 interactive foods.");
             yield return new WaitForSeconds(0.5f);
             foreach (var food in foods)
-                Assert.Greater(food.transform.position.y, 0.9f, $"Food {food.name} fell through the platter.");
+                Assert.Greater(food.transform.position.y, 0.75f, $"Food {food.name} fell through the food plate.");
 
             var plate = Object.FindFirstObjectByType<PlateController>();
             Assert.IsNotNull(plate, "PlateController missing.");

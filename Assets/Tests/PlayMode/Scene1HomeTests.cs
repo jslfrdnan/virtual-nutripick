@@ -22,7 +22,7 @@ namespace NutriPick.Tests
         }
 
         [UnityTest]
-        public IEnumerator MainVRHasHomeKitchenAndTwoPlatters()
+        public IEnumerator MainVRHasHomeKitchenAndEightFoodPlates()
         {
             SceneManager.LoadScene("MainVR");
             yield return null;
@@ -31,20 +31,26 @@ namespace NutriPick.Tests
             var foods = Object.FindObjectsByType<FoodItem>(FindObjectsSortMode.None);
             Assert.AreEqual(8, foods.Length, "Scene 1 should have 8 interactive foods.");
             foreach (var food in foods)
+            {
                 Assert.IsNotNull(food.data, $"Food {food.name} is missing FoodData.");
+                Assert.Greater(food.transform.position.y, 0.75f, $"{food.name} is below the table.");
+            }
 
             var stands = Object.FindObjectsByType<FoodStand>(FindObjectsSortMode.None);
-            Assert.AreEqual(2, stands.Length, "Scene 1 should have two serving platters.");
-            var lauk = stands.FirstOrDefault(stand => stand.name == "LaukPlatter");
-            var karbo = stands.FirstOrDefault(stand => stand.name == "KarboSayurPlatter");
-            Assert.IsNotNull(lauk, "LaukPlatter missing.");
-            Assert.IsNotNull(karbo, "KarboSayurPlatter missing.");
-            Assert.AreEqual(5, lauk.foods.Length, "LaukPlatter should hold 5 foods.");
-            Assert.AreEqual(3, karbo.foods.Length, "KarboSayurPlatter should hold 3 foods.");
+            Assert.AreEqual(8, stands.Length, "Scene 1 should have eight food plates.");
+            Assert.IsTrue(stands.All(stand => stand.name.StartsWith("FoodPlate_")), "Every stand should be a FoodPlate.");
+            Assert.AreEqual(8, stands.Sum(stand => stand.foods.Length), "Each food plate should hold one food.");
 
             Assert.IsNotNull(GameObject.Find("Scene1Home"), "Scene1Home environment root missing.");
             Assert.IsNotNull(GameObject.Find("KitchenRoom"), "KitchenRoom missing.");
             Assert.IsNotNull(GameObject.Find("DiningSet"), "DiningSet missing.");
+
+            Assert.IsNull(GameObject.Find("TableVase"), "TableVase must not be active on the table.");
+            Assert.IsNull(GameObject.Find("TablePlant"), "TablePlant must not be active on the table.");
+            Assert.IsNull(GameObject.Find("LaukPlatter"), "Old Lauk platter must be removed.");
+            Assert.IsNull(GameObject.Find("KarboSayurPlatter"), "Old Karbo platter must be removed.");
+            Assert.IsNull(GameObject.Find("Tray_Lauk"), "Old tray must be removed.");
+            Assert.IsNull(GameObject.Find("Tray_Karbo"), "Old tray must be removed.");
 
             var plate = Object.FindFirstObjectByType<PlateController>();
             Assert.IsNotNull(plate, "Serving plate missing.");
@@ -54,7 +60,7 @@ namespace NutriPick.Tests
 
             var flow = Object.FindFirstObjectByType<LevelFlowController>();
             Assert.IsNotNull(flow, "LevelFlowController missing.");
-            Assert.AreEqual(2, flow.stands.Length, "Flow should know both platters.");
+            Assert.AreEqual(8, flow.stands.Length, "Flow should know all eight food plates.");
             Assert.IsTrue(flow.IsLevelStarted, "Scene 1 should start immediately.");
 
             var grids = Object.FindObjectsByType<FoodCardGridPresenter>(FindObjectsInactive.Include, FindObjectsSortMode.None);

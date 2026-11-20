@@ -77,8 +77,24 @@ namespace NutriPick.Editor
                     var foods = Object.FindObjectsByType<FoodItem>(FindObjectsInactive.Include, FindObjectsSortMode.None);
                     if (foods.Length != 8) { errors++; Debug.LogError($"[NutriPick] {path}: expected 8 food items, found {foods.Length}"); }
 
-                    if (flow.stands == null || flow.stands.Length != 2) { errors++; Debug.LogError($"[NutriPick] {path}: expected 2 platters, found {flow.stands?.Length ?? 0}"); }
+                    if (flow.stands == null || flow.stands.Length != 8) { errors++; Debug.LogError($"[NutriPick] {path}: expected 8 food plates, found {flow.stands?.Length ?? 0}"); }
+                    if (flow.stands != null && flow.stands.Any(stand => stand == null || stand.foods == null || stand.foods.Length != 1)) { errors++; Debug.LogError($"[NutriPick] {path}: every food plate must hold exactly one food"); }
                     if (GameObject.Find("Scene1Home") == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing Scene1Home environment"); }
+
+                    foreach (var tableObject in Object.FindObjectsByType<Transform>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
+                    {
+                        if (tableObject == null)
+                            continue;
+                        if (tableObject.name == "TableVase"
+                            || tableObject.name.StartsWith("TablePlant")
+                            || tableObject.name.StartsWith("Tray_")
+                            || tableObject.name == "LaukPlatter"
+                            || tableObject.name == "KarboSayurPlatter")
+                        {
+                            errors++;
+                            Debug.LogError($"[NutriPick] {path}: non-food table object still active: {tableObject.name}");
+                        }
+                    }
                 }
 
                 Debug.Log($"[NutriPick] {path}: flow OK, stands={flow.stands?.Length}, plateSlots={flow.plate?.slots?.Length}");
@@ -117,7 +133,14 @@ namespace NutriPick.Editor
                 {
                     Capture(camera, output, "MainVR_FirstPerson", new Vector3(0.4f, 1.6f, -2f), Quaternion.Euler(8f, -20f, 0f));
                     Capture(camera, output, "MainVR_Buffet", new Vector3(0.4f, 1.5f, -1.2f), Quaternion.Euler(15f, -30f, 0f));
-                    Capture(camera, output, "MainVR_PlattersTop", new Vector3(-1.0f, 1.4f, -1.1f), Quaternion.Euler(90f, 0f, 0f));
+
+                    var wasOrthographic = camera.orthographic;
+                    var previousSize = camera.orthographicSize;
+                    camera.orthographic = true;
+                    camera.orthographicSize = 0.65f;
+                    Capture(camera, output, "MainVR_PlattersTop", new Vector3(-1.0f, 2.4f, -1.1f), Quaternion.Euler(90f, 0f, 0f));
+                    camera.orthographic = wasOrthographic;
+                    camera.orthographicSize = previousSize;
 
                     var ceiling = FindSceneObject("Ceiling");
                     var ceilingActive = ceiling != null && ceiling.activeSelf;

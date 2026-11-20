@@ -136,7 +136,7 @@ namespace NutriPick.Editor
             UpdateBuildSettings();
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            Debug.Log("[Scene1Home] Built kitchen + dining room, 2 platters, 8 foods, and serving plate.");
+            Debug.Log("[Scene1Home] Built kitchen + dining room, 8 food plates, serving plate, and serve station.");
         }
 
         private static void ConfigureModelImporters()
@@ -365,7 +365,8 @@ namespace NutriPick.Editor
             {
                 "Plane", "Plane (1)", "Plane (2)", "Plane (3)",
                 "TableSurfaceCollider", "TableFoodStand", "Environment", "Scene1Home",
-                "FigmaHUD", "HUD"
+                "FigmaHUD", "HUD", "Tray_Lauk", "Tray_Karbo",
+                "LaukPlatter", "KarboSayurPlatter"
             };
 
             foreach (var transform in Object.FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None))
@@ -429,40 +430,24 @@ namespace NutriPick.Editor
 
             AddColliders(root, room, island, dining);
 
-            var trayPath = "Assets/Models/Food/Plating/Tray_Bamboo.fbx";
-            var trayLauk = InstantiateModel(trayPath, root.transform, "Tray_Lauk", new Vector3(-1.4f, 0.755f, -1.1f));
-            if (trayLauk != null)
-                trayLauk.transform.localScale = Vector3.one * 1.5f;
-            var trayKarbo = InstantiateModel(trayPath, root.transform, "Tray_Karbo", new Vector3(-0.6f, 0.755f, -1.1f));
-            if (trayKarbo != null)
-                trayKarbo.transform.localScale = Vector3.one * 1.5f;
+            var foodPlateXs = new[] { -1.55f, -1.15f, -0.75f, -0.35f };
+            var foodPlateZs = new[] { -1.30f, -1.05f };
+            var plates = new FoodStand[level.foodPool.Length];
+            for (int index = 0; index < level.foodPool.Length; index++)
+            {
+                var food = level.foodPool[index];
+                if (food == null)
+                    continue;
 
-            var lauk = CreatePlatter(root.transform, "LaukPlatter", new Vector3(-1.4f, 0.85f, -1.1f),
-                level.foodPool.Take(5).ToArray(),
-                new[]
-                {
-                    new Vector3(-0.15f, 0.075f, 0.07f),
-                    new Vector3(0f, 0.075f, 0.09f),
-                    new Vector3(0.15f, 0.075f, 0.07f),
-                    new Vector3(-0.08f, 0.075f, -0.07f),
-                    new Vector3(0.08f, 0.075f, -0.07f),
-                },
-                new[] { true, false, false, false, false });
-
-            var karbo = CreatePlatter(root.transform, "KarboSayurPlatter", new Vector3(-0.6f, 0.85f, -1.1f),
-                level.foodPool.Skip(5).Take(3).ToArray(),
-                new[]
-                {
-                    new Vector3(-0.16f, 0.075f, 0f),
-                    new Vector3(0f, 0.075f, 0.06f),
-                    new Vector3(0.16f, 0.075f, 0f),
-                },
-                new[] { false, false, true });
+                var position = new Vector3(foodPlateXs[index % 4], 0.755f, foodPlateZs[index / 4]);
+                var isBowl = food.id == "rendang" || food.id == "brokoli" || food.id == "mie_goreng";
+                plates[index] = CreateFoodPlate(root.transform, food, position, isBowl);
+            }
 
             var platePrefab = AssetDatabase.LoadAssetAtPath<GameObject>(ServingPlatePath);
             var plateObject = (GameObject)PrefabUtility.InstantiatePrefab(platePrefab, root.transform);
             plateObject.name = "ServingPlate";
-            plateObject.transform.localPosition = new Vector3(-1.0f, 0.78f, -0.72f);
+            plateObject.transform.localPosition = new Vector3(-1.0f, 0.78f, -0.75f);
             plateObject.transform.localRotation = Quaternion.identity;
             var plate = plateObject.GetComponent<PlateController>();
 
@@ -470,7 +455,7 @@ namespace NutriPick.Editor
             var stationObject = (GameObject)PrefabUtility.InstantiatePrefab(stationPrefab, root.transform);
             stationObject.name = "ServeStation";
             var serveStation = stationObject.GetComponent<ServeStation>();
-            serveStation.transform.localPosition = new Vector3(-0.35f, 0.78f, -0.72f);
+            serveStation.transform.localPosition = new Vector3(-0.35f, 0.78f, -0.75f);
             serveStation.transform.localRotation = Quaternion.identity;
 
             var hud = GameObject.Find("FigmaHUD");
@@ -493,7 +478,7 @@ namespace NutriPick.Editor
             flow.level = level;
             flow.rules = rules;
             flow.plate = plate;
-            flow.stands = new[] { lauk, karbo };
+            flow.stands = plates;
             flow.serveStation = serveStation;
             flow.player = player;
             flow.reticle = reticle;
@@ -558,7 +543,9 @@ namespace NutriPick.Editor
             {
                 if (child.name.StartsWith("Sideboard")
                     || child.name == "Chair_SouthLeft"
-                    || child.name == "Chair_SouthRight")
+                    || child.name == "Chair_SouthRight"
+                    || child.name == "TableVase"
+                    || child.name.StartsWith("TablePlant"))
                 {
                     child.gameObject.SetActive(false);
                     continue;
@@ -567,9 +554,7 @@ namespace NutriPick.Editor
                 if (child.name.StartsWith("DiningTable")
                     || child.name.StartsWith("Chair_")
                     || child.name == "DiningRug"
-                    || child.name.StartsWith("DiningPendant")
-                    || child.name == "TableVase"
-                    || child.name == "TablePlant")
+                    || child.name.StartsWith("DiningPendant"))
                 {
                     child.localPosition += offset;
                 }
@@ -610,55 +595,47 @@ namespace NutriPick.Editor
             collider.size = size;
         }
 
-        private static FoodStand CreatePlatter(
-            Transform parent,
-            string name,
-            Vector3 position,
-            FoodData[] foods,
-            Vector3[] layout,
-            bool[] bowls)
+        private static FoodStand CreateFoodPlate(Transform parent, FoodData food, Vector3 position, bool bowl)
         {
-            var platter = InstantiateModel(PlatterFbx, parent, name, position);
+            var station = new GameObject($"FoodPlate_{food.id}");
+            station.transform.SetParent(parent, false);
+            station.transform.position = position;
+            station.transform.rotation = Quaternion.identity;
 
-            var stand = platter.AddComponent<FoodStand>();
-            stand.displayName = name;
-            stand.foods = foods;
-            stand.anchors = new Transform[foods.Length];
+            var stand = station.AddComponent<FoodStand>();
+            stand.displayName = food.displayName;
+            stand.foods = new[] { food };
+            stand.anchors = new Transform[1];
             stand.enabled = false;
 
-            var foodRoot = new GameObject(name + "_Foods");
+            var anchor = new GameObject($"FoodPlate_{food.id}_Anchor");
+            anchor.transform.SetParent(parent, false);
+            anchor.transform.position = new Vector3(position.x, 0.79f, position.z);
+            anchor.transform.rotation = Quaternion.identity;
+            stand.anchors[0] = anchor.transform;
+
+            var dishPath = bowl ? BowlFbx : PlateFbx;
+            var dish = InstantiateModel(dishPath, station.transform, "Dish", Vector3.zero);
+            if (dish != null)
+                dish.transform.localScale = Vector3.one * 0.7f;
+
+            var foodRoot = new GameObject($"FoodPlate_{food.id}_Food");
             foodRoot.transform.SetParent(parent, false);
 
-            for (int index = 0; index < foods.Length; index++)
+            if (food.prefab == null)
             {
-                var anchor = new GameObject($"{name}_Anchor_{index + 1}");
-                anchor.transform.SetParent(parent, false);
-                anchor.transform.position = platter.transform.position + layout[index];
-                anchor.transform.rotation = Quaternion.identity;
-                stand.anchors[index] = anchor.transform;
-
-                var dishPath = bowls[index] ? BowlFbx : PlateFbx;
-                var dish = InstantiateModel(dishPath, anchor.transform, bowls[index] ? "Bowl" : "Plate", new Vector3(0f, -0.025f, 0f));
-                if (dish != null)
-                    dish.transform.localScale = Vector3.one * (bowls[index] ? 0.7f : 0.55f);
-
-                var data = foods[index];
-                if (data == null || data.prefab == null)
-                {
-                    Debug.LogError($"[Scene1Home] Missing food prefab for {name} index {index}.");
-                    continue;
-                }
-
-                var food = (GameObject)PrefabUtility.InstantiatePrefab(data.prefab, foodRoot.transform);
-                food.name = data.id;
-                food.transform.position = anchor.transform.position;
-                food.transform.rotation = anchor.transform.rotation;
-                var item = food.GetComponent<FoodItem>();
-                item.data = data;
-                item.SetHome(stand, anchor.transform.position, anchor.transform.rotation);
-                food.transform.SetParent(foodRoot.transform, true);
+                Debug.LogError($"[Scene1Home] Missing food prefab for {food.id}.");
+                return stand;
             }
 
+            var instance = (GameObject)PrefabUtility.InstantiatePrefab(food.prefab, foodRoot.transform);
+            instance.name = food.id;
+            instance.transform.position = anchor.transform.position;
+            instance.transform.rotation = anchor.transform.rotation;
+            var item = instance.GetComponent<FoodItem>();
+            item.data = food;
+            item.SetHome(stand, anchor.transform.position, anchor.transform.rotation);
+            instance.transform.SetParent(foodRoot.transform, true);
             return stand;
         }
 

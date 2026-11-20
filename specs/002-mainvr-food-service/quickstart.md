@@ -35,7 +35,7 @@
 
 - Scene 1 starts immediately after Play.
 - No Start screen or `Profil Dev` panel appears.
-- The home kitchen, dining table, two platters, and eight foods are visible.
+- The home kitchen, dining table, eight food plates, and eight foods are visible.
 - Player movement, reticle, food cards, and Status Makanan are active immediately.
 
 **Expected**: no console errors; the kitchen scene is interactive without pressing Start.
@@ -54,7 +54,7 @@
 
 - The serving plate uses `ceramic_plate.fbx` and sits on the dining table.
 - Four placement positions exist.
-- Foods are picked from the two platters on the dining table.
+- Foods are picked from the eight food plates on the dining table.
 - Each food shows its reference-derived albedo texture; no pink or missing materials.
 - Repeat pickup/place/remove for all eight foods.
 - Carrying food over a free position highlights it.

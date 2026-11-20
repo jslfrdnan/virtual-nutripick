@@ -1,6 +1,6 @@
 # NutriPick VR
 
-NutriPick VR is an educational first-person nutrition game built in Unity 6. The player uses a **Rexus gamepad** to move, aim a reticle, pick up food, plate it, and serve a meal. Scene 1 is a **home kitchen and dining room**: two serving platters hold eight foods, the player plates a meal on the dining table, and a Figma-style UI Canvas shows the eight-card food grid, Status Makanan bar, and two-panel Final Result. A live health balance and food information cards teach balanced choices.
+NutriPick VR is an educational first-person nutrition game built in Unity 6. The player uses a **Rexus gamepad** to move, aim a reticle, pick up food, plate it, and serve a meal. Scene 1 is a **home kitchen and dining room**: eight individual plates and bowls hold eight foods — one food type per plate — and the player plates a meal on the dining table. A Figma-style UI Canvas shows the eight-card food grid, Status Makanan bar, and two-panel Final Result. A live health balance and food information cards teach balanced choices.
 
 1. **Rumah** — breakfast at home (`MainVR`)
 2. **RM Padang** — lunch (not present in the current working tree)
@@ -30,7 +30,7 @@ NutriPick VR is an educational first-person nutrition game built in Unity 6. The
 1. Open the project with Unity 6000.6.0f1.
 2. Open `Assets/Scenes/MainVR.unity`.
 3. Press **Play**.
-4. Scene 1 starts directly in gameplay. Pick up three foods from the two platters on the kitchen island, place them on the serving plate on the dining table, and press **Start** to serve. The eight-card food grid, Status Makanan bar, and Final Result stay visible.
+4. Scene 1 starts directly in gameplay. Pick up three foods from the eight food plates on the dining table, place them on the serving plate, and press **Start** to serve. The eight-card food grid, Status Makanan bar, and Final Result stay visible.
 
 Build Settings currently contains `MainVR` only; `Level02_Padang` and `Level03_Bazaar` are intentionally absent from the current working tree. Scene 1 uses `Assets/Models/Environment/Home/` (kitchen, island, dining, decor), `Assets/Models/Food/Plating/` (platters, plates, bowls), and `Assets/Prefabs/Interaction/ServingPlate.prefab` with `Assets/Models/Props/ceramic_plate.fbx`.
 
@@ -55,7 +55,7 @@ The Windows build is written to `Builds/Windows/NutriPick.exe`.
 ## Tests
 
 - **EditMode**: 27 tests covering classification, meal evaluation, session state, level validation, protein types, Final Result points, food-card formatting, and food texture assignment.
-- **PlayMode**: 11 tests covering Scene 1 home layout/platters/direct start/card grid/Status Makanan/Final Result/replication, MainVR plate-and-serve, and Level 2/3 smoke tests (skipped when those scenes are absent).
+- **PlayMode**: 12 tests covering Scene 1 food plates/table layout/direct start/card grid/Status Makanan/Final Result/replication, MainVR plate-and-serve, and Level 2/3 smoke tests (skipped when those scenes are absent).
 
 Run them from **Window → General → Test Runner**, or headlessly:
 
