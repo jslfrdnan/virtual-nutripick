@@ -75,7 +75,9 @@ namespace NutriPick.Editor
                     if (finalResults.Length != 1) { errors++; Debug.LogError($"[NutriPick] {path}: expected 1 FinalResultPresenter, found {finalResults.Length}"); }
 
                     var foods = Object.FindObjectsByType<FoodItem>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-                    if (foods.Length != 8) { errors++; Debug.LogError($"[NutriPick] {path}: expected 8 food items, found {foods.Length}"); }
+                    var foodTypes = foods.Where(food => food.data != null).Select(food => food.data.id).Distinct().Count();
+                    if (foodTypes != 8) { errors++; Debug.LogError($"[NutriPick] {path}: expected 8 food types, found {foodTypes}"); }
+                    if (foods.Length < 8) { errors++; Debug.LogError($"[NutriPick] {path}: expected at least 8 food items, found {foods.Length}"); }
 
                     if (flow.stands == null || flow.stands.Length != 8) { errors++; Debug.LogError($"[NutriPick] {path}: expected 8 food plates, found {flow.stands?.Length ?? 0}"); }
                     if (flow.stands != null && flow.stands.Any(stand => stand == null || stand.foods == null || stand.foods.Length != 1)) { errors++; Debug.LogError($"[NutriPick] {path}: every food plate must hold exactly one food"); }

@@ -29,7 +29,8 @@ namespace NutriPick.Tests
             yield return null;
 
             var foods = Object.FindObjectsByType<FoodItem>(FindObjectsSortMode.None);
-            Assert.AreEqual(8, foods.Length, "Scene 1 should have 8 interactive foods.");
+            Assert.AreEqual(8, foods.Select(food => food.data != null ? food.data.id : null).Distinct().Count(), "Scene 1 should have 8 food types.");
+            Assert.AreEqual(13, foods.Length, "Scene 1 should have 13 interactive food items (3 tempe + 2 ayam + 3 brokoli).");
             foreach (var food in foods)
             {
                 Assert.IsNotNull(food.data, $"Food {food.name} is missing FoodData.");

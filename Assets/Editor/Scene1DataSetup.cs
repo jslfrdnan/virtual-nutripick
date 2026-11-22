@@ -16,7 +16,7 @@ namespace NutriPick.Editor
             ("tempe", ProteinType.Nabati),
             ("brokoli", ProteinType.Nabati),
             ("pisang", ProteinType.Nabati),
-            ("mie_goreng", ProteinType.Nabati)
+            ("ayam_goreng", ProteinType.Hewani)
         };
 
         [MenuItem("NutriPick/Setup Scene 1 Data")]
