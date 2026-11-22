@@ -1,4 +1,5 @@
 using UnityEngine;
+using NutriPick.Content;
 using NutriPick.Interaction;
 using NutriPick.UI;
 using NutriPick.Flow;
@@ -20,6 +21,7 @@ namespace NutriPick.Player
 
         private PlateSlot highlightedSlot;
         private int interactionMask = ~0;
+        private StandPopularityTracker tracker;
 
         private void Start()
         {
@@ -41,6 +43,8 @@ namespace NutriPick.Player
                 plate = Object.FindAnyObjectByType<PlateController>();
             if (serveStation == null)
                 serveStation = Object.FindAnyObjectByType<ServeStation>();
+
+            tracker = Object.FindAnyObjectByType<StandPopularityTracker>();
         }
 
         private void Update()
@@ -150,6 +154,7 @@ namespace NutriPick.Player
                 food.PlatedSlot.Remove(food);
 
             carrier.Hold(food);
+            tracker?.NotifyPickup(food.homeStand);
             foodCards?.Focus(food.data.id);
             infoCard?.ShowFull(food.data);
             flow.PlayPickup();

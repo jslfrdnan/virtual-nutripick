@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using NutriPick.Interaction;
 
@@ -10,6 +11,8 @@ namespace NutriPick.Player
 
         public bool IsCarrying => Current != null;
 
+        public event Action Changed;
+
         public void Hold(FoodItem item)
         {
             if (item == null)
@@ -17,6 +20,7 @@ namespace NutriPick.Player
 
             Current = item;
             item.SetCarried(true, holdAnchor);
+            Changed?.Invoke();
         }
 
         public void Release()
@@ -27,6 +31,7 @@ namespace NutriPick.Player
             var item = Current;
             Current = null;
             item.SetCarried(false);
+            Changed?.Invoke();
         }
     }
 }

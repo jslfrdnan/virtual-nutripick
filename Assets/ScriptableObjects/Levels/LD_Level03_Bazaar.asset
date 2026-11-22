@@ -19,7 +19,7 @@ MonoBehaviour:
   levelIndex: 3
   settingDescription: Makan malam di bazar Flamboyant
   foodPool:
-  - {fileID: 11400000, guid: 16a254eb98f70d442a7460d4624b7e15, type: 2}
+  - {fileID: 11400000, guid: c8a0304d4ab792a4e9dd67f109ac4429, type: 2}
   - {fileID: 11400000, guid: 7f5912e29c707184cba9bdd549cb2614, type: 2}
   - {fileID: 11400000, guid: 9aba7825da2a7b34aaf81ddf26ab09b7, type: 2}
   - {fileID: 11400000, guid: 6db1d7fc5c135a14eba4c643e22f0b8f, type: 2}
@@ -29,7 +29,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 590222e25910c1441863f4decb7399a0, type: 2}
   minItems: 4
   requiresDrink: 1
-  minimumStands: 4
+  minimumStands: 2
   timeLimitSeconds: 180
   graceSeconds: 30
   isFinalLevel: 1

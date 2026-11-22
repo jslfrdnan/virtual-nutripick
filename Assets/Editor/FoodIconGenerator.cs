@@ -21,7 +21,8 @@ namespace NutriPick.Editor
             "tempe",
             "brokoli",
             "pisang",
-            "mie_goreng"
+            "mie_goreng",
+            "ayam_goreng"
         };
 
         [MenuItem("NutriPick/Generate Scene 1 Food Icons")]

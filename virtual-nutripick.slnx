@@ -1,0 +1,14 @@
+﻿<Solution>
+  <Project Path="NutriPick.Runtime.csproj" />
+  <Project Path="MCPForUnity.Runtime.csproj" />
+  <Project Path="NutriPick.Tests.EditMode.csproj" />
+  <Project Path="MCPForUnity.Editor.csproj" />
+  <Project Path="NutriPick.Editor.csproj" />
+  <Project Path="NutriPick.Tests.PlayMode.csproj" />
+  <Project Path="Unity.XR.Interaction.Toolkit.Samples.StarterAssets.csproj" />
+  <Project Path="Assembly-CSharp.csproj" />
+  <Project Path="Unity.XR.Interaction.Toolkit.Samples.InteractionSimulator.csproj" />
+  <Project Path="Unity.XR.Interaction.Toolkit.Samples.InteractionSimulator.Editor.csproj" />
+  <Project Path="Unity.XR.Interaction.Toolkit.Samples.StarterAssets.Editor.csproj" />
+  <Project Path="Assembly-CSharp-Editor.csproj" />
+</Solution>

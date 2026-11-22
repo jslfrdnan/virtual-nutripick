@@ -117,9 +117,9 @@ namespace NutriPick.Content
                 return false;
             }
 
-            if (levelIndex == 3 && minimumStands < 3)
+            if (levelIndex == 3 && minimumStands < 2)
             {
-                error = "Level 3 must have at least three stands";
+                error = "Level 3 must have at least two stands";
                 return false;
             }
 
