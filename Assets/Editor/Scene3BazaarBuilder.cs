@@ -12,6 +12,7 @@ using NutriPick.Content;
 using NutriPick.Flow;
 using NutriPick.Interaction;
 using NutriPick.Nutrition;
+using NutriPick.NPC;
 using NutriPick.Player;
 using NutriPick.UI;
 
@@ -37,6 +38,7 @@ namespace NutriPick.Editor
         private const string StreetPropsFbx = "Assets/Models/Environment/Bazaar/StreetProps.fbx";
         private const string PlateFbx = "Assets/Models/Food/Plating/Plate_Small.fbx";
         private const string BowlFbx = "Assets/Models/Food/Plating/Bowl_Small.fbx";
+        private const string NpcFolder = "Assets/Prefabs/NPC";
 
         private const float StageX = -8f;
         private const float StageZ = 0f;
@@ -294,6 +296,7 @@ namespace NutriPick.Editor
             }
 
             CreateDecorStalls(root.transform);
+            CreateNpcCast(root.transform);
 
             var platePrefab = AssetDatabase.LoadAssetAtPath<GameObject>(ServingPlatePath);
             var plateObject = (GameObject)PrefabUtility.InstantiatePrefab(platePrefab, root.transform);
@@ -509,6 +512,78 @@ namespace NutriPick.Editor
                 new Color(0.28f, 0.28f, 0.28f), TextAlignmentOptions.Center);
 
             AddBox(stall.transform, "Collider_Stall", new Vector3(0f, 0.5f, 0.85f), new Vector3(2.9f, 1f, 0.8f));
+        }
+
+        private static void CreateNpcCast(Transform parent)
+        {
+            var npcRoot = new GameObject("NPCs");
+            npcRoot.transform.SetParent(parent, false);
+
+            PlaceNpc(npcRoot.transform, "NPC_Male_B", "Npc_Walker_Male", new Vector3(-10.8f, 0.02f, 36f), 180f,
+                "Visitor", "Walk", 0f, new[]
+                {
+                    new Vector3(-10.8f, 0.02f, 36f),
+                    new Vector3(-10.8f, 0.02f, 12f),
+                    new Vector3(-10.8f, 0.02f, 6f)
+                });
+            PlaceNpc(npcRoot.transform, "NPC_Female_B", "Npc_Walker_Female", new Vector3(-7.0f, 0.02f, 38f), 0f,
+                "Visitor", "Walk", 0.2f, new[]
+                {
+                    new Vector3(-7.0f, 0.02f, 38f),
+                    new Vector3(-7.0f, 0.02f, 16f),
+                    new Vector3(-7.0f, 0.02f, 8f)
+                });
+
+            PlaceNpc(npcRoot.transform, "NPC_Male_A", "Npc_Stand_West_01", new Vector3(-12.6f, 0.02f, 28f), -90f, "Visitor", "Idle", 0.15f, null);
+            PlaceNpc(npcRoot.transform, "NPC_Female_A", "Npc_Stand_West_03", new Vector3(-12.6f, 0.02f, 18f), -90f, "Visitor", "Wipe", 0.4f, null);
+            PlaceNpc(npcRoot.transform, "NPC_FemaleHijab_A", "Npc_Stand_East_06", new Vector3(-5.4f, 0.02f, -13f), 90f, "Visitor", "Idle", 0.6f, null);
+            PlaceNpc(npcRoot.transform, "NPC_Male_A", "Npc_Stand_East_07", new Vector3(-5.4f, 0.02f, -23f), 90f, "Visitor", "Talk", 0.3f, null);
+            PlaceNpc(npcRoot.transform, "NPC_FemaleHijab_B", "Npc_Cafe_Guest", new Vector3(-12.9f, 0.02f, 34.0f), 90f, "CafeGuest", "Talk", 0.55f, null);
+            PlaceNpc(npcRoot.transform, "NPC_Male_B", "Npc_Stage_Audience_01", new Vector3(-9.3f, 0.02f, 5.4f), 180f, "Audience", "Idle", 0.25f, null);
+            PlaceNpc(npcRoot.transform, "NPC_Female_A", "Npc_Stage_Audience_02", new Vector3(-6.3f, 0.02f, 5.4f), 180f, "Audience", "Talk", 0.7f, null);
+        }
+
+        private static GameObject PlaceNpc(
+            Transform parent, string prefabName, string name, Vector3 position, float yaw,
+            string role, string clip, float phase, Vector3[] waypoints)
+        {
+            var prefab = AssetDatabase.LoadAssetAtPath<GameObject>($"{NpcFolder}/{prefabName}.prefab");
+            if (prefab == null)
+            {
+                Debug.LogError($"[Scene3Bazaar] Missing NPC prefab {prefabName}.");
+                return null;
+            }
+
+            var instance = (GameObject)PrefabUtility.InstantiatePrefab(prefab, parent);
+            instance.name = name;
+            instance.transform.localPosition = position;
+            instance.transform.localRotation = Quaternion.Euler(0f, yaw, 0f);
+
+            NpcKitBuilder.ConfigureRole(instance, false, false);
+
+            var marker = instance.GetComponent<NpcMarker>();
+            if (marker != null)
+            {
+                marker.role = role;
+                marker.seated = false;
+            }
+
+            var animator = instance.GetComponent<NpcAnimator>();
+            if (animator != null)
+            {
+                animator.defaultState = clip;
+                animator.phaseOffset = phase;
+            }
+
+            var walker = instance.GetComponent<NpcWalker>();
+            if (walker != null && waypoints != null && waypoints.Length > 1)
+            {
+                walker.waypoints = waypoints;
+                walker.speed = 0.9f;
+                walker.pauseSeconds = 1.3f;
+            }
+
+            return instance;
         }
 
         private static bool IsBowl(string foodId)

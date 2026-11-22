@@ -15,7 +15,7 @@ MonoBehaviour:
   levelId: level_01_warteg
   displayName: "Level 1 \u2014 Rumah"
   sceneName: MainVR
-  nextSceneName: Level02_Padang
+  nextSceneName: Level02_Warteg
   levelIndex: 1
   settingDescription: Sarapan di rumah
   foodPool:

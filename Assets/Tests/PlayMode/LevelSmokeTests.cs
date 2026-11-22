@@ -82,19 +82,25 @@ namespace NutriPick.Tests
         [UnityTest]
         public IEnumerator Level02SpawnsSevenFoods()
         {
-            if (!Application.CanStreamedLevelBeLoaded("Level02_Padang"))
+            if (!Application.CanStreamedLevelBeLoaded("Level02_Warteg"))
             {
-                Assert.Ignore("Level02_Padang is not in the current build settings.");
+                Assert.Ignore("Level02_Warteg is not in the current build settings.");
                 yield break;
             }
 
-            SceneManager.LoadScene("Level02_Padang");
+            SceneManager.LoadScene("Level02_Warteg");
             yield return null;
             yield return null;
 
             var stands = Object.FindObjectsByType<FoodStand>(FindObjectsSortMode.None);
-            Assert.AreEqual(1, stands.Length, "Level 2 should have one stand.");
-            Assert.AreEqual(7, stands[0].Spawned.Count, "Level 2 should spawn 7 foods.");
+            Assert.AreEqual(1, stands.Length, "Level 2 should have one food display.");
+            Assert.AreEqual(7, stands[0].foods.Length, "Level 2 display should hold 7 foods.");
+
+            var foods = Object.FindObjectsByType<FoodItem>(FindObjectsSortMode.None);
+            Assert.AreEqual(7, foods.Length, "Level 2 should have 7 interactive foods.");
+
+            var npcs = Object.FindObjectsByType<NutriPick.NPC.NpcMarker>(FindObjectsSortMode.None);
+            Assert.AreEqual(5, npcs.Length, "Level 2 should have five set-dressing NPCs.");
 
             var flow = Object.FindFirstObjectByType<LevelFlowController>();
             Assert.IsNotNull(flow, "LevelFlowController missing.");
@@ -122,6 +128,9 @@ namespace NutriPick.Tests
 
             var decor = Object.FindObjectsByType<DecorStall>(FindObjectsSortMode.None);
             Assert.AreEqual(4, decor.Length, "Level 3 should have four decorative stalls.");
+
+            var npcs = Object.FindObjectsByType<NutriPick.NPC.NpcMarker>(FindObjectsSortMode.None);
+            Assert.AreEqual(9, npcs.Length, "Level 3 should have nine set-dressing NPCs.");
 
             var flow = Object.FindFirstObjectByType<LevelFlowController>();
             Assert.IsNotNull(flow, "LevelFlowController missing.");

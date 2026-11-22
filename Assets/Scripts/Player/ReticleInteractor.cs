@@ -16,11 +16,17 @@ namespace NutriPick.Player
         public PlateController plate;
         public ServeStation serveStation;
         public float maxDistance = 3.0f;
+        public string ignoredLayerName = "NPC";
 
         private PlateSlot highlightedSlot;
+        private int interactionMask = ~0;
 
         private void Start()
         {
+            var ignoredLayer = LayerMask.NameToLayer(ignoredLayerName);
+            if (ignoredLayer >= 0)
+                interactionMask = ~(1 << ignoredLayer);
+
             if (interactionCamera == null)
                 interactionCamera = GetComponentInChildren<Camera>();
             if (carrier == null)
@@ -50,7 +56,7 @@ namespace NutriPick.Player
             PlateSlot slot = null;
             ServeStation serve = null;
 
-            if (Physics.Raycast(ray, out var hit, maxDistance, ~0, QueryTriggerInteraction.Collide))
+            if (Physics.Raycast(ray, out var hit, maxDistance, interactionMask, QueryTriggerInteraction.Collide))
             {
                 food = hit.collider.GetComponentInParent<FoodItem>();
                 slot = hit.collider.GetComponentInParent<PlateSlot>();

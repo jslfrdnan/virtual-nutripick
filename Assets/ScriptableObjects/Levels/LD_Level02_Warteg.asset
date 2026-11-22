@@ -10,22 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 38e42016aaae29f4eb9f72aee723f326, type: 3}
-  m_Name: LD_Level02_Padang
+  m_Name: LD_Level02_Warteg
   m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.Content.LevelDefinition
-  levelId: level_02_padang
-  displayName: "Level 2 \u2014 Padang"
-  sceneName: Level02_Padang
+  levelId: level_02_warteg
+  displayName: "Level 2 \u2014 Warteg"
+  sceneName: Level02_Warteg
   nextSceneName: Level03_Bazaar
   levelIndex: 2
-  settingDescription: Makan siang di RM Padang
+  settingDescription: Makan siang di Warteg Tegal Sari
   foodPool:
+  - {fileID: 11400000, guid: 357913ed32c4a134ea49e0ed16815ffb, type: 2}
   - {fileID: 11400000, guid: f0b5a3980fba9ce439ac8eea306afc50, type: 2}
   - {fileID: 11400000, guid: c8a0304d4ab792a4e9dd67f109ac4429, type: 2}
-  - {fileID: 11400000, guid: 9aba7825da2a7b34aaf81ddf26ab09b7, type: 2}
   - {fileID: 11400000, guid: ea91edb44b057d0408c7ee80ac71d97e, type: 2}
   - {fileID: 11400000, guid: 6db1d7fc5c135a14eba4c643e22f0b8f, type: 2}
-  - {fileID: 11400000, guid: 5dd1324f666d9fc4a881907b37eaf98e, type: 2}
-  - {fileID: 11400000, guid: 7f5912e29c707184cba9bdd549cb2614, type: 2}
+  - {fileID: 11400000, guid: aa184732c302f99408bb00fded512297, type: 2}
+  - {fileID: 11400000, guid: b26e4c0a5e6f2a544aed9ff3a49fa3f0, type: 2}
   minItems: 3
   requiresDrink: 0
   minimumStands: 1

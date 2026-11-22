@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/MainVR.unity
     guid: 0ff241830396f64429dcdf243582a081
   - enabled: 1
+    path: Assets/Scenes/Level02_Warteg.unity
+    guid: 002306d6e28ea2d4f9c0b51f2991dacc
+  - enabled: 1
     path: Assets/Scenes/Level03_Bazaar.unity
     guid: d27e88ea2ebc82b458de4d6150c29271
   m_configObjects:

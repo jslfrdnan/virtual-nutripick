@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using NUnit.Framework;
+using UnityEditor;
 using UnityEngine;
 using NutriPick.Content;
 using NutriPick.Nutrition;
@@ -44,7 +45,7 @@ namespace NutriPick.Tests
             level.levelId = "test_level";
             level.displayName = "Test Level";
             level.sceneName = "Level01_Warteg";
-            level.nextSceneName = "Level02_Padang";
+            level.nextSceneName = "Level02_Warteg";
             level.levelIndex = 1;
             level.settingDescription = "Test";
             level.foodPool = foods;
@@ -76,6 +77,24 @@ namespace NutriPick.Tests
                 Food("b", FoodCompositionCategory.Protein));
             Assert.IsFalse(level.IsValid(out _));
             Object.DestroyImmediate(level);
+        }
+
+        [Test]
+        public void CampaignChainIsWartegThenBazaar()
+        {
+            var level1 = AssetDatabase.LoadAssetAtPath<LevelDefinition>("Assets/ScriptableObjects/Levels/LD_MainVR.asset");
+            var level2 = AssetDatabase.LoadAssetAtPath<LevelDefinition>("Assets/ScriptableObjects/Levels/LD_Level02_Warteg.asset");
+            var level3 = AssetDatabase.LoadAssetAtPath<LevelDefinition>("Assets/ScriptableObjects/Levels/LD_Level03_Bazaar.asset");
+
+            Assert.IsNotNull(level1);
+            Assert.IsNotNull(level2);
+            Assert.IsNotNull(level3);
+            Assert.AreEqual("MainVR", level1.sceneName);
+            Assert.AreEqual("Level02_Warteg", level1.nextSceneName);
+            Assert.AreEqual("Level02_Warteg", level2.sceneName);
+            Assert.AreEqual("Level03_Bazaar", level2.nextSceneName);
+            Assert.AreEqual("Level03_Bazaar", level3.sceneName);
+            Assert.IsTrue(level3.isFinalLevel);
         }
 
         [Test]

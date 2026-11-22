@@ -45,8 +45,7 @@ namespace NutriPick.Interaction
 
                 if (body != null)
                 {
-                    body.linearVelocity = Vector3.zero;
-                    body.angularVelocity = Vector3.zero;
+                    StopMotion();
                     body.isKinematic = true;
                 }
                 if (itemCollider != null)
@@ -76,8 +75,7 @@ namespace NutriPick.Interaction
 
             if (body != null)
             {
-                body.linearVelocity = Vector3.zero;
-                body.angularVelocity = Vector3.zero;
+                StopMotion();
                 body.isKinematic = true;
             }
             if (itemCollider != null)
@@ -144,8 +142,7 @@ namespace NutriPick.Interaction
 
             if (body != null)
             {
-                body.linearVelocity = Vector3.zero;
-                body.angularVelocity = Vector3.zero;
+                StopMotion();
                 body.isKinematic = true;
             }
 
@@ -154,6 +151,15 @@ namespace NutriPick.Interaction
 
             homePosition = position;
             homeRotation = rotation;
+        }
+
+        private void StopMotion()
+        {
+            if (body == null || body.isKinematic)
+                return;
+
+            body.linearVelocity = Vector3.zero;
+            body.angularVelocity = Vector3.zero;
         }
 
         private void CheckLost()

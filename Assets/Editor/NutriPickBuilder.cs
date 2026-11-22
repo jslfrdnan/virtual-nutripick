@@ -99,26 +99,23 @@ namespace NutriPick.Editor
 
             AssetDatabase.SaveAssets();
 
-            var level1 = CreateLevel("level_01_warteg", "Level 1 — Warteg", "MainVR", "Level02_Padang", 1,
+            var level1 = CreateLevel("level_01_warteg", "Level 1 — Warteg", "MainVR", "Level02_Warteg", 1,
                 "Sarapan di warteg", new[] { "rendang", "burger", "telur_rebus", "telur_ceplok", "tempe", "brokoli", "pisang", "mie_goreng" },
                 3, false, 1, false, new[] { "piring dasar", "pilih sayur dan protein" }, foods);
-            var level2 = CreateLevel("level_02_padang", "Level 2 — Padang", "Level02_Padang", "Level03_Bazaar", 2,
-                "Makan siang di RM Padang", new[] { "rendang", "ayam_goreng", "telur_rebus", "telur_ceplok", "tempe", "brokoli", "burger" },
-                3, false, 1, false, new[] { "porsi", "lemak", "natrium" }, foods);
             var level3 = CreateLevel("level_03_bazaar", "Level 3 — Bazaar", "Level03_Bazaar", string.Empty, 3,
                 "Makan malam di bazaar", new[] { "mie_goreng", "burger", "telur_rebus", "tempe", "brokoli", "pisang", "air_putih", "teh_manis" },
                 4, true, 4, true, new[] { "variasi", "minuman manis" }, foods);
 
             AssetDatabase.SaveAssets();
 
-            var playerPrefab = CreatePlayerRig();
-            var hudPrefab = CreateHud(rules);
-            var platePrefab = CreatePlate();
-            var standPrefab = CreateFoodStand();
-            var servePrefab = CreateServeStation();
+            CreatePlayerRig();
+            CreateHud(rules);
+            CreatePlate();
+            CreateFoodStand();
+            CreateServeStation();
 
-            CreateLevelScene(level2, rules, foods, playerPrefab, hudPrefab, platePrefab, standPrefab, servePrefab);
-            CreateLevelScene(level3, rules, foods, playerPrefab, hudPrefab, platePrefab, standPrefab, servePrefab);
+            Scene2WartegBuilder.Build();
+            Scene3BazaarBuilder.Build();
 
             AddScenesToBuildSettings();
             AssetDatabase.SaveAssets();
@@ -135,7 +132,7 @@ namespace NutriPick.Editor
                 scenes = new[]
                 {
                     $"{SceneFolder}/MainVR.unity",
-                    $"{SceneFolder}/Level02_Padang.unity",
+                    $"{SceneFolder}/Level02_Warteg.unity",
                     $"{SceneFolder}/Level03_Bazaar.unity"
                 },
                 locationPathName = "Builds/Windows/NutriPick.exe",
@@ -1131,7 +1128,7 @@ namespace NutriPick.Editor
             EditorBuildSettings.scenes = new[]
             {
                 new EditorBuildSettingsScene($"{SceneFolder}/MainVR.unity", true),
-                new EditorBuildSettingsScene($"{SceneFolder}/Level02_Padang.unity", true),
+                new EditorBuildSettingsScene($"{SceneFolder}/Level02_Warteg.unity", true),
                 new EditorBuildSettingsScene($"{SceneFolder}/Level03_Bazaar.unity", true)
             };
         }

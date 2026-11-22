@@ -39,7 +39,7 @@ namespace NutriPick.Tests
             temp.levelId = "replication_test";
             temp.displayName = "Replication Test";
             temp.sceneName = "MainVR";
-            temp.nextSceneName = "Level02_Padang";
+            temp.nextSceneName = "Level02_Warteg";
             temp.levelIndex = 1;
             temp.foodPool = original.foodPool.Reverse().ToArray();
             temp.minItems = 3;

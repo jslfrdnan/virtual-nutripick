@@ -1,0 +1,47 @@
+# Scene 2 — Warteg Lunch & Living NPCs
+
+Build Level 2 as a small open-front **Warung Tegal**, then add five NPCs to the warteg and nine to the Flamboyant bazaar. All character and environment assets are authored from scratch in Blender using the imported `arjun988/blender-skills` task subset and the six project category agents. No external asset packs are used. The work restores the campaign path `MainVR → Level02_Warteg → Level03_Bazaar`.
+
+## Blender skill pack and category agents
+
+Source: `https://github.com/arjun988/blender-skills` (MIT). The task subset is installed at `.opencode/skills/` with the shared `references/` folder and the MIT license. The six agents live at `.opencode/agents/`: `blender-director`, `modeling`, `production`, `technical`, `pipeline`, and `styles`. `blender-director` routes the five specialists; specialists cannot spawn further agents. No agent commits git.
+
+## Warteg
+
+| Item | Decision |
+|---|---|
+| Layout | Open front facing the street, 8.2 × 6.2 m floor, glass display counter along the back, long bench table on the left, cashier/serve table near the front right |
+| Shell | Cream walls, wood wainscot, dark corrugated roof, red/cream striped awning, gold-framed banner |
+| Food display | Seven tray wells under a glass case; one `FoodStand` owns seven anchors and seven food items |
+| Seating | One long table, two benches, two stools; three diners |
+| Props | Cooler, rice cooker, gas cylinder, stove, crates, bucket, condiment jars, pendant lamps, potted plants |
+| Export | `WartegShell.fbx`, `WartegCounter.fbx`, `WartegFurniture.fbx`, `WartegProps.fbx`; 1 unit = 1 m; pivots at floor/origin |
+
+The static FBX export mirrors X relative to Blender. The builder negates X placement in Blender before export so the Unity modules land on the hand-authored collider and NPC coordinates.
+
+## NPCs
+
+| Item | Decision |
+|---|---|
+| Variants | Male 1.72 m, Female 1.64 m, FemaleHijab 1.64 m |
+| Rig | 21 bones: root, hips, spine, chest, neck, head, jaw, shoulders, upper arms, forearms, hands, thighs, shins, feet |
+| Clips | `Idle` 90f, `Walk` 28f, `Eat` 60f, `Talk` 60f, `Wipe` 60f at 30 fps; no root motion |
+| Clothing | Flat-color shirt/pants variants; apron and cap are separate skinned meshes toggled by role |
+| Collision | Root capsule on the `NPC` layer; `ReticleInteractor` raycast excludes that layer |
+| Level 2 cast | Cook at the counter, server at the counter, three seated diners |
+| Level 3 cast | Two walkers, four stall visitors, one cafe guest, two stage audience members |
+
+## Scene flow
+
+- Level 2 scene: `Assets/Scenes/Level02_Warteg.unity`.
+- Level 2 data: `LD_Level02_Warteg.asset`, levelId `level_02_warteg`, food pool `nasi_putih`, `rendang`, `ayam_goreng`, `telur_ceplok`, `tempe`, `sayur_singkong`, `kerupuk`; no drink; 3 minimum items; 180 s / 30 s grace.
+- Level 1 asset points to `Level02_Warteg`; Level 2 points to `Level03_Bazaar`.
+- Build settings order: `MainVR`, `Level02_Warteg`, `Level03_Bazaar`.
+
+## Verification
+
+- Blender: NPC bone count 21, feet at z = 0, five clip takes, no root translation. Warteg 5,148 triangles across four modules, 25 flat materials.
+- Unity EditMode: 28/28 pass.
+- Unity PlayMode: 19/19 pass, including 7 Level 2 foods, 5 Level 2 NPCs, 8 Level 3 stands, and 9 Level 3 NPCs.
+- Scene validator passes all three scenes and the campaign chain.
+- No Windows player build.
