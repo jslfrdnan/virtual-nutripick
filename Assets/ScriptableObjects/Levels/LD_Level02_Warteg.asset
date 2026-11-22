@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 38e42016aaae29f4eb9f72aee723f326, type: 3}
-  m_Name: LD_Level02_Padang
+  m_Name: LD_Level02_Warteg
   m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.Content.LevelDefinition
-  levelId: level_02_padang
-  displayName: "Level 2 \u2014 Padang"
-  sceneName: Level02_Padang
+  levelId: level_02_warteg
+  displayName: "Level 2 \u2014 Warteg"
+  sceneName: Level2_warteg
   nextSceneName: Level03_Bazaar
   levelIndex: 2
-  settingDescription: Makan siang di RM Padang
+  settingDescription: Makan siang di warteg
   foodPool:
   - {fileID: 11400000, guid: f0b5a3980fba9ce439ac8eea306afc50, type: 2}
   - {fileID: 11400000, guid: c8a0304d4ab792a4e9dd67f109ac4429, type: 2}

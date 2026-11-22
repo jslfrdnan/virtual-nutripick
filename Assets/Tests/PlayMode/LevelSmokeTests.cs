@@ -82,29 +82,30 @@ namespace NutriPick.Tests
         }
 
         [UnityTest]
-        public IEnumerator Level02SpawnsSevenFoods()
+        public IEnumerator Level2WartegSpawnsSevenFoods()
         {
-            if (!Application.CanStreamedLevelBeLoaded("Level02_Padang"))
+            if (!Application.CanStreamedLevelBeLoaded("Level2_warteg"))
             {
-                Assert.Ignore("Level02_Padang is not in the current build settings.");
+                Assert.Ignore("Level2_warteg is not in the current build settings.");
                 yield break;
             }
 
-            SceneManager.LoadScene("Level02_Padang");
+            SceneManager.LoadScene("Level2_warteg");
             yield return null;
             yield return null;
 
             var stands = Object.FindObjectsByType<FoodStand>(FindObjectsSortMode.None);
-            Assert.AreEqual(1, stands.Length, "Level 2 should have one stand.");
+            Assert.AreEqual(1, stands.Length, "Level 2 should have one warteg stand.");
             Assert.AreEqual(7, stands[0].Spawned.Count, "Level 2 should spawn 7 foods.");
 
             var flow = Object.FindFirstObjectByType<LevelFlowController>();
             Assert.IsNotNull(flow, "LevelFlowController missing.");
             Assert.AreEqual(2, flow.level.levelIndex);
+            StringAssert.Contains("Warteg", flow.level.displayName);
         }
 
         [UnityTest]
-        public IEnumerator Level03HasEightStandsAndDrinkRequirement()
+        public IEnumerator Level03HasTwoStandsAndDrinkRequirement()
         {
             if (!Application.CanStreamedLevelBeLoaded("Level03_Bazaar"))
             {
@@ -117,13 +118,13 @@ namespace NutriPick.Tests
             yield return null;
 
             var stands = Object.FindObjectsByType<FoodStand>(FindObjectsSortMode.None);
-            Assert.AreEqual(8, stands.Length, "Level 3 should have eight interactive stands.");
+            Assert.AreEqual(2, stands.Length, "Level 3 should have two open stalls.");
 
             var foods = Object.FindObjectsByType<FoodItem>(FindObjectsSortMode.None);
-            Assert.AreEqual(8, foods.Length, "Level 3 should spawn 8 foods across the stands.");
+            Assert.AreEqual(8, foods.Length, "Level 3 should spawn 8 foods across the two stands.");
 
             var decor = Object.FindObjectsByType<DecorStall>(FindObjectsSortMode.None);
-            Assert.AreEqual(4, decor.Length, "Level 3 should have four decorative stalls.");
+            Assert.AreEqual(10, decor.Length, "Level 3 should have ten closed stalls.");
 
             var flow = Object.FindFirstObjectByType<LevelFlowController>();
             Assert.IsNotNull(flow, "LevelFlowController missing.");

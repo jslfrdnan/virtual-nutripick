@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -22,6 +23,7 @@ namespace NutriPick.Flow
         public ServeStation serveStation;
         public FirstPersonController player;
         public ReticleInteractor reticle;
+        public HeldFoodCarrier carrier;
         public GamepadInput input;
         public NutritionBar bar;
         public LevelTimerDisplay timer;
@@ -65,6 +67,10 @@ namespace NutriPick.Flow
                 input = player.GetComponent<GamepadInput>();
             if (reticle == null)
                 reticle = FindAnyObjectByType<ReticleInteractor>();
+            if (carrier == null && player != null)
+                carrier = player.GetComponent<HeldFoodCarrier>();
+            if (carrier == null)
+                carrier = FindAnyObjectByType<HeldFoodCarrier>();
             if (plate == null)
                 plate = FindAnyObjectByType<PlateController>();
             if (serveStation == null)
@@ -84,6 +90,9 @@ namespace NutriPick.Flow
 
             var session = GameSession.EnsureExists();
             session.BeginLevel(level.levelIndex);
+
+            if (carrier != null)
+                carrier.Changed += RefreshPreview;
 
             if (plate != null)
             {
@@ -240,16 +249,34 @@ namespace NutriPick.Flow
         {
             if (plate != null)
                 plate.PlateChanged -= OnPlateChanged;
+            if (carrier != null)
+                carrier.Changed -= RefreshPreview;
             if (serveStation != null)
                 serveStation.onServe.RemoveListener(TryServe);
         }
 
         private void OnPlateChanged()
         {
-            if (plate == null || rules == null)
+            RefreshPreview();
+        }
+
+        private void RefreshPreview()
+        {
+            if (level == null || rules == null)
                 return;
 
-            var result = MealEvaluator.Evaluate(plate.Foods, rules, level.minItems, level.requiresDrink);
+            var foods = new List<FoodData>();
+            if (plate != null)
+            {
+                foreach (var food in plate.Foods)
+                    foods.Add(food);
+            }
+
+            bool hasRoom = plate == null || plate.slots == null || plate.Count < plate.slots.Length;
+            if (hasRoom && carrier != null && carrier.Current != null && carrier.Current.data != null)
+                foods.Add(carrier.Current.data);
+
+            var result = MealEvaluator.Evaluate(foods, rules, level.minItems, level.requiresDrink);
             if (mealStatus != null)
                 mealStatus.SetPreview(result);
             else if (bar != null)

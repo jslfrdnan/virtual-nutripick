@@ -6,9 +6,16 @@ using NutriPick.Interaction;
 
 namespace NutriPick.Content
 {
+    public enum FoodStandKind
+    {
+        Healthy,
+        Junk
+    }
+
     public class FoodStand : MonoBehaviour
     {
         public string displayName = "Stand";
+        public FoodStandKind kind = FoodStandKind.Healthy;
         public FoodData[] foods;
         public Transform[] anchors;
         public TMP_Text signText;

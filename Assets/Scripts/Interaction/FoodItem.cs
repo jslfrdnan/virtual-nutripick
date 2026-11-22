@@ -24,6 +24,11 @@ namespace NutriPick.Interaction
                 body = GetComponent<Rigidbody>();
             if (itemCollider == null)
                 itemCollider = GetComponent<Collider>();
+
+            // Foods placed directly in a scene never go through SetHome, so remember
+            // their starting spot here; foods spawned by a stand overwrite this in SetHome.
+            homePosition = transform.position;
+            homeRotation = transform.rotation;
         }
 
         public void SetHome(FoodStand stand, Vector3 position, Quaternion rotation)

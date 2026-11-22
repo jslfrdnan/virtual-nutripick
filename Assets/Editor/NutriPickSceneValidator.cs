@@ -56,6 +56,19 @@ namespace NutriPick.Editor
                 if (flow.recap == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing RecapPresenter"); }
                 if (flow.pausePanel == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing PausePanel"); }
 
+                var mainCamera = Camera.main;
+                if (mainCamera != null)
+                {
+                    bool offsetCamera = mainCamera.transform.localPosition.sqrMagnitude > 0.0001f
+                        || Quaternion.Angle(mainCamera.transform.localRotation, Quaternion.identity) > 0.1f
+                        || (mainCamera.transform.localScale - Vector3.one).sqrMagnitude > 0.0001f;
+                    if (offsetCamera)
+                    {
+                        errors++;
+                        Debug.LogError($"[NutriPick] {path}: main camera is offset from the player rig (localPos={mainCamera.transform.localPosition}, localRot={mainCamera.transform.localEulerAngles})");
+                    }
+                }
+
                 if (path.Contains("MainVR"))
                 {
                     if (flow.foodCards == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing FoodCardGridPresenter"); }
@@ -110,12 +123,19 @@ namespace NutriPick.Editor
                     var foods = Object.FindObjectsByType<FoodItem>(FindObjectsInactive.Include, FindObjectsSortMode.None);
                     if (foods.Length != 8) { errors++; Debug.LogError($"[NutriPick] {path}: expected 8 food items, found {foods.Length}"); }
 
-                    if (flow.stands == null || flow.stands.Length != 8) { errors++; Debug.LogError($"[NutriPick] {path}: expected 8 bazaar stands, found {flow.stands?.Length ?? 0}"); }
-                    if (flow.stands != null && flow.stands.Any(stand => stand == null || stand.foods == null || stand.foods.Length != 1)) { errors++; Debug.LogError($"[NutriPick] {path}: every bazaar stand must hold exactly one food"); }
+                    if (flow.stands == null || flow.stands.Length != 2) { errors++; Debug.LogError($"[NutriPick] {path}: expected 2 bazaar stands, found {flow.stands?.Length ?? 0}"); }
+                    if (flow.stands != null && flow.stands.Any(stand => stand == null || stand.foods == null || stand.foods.Length == 0)) { errors++; Debug.LogError($"[NutriPick] {path}: every bazaar stand must hold at least one food"); }
+                    if (flow.stands != null && !flow.stands.Any(stand => stand != null && stand.displayName == "Healthy Food")) { errors++; Debug.LogError($"[NutriPick] {path}: missing Healthy Food stand"); }
+                    if (flow.stands != null && !flow.stands.Any(stand => stand != null && stand.displayName == "Junk Food")) { errors++; Debug.LogError($"[NutriPick] {path}: missing Junk Food stand"); }
 
                     var decorStalls = Object.FindObjectsByType<DecorStall>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-                    if (decorStalls.Length != 4) { errors++; Debug.LogError($"[NutriPick] {path}: expected 4 decorative stalls, found {decorStalls.Length}"); }
+                    if (decorStalls.Length != 10) { errors++; Debug.LogError($"[NutriPick] {path}: expected 10 decorative stalls, found {decorStalls.Length}"); }
                     if (decorStalls.Any(stall => stall.GetComponentInChildren<FoodItem>(true) != null)) { errors++; Debug.LogError($"[NutriPick] {path}: a decorative stall carries food"); }
+
+                    if (Object.FindFirstObjectByType<StandPopularityTracker>() == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing StandPopularityTracker"); }
+                    if (Object.FindFirstObjectByType<StandScoreboard>() == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing StandScoreboard"); }
+                    var vendors = Object.FindObjectsByType<StandVendor>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+                    if (vendors.Length != 2) { errors++; Debug.LogError($"[NutriPick] {path}: expected 2 stand vendors, found {vendors.Length}"); }
 
                     if (GameObject.Find("Scene3Bazaar") == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing Scene3Bazaar environment"); }
                     if (GameObject.Find("SchoolCampus") == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing SchoolCampus backdrop"); }
@@ -217,25 +237,45 @@ namespace NutriPick.Editor
 
         private static void Capture(Camera camera, string output, string name, Vector3 position, Quaternion rotation)
         {
-            camera.transform.position = position;
-            camera.transform.rotation = rotation;
+            var previousPosition = camera.transform.position;
+            var previousRotation = camera.transform.rotation;
+            var previousTarget = camera.targetTexture;
+            var previousActive = RenderTexture.active;
 
             var rt = new RenderTexture(1280, 720, 24);
-            camera.targetTexture = rt;
-            camera.Render();
-            RenderTexture.active = rt;
-            var tex = new Texture2D(1280, 720, TextureFormat.RGB24, false);
-            tex.ReadPixels(new Rect(0, 0, 1280, 720), 0, 0);
-            tex.Apply();
-            RenderTexture.active = null;
-            camera.targetTexture = null;
+            try
+            {
+                camera.transform.position = position;
+                camera.transform.rotation = rotation;
 
-            var file = Path.Combine(output, name + ".png");
-            File.WriteAllBytes(file, tex.EncodeToPNG());
-            Object.DestroyImmediate(tex);
-            rt.Release();
-            Object.DestroyImmediate(rt);
-            Debug.Log($"[NutriPick] Captured {file}");
+                camera.targetTexture = rt;
+                camera.Render();
+                RenderTexture.active = rt;
+
+                var tex = new Texture2D(1280, 720, TextureFormat.RGB24, false);
+                try
+                {
+                    tex.ReadPixels(new Rect(0, 0, 1280, 720), 0, 0);
+                    tex.Apply();
+
+                    var file = Path.Combine(output, name + ".png");
+                    File.WriteAllBytes(file, tex.EncodeToPNG());
+                    Debug.Log($"[NutriPick] Captured {file}");
+                }
+                finally
+                {
+                    Object.DestroyImmediate(tex);
+                }
+            }
+            finally
+            {
+                RenderTexture.active = previousActive;
+                camera.targetTexture = previousTarget;
+                camera.transform.position = previousPosition;
+                camera.transform.rotation = previousRotation;
+                rt.Release();
+                Object.DestroyImmediate(rt);
+            }
         }
     }
 }

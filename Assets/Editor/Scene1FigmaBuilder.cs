@@ -159,7 +159,7 @@ namespace NutriPick.Editor
             EditorBuildSettings.scenes = new[]
             {
                 new EditorBuildSettingsScene("Assets/Scenes/MainVR.unity", true),
-                new EditorBuildSettingsScene("Assets/Scenes/Level02_Padang.unity", true),
+                new EditorBuildSettingsScene("Assets/Scenes/Level2_warteg.unity", true),
                 new EditorBuildSettingsScene("Assets/Scenes/Level03_Bazaar.unity", true)
             };
             AssetDatabase.SaveAssets();
