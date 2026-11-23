@@ -24,7 +24,7 @@ namespace NutriPick.Tests
                 Assert.IsNotNull(material.GetTexture("_BaseMap"), $"{material.name} has no albedo texture.");
             }
 
-            Assert.AreEqual(17, foodMaterials, "Expected 17 textured food materials.");
+            Assert.AreEqual(23, foodMaterials, "Expected 23 textured food materials.");
         }
     }
 }

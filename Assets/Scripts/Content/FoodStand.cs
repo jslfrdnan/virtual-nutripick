@@ -84,27 +84,10 @@ namespace NutriPick.Content
             if (item == null)
                 return;
 
-            int index = -1;
-            for (int i = 0; i < foods.Length; i++)
-            {
-                if (foods[i] == item.data)
-                {
-                    index = i;
-                    break;
-                }
-            }
-
-            if (index < 0)
-            {
-                item.ResetToHome(item.transform.position, item.transform.rotation);
-                return;
-            }
-
-            var anchor = anchors != null && anchors.Length > 0
-                ? anchors[Mathf.Min(index, anchors.Length - 1)]
-                : transform;
-
-            item.ResetToHome(anchor.position, anchor.rotation);
+            // Every portion remembers its own spot on the stall (the duplicate tempe,
+            // ayam goreng, brokoli and pisang pieces sit side by side), so send it back
+            // there instead of stacking every copy on the shared anchor.
+            item.ReturnToHome();
         }
     }
 }

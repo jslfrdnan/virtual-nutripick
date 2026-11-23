@@ -22,6 +22,14 @@ Semua gambar disimpan di `References/Scene1_Home/foods/`.
 | `M_Food_BananaTip_Albedo.png` | banana_sitia_crete.jpg (Wikimedia Commons / Banana, Sitia, Crete) | CC BY-SA 4.0 |
 | `M_Food_Noodle_Albedo.png` | mi_goreng_gm.jpg (Wikimedia Commons / Mi Goreng GM) | CC BY-SA 3.0 |
 | `M_Food_GreenOnion_Albedo.png` | mi_goreng_gm.jpg (Wikimedia Commons / Mi Goreng GM) | CC BY-SA 3.0 |
+| `M_Food_Sayur_Albedo.png` | Sayursingkong1.jpg (project reference, sumber belum tercatat) | **perlu verifikasi** |
+| `M_Food_Ayam_Albedo.png` | Prosedural (dibuat untuk proyek) | Proyek |
+| `M_Food_Kerupuk_Albedo.png` | Prosedural (dibuat untuk proyek) | Proyek |
+| `M_Food_NasiPutih_Albedo.png` | Prosedural (dibuat untuk proyek) | Proyek |
+| `M_Food_TehManis_Albedo.png` | Prosedural (dibuat untuk proyek) | Proyek |
+| `M_Food_AirPutih_Albedo.png` | Prosedural (dibuat untuk proyek) | Proyek |
 
 Catatan: crop dan color-correct adalah perubahan; untuk lisensi CC BY-SA/GFDL, hasil turunan
 tetap mengikuti lisensi sumber dan atribusi di atas harus disertakan bila proyek dipublikasikan.
+`Sayursingkong1.jpg` berasal dari folder `Assets/Textures` proyek tanpa catatan lisensi —
+verifikasi sebelum publikasi. `Kerupuk.jpg` (Shutterstock, ber-watermark) **tidak** dipakai.

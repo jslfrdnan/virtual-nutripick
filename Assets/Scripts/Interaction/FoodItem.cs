@@ -11,6 +11,9 @@ namespace NutriPick.Interaction
         public Rigidbody body;
         public Collider itemCollider;
 
+        [Tooltip("Local offset applied while the item is carried, so tall items (drinks) do not cover the reticle.")]
+        public Vector3 holdOffset = Vector3.zero;
+
         public PlateSlot PlatedSlot { get; private set; }
         public bool IsCarried { get; private set; }
         public bool InteractionLocked { get; set; }
@@ -57,7 +60,7 @@ namespace NutriPick.Interaction
                     itemCollider.enabled = false;
 
                 transform.SetParent(holdAnchor, false);
-                transform.localPosition = Vector3.zero;
+                transform.localPosition = holdOffset;
                 transform.localRotation = Quaternion.identity;
             }
             else
@@ -133,6 +136,11 @@ namespace NutriPick.Interaction
                 homeStand.ReturnFood(this);
             else
                 ResetToHome(homePosition, homeRotation);
+        }
+
+        public void ReturnToHome()
+        {
+            ResetToHome(homePosition, homeRotation);
         }
 
         public void ResetToHome(Vector3 position, Quaternion rotation)

@@ -172,6 +172,58 @@ namespace NutriPick.Tests
         }
 
         [UnityTest]
+        public IEnumerator FoodPortionsAreNotStackedOnTheSameSpot()
+        {
+            SceneManager.LoadScene("Level03_Bazaar");
+            yield return null;
+            yield return null;
+            yield return new WaitForSeconds(0.1f);
+
+            var activeScene = SceneManager.GetActiveScene();
+            var foods = Object.FindObjectsByType<FoodItem>(FindObjectsSortMode.None)
+                .Where(food => food.gameObject.scene == activeScene)
+                .ToArray();
+            Assert.AreEqual(17, foods.Length, "Level 3 should keep every interactive food portion.");
+
+            for (int i = 0; i < foods.Length; i++)
+            {
+                for (int j = i + 1; j < foods.Length; j++)
+                {
+                    float distance = Vector3.Distance(foods[i].transform.position, foods[j].transform.position);
+                    Assert.Greater(distance, 0.02f,
+                        $"{foods[i].name} and {foods[j].name} are stacked on the same spot ({distance:F3} m).");
+                }
+            }
+        }
+
+        [UnityTest]
+        public IEnumerator DrinksAreHeldBelowTheReticle()
+        {
+            SceneManager.LoadScene("Level03_Bazaar");
+            yield return null;
+            yield return null;
+
+            var carrier = Object.FindFirstObjectByType<HeldFoodCarrier>();
+            var foods = Object.FindObjectsByType<FoodItem>(FindObjectsSortMode.None);
+            Assert.IsNotNull(carrier, "HeldFoodCarrier missing.");
+
+            foreach (var id in new[] { "air_putih", "teh_manis" })
+            {
+                var drink = foods.First(food => food.data != null && food.data.id == id);
+                carrier.Hold(drink);
+                yield return null;
+
+                Assert.AreEqual(carrier.holdAnchor, drink.transform.parent, $"{id} is not parented to the hold anchor.");
+                Assert.Less(drink.transform.localPosition.y, -0.05f,
+                    $"{id} should sit below the reticle while held.");
+
+                carrier.Release();
+                drink.ReturnHome();
+                yield return null;
+            }
+        }
+
+        [UnityTest]
         public IEnumerator PlayerCameraStaysAtEyeHeight()
         {
             SceneManager.LoadScene("Level03_Bazaar");
