@@ -15,7 +15,6 @@ using NutriPick.Nutrition;
 using NutriPick.NPC;
 using NutriPick.Player;
 using NutriPick.UI;
-using NutriPick.Utilities;
 
 namespace NutriPick.Editor
 {
@@ -61,34 +60,6 @@ namespace NutriPick.Editor
         };
 
         private static readonly float[] ClosedStandYaws = { -90f, 90f, -90f, 90f, -90f, 90f };
-
-        private static readonly string[] HealthyGreetings =
-        {
-            "Sayur segar baru datang!",
-            "Tambah brokoli atau pisang, yuk.",
-            "Piring sehat dimulai dari sini."
-        };
-
-        private static readonly string[] HealthyReactions =
-        {
-            "Pilihan bagus! Serat dan vitaminnya dapat.",
-            "Itu bikin piringmu makin lengkap.",
-            "Mantap, sayurnya kebawa terus."
-        };
-
-        private static readonly string[] JunkGreetings =
-        {
-            "Teh manis lagi promo!",
-            "Gorengan hangat, cepat saji.",
-            "Murah dan bikin kenyang."
-        };
-
-        private static readonly string[] JunkReactions =
-        {
-            "Boleh, tapi cek gulanya ya.",
-            "Air putih juga ada kalau mau.",
-            "Enak, tapi jangan tiap hari."
-        };
 
         private class MatSpec
         {
@@ -333,13 +304,6 @@ namespace NutriPick.Editor
                 FoodStandKind.Junk, junkFoods, JunkStandPosition, JunkStandYaw);
             var stands = new[] { healthyStand, junkStand };
 
-            var trackerObject = new GameObject("StandPopularity");
-            trackerObject.transform.SetParent(root.transform, false);
-            var tracker = trackerObject.AddComponent<StandPopularityTracker>();
-            tracker.stands = stands;
-
-            CreateScoreboard(root.transform, tracker);
-
             CreateDecorStalls(root.transform);
             CreateNpcCast(root.transform);
 
@@ -349,7 +313,6 @@ namespace NutriPick.Editor
             plateObject.transform.localPosition = new Vector3(StageX - 0.35f, 0.78f, ServeZ);
             plateObject.transform.localRotation = Quaternion.identity;
             var plate = plateObject.GetComponent<PlateController>();
-            tracker.plate = plate;
 
             var stationPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(ServeStationPath);
             var stationObject = (GameObject)PrefabUtility.InstantiatePrefab(stationPrefab, root.transform);
@@ -385,12 +348,10 @@ namespace NutriPick.Editor
             flow.foodCards = hud.GetComponentInChildren<FoodCardGridPresenter>(true);
             flow.mealStatus = hud.GetComponentInChildren<MealStatusBarPresenter>(true);
             flow.bar = hud.GetComponentInChildren<NutritionBar>(true);
-            flow.timer = hud.GetComponentInChildren<LevelTimerDisplay>(true);
             flow.prompt = hud.GetComponentInChildren<InteractionPrompt>(true);
             flow.infoCard = hud.GetComponentInChildren<FoodInfoCardPresenter>(true);
             flow.report = hud.GetComponentInChildren<HealthReportPresenter>(true);
             flow.finalResult = hud.GetComponentInChildren<FinalResultPresenter>(true);
-            flow.recap = hud.GetComponentInChildren<RecapPresenter>(true);
             flow.pausePanel = FindDeepChild(hud.transform, "PausePanel")?.gameObject;
             flow.pauseMessage = FindDeepChild(hud.transform, "PauseMessage")?.GetComponent<TMP_Text>();
             flow.pauseResumeButton = FindDeepChild(hud.transform, "ResumeButton")?.GetComponent<Button>();
@@ -522,14 +483,19 @@ namespace NutriPick.Editor
                     continue;
                 }
 
-                var instance = (GameObject)PrefabUtility.InstantiatePrefab(food.prefab, foodRoot.transform);
-                instance.name = food.id;
-                instance.transform.position = anchor.transform.position;
-                instance.transform.rotation = anchor.transform.rotation;
-                var item = instance.GetComponent<FoodItem>();
-                item.data = food;
-                item.SetHome(stand, anchor.transform.position, anchor.transform.rotation);
-                instance.transform.SetParent(foodRoot.transform, true);
+                var portionCount = PortionCount(food.id);
+                for (int portion = 0; portion < portionCount; portion++)
+                {
+                    var instance = (GameObject)PrefabUtility.InstantiatePrefab(food.prefab, foodRoot.transform);
+                    instance.name = portion == 0 ? food.id : $"{food.id}_{portion + 1}";
+                    var spawnPosition = anchor.transform.position + anchor.transform.rotation * PortionOffset(portion, portionCount);
+                    instance.transform.position = spawnPosition;
+                    instance.transform.rotation = anchor.transform.rotation;
+                    var item = instance.GetComponent<FoodItem>();
+                    item.data = food;
+                    item.SetHome(stand, spawnPosition, anchor.transform.rotation);
+                    instance.transform.SetParent(foodRoot.transform, true);
+                }
             }
 
             var signKey = displayName.Replace(" ", string.Empty);
@@ -544,7 +510,6 @@ namespace NutriPick.Editor
             AddBox(station.transform, "Collider_Counter", new Vector3(0f, 0.45f, 0.85f), new Vector3(2.9f, 0.9f, 0.8f));
             AddBox(station.transform, "Collider_Back", new Vector3(0f, 1.3f, -0.85f), new Vector3(2.9f, 1f, 0.5f));
 
-            CreateVendor(station.transform, stand, kind);
             CreatePromoBoard(station.transform, kind);
             return stand;
         }
@@ -567,54 +532,40 @@ namespace NutriPick.Editor
             return index >= 3 ? 1.07f : 0.63f;
         }
 
-        private static void CreateVendor(Transform standTransform, FoodStand stand, FoodStandKind kind)
+        private static int PortionCount(string foodId)
         {
-            var vendorRoot = new GameObject(kind == FoodStandKind.Healthy ? "Vendor_Healthy" : "Vendor_Junk");
-            vendorRoot.transform.SetParent(standTransform, false);
-            vendorRoot.transform.localPosition = new Vector3(0f, 0f, -0.15f);
-            vendorRoot.transform.localRotation = Quaternion.identity;
+            return foodId switch
+            {
+                "pisang" => 4,
+                "tempe" => 3,
+                "brokoli" => 3,
+                "ayam_goreng" => 3,
+                _ => 1
+            };
+        }
 
-            CreatePrimitivePart(PrimitiveType.Capsule, vendorRoot.transform, "Body",
-                new Vector3(0f, 0.55f, 0f), new Vector3(0.55f, 0.5f, 0.55f),
-                kind == FoodStandKind.Healthy ? "M_Bazaar_ProduceGreen" : "M_Bazaar_FlagRed");
-            CreatePrimitivePart(PrimitiveType.Cube, vendorRoot.transform, "Apron",
-                new Vector3(0f, 0.5f, 0.26f), new Vector3(0.35f, 0.5f, 0.05f), "M_Bazaar_CanvasCream");
-            CreatePrimitivePart(PrimitiveType.Capsule, vendorRoot.transform, "Arm_L",
-                new Vector3(-0.34f, 0.68f, 0f), new Vector3(0.12f, 0.36f, 0.12f), "M_Bazaar_WallWarm");
-            CreatePrimitivePart(PrimitiveType.Capsule, vendorRoot.transform, "Arm_R",
-                new Vector3(0.34f, 0.68f, 0f), new Vector3(0.12f, 0.36f, 0.12f), "M_Bazaar_WallWarm");
-            CreatePrimitivePart(PrimitiveType.Sphere, vendorRoot.transform, "Head",
-                new Vector3(0f, 1.2f, 0f), new Vector3(0.32f, 0.32f, 0.32f), "M_Bazaar_WallWarm");
-            CreatePrimitivePart(PrimitiveType.Sphere, vendorRoot.transform, "Hair",
-                new Vector3(0f, 1.33f, -0.02f), new Vector3(0.34f, 0.16f, 0.34f), "M_Bazaar_WoodDark");
-            CreatePrimitivePart(PrimitiveType.Sphere, vendorRoot.transform, "Eye_L",
-                new Vector3(-0.07f, 1.23f, 0.14f), new Vector3(0.04f, 0.04f, 0.04f), "M_Bazaar_MetalDark");
-            CreatePrimitivePart(PrimitiveType.Sphere, vendorRoot.transform, "Eye_R",
-                new Vector3(0.07f, 1.23f, 0.14f), new Vector3(0.04f, 0.04f, 0.04f), "M_Bazaar_MetalDark");
+        private static Vector3 PortionOffset(int index, int count)
+        {
+            if (count <= 1)
+                return Vector3.zero;
 
-            var bubbleRoot = new GameObject("SpeechBubble");
-            bubbleRoot.transform.SetParent(standTransform, false);
-            bubbleRoot.transform.localPosition = new Vector3(0f, 1.95f, -0.15f);
-            CreatePrimitivePart(PrimitiveType.Cube, bubbleRoot.transform, "Board",
-                Vector3.zero, new Vector3(1.45f, 0.6f, 0.03f), "M_Bazaar_CanvasCream");
-            var bubbleText = CreateWorldText(bubbleRoot.transform, "Text", string.Empty,
-                new Vector3(0f, 0f, -0.03f), Quaternion.identity, 0.028f, 30f,
-                new Color(0.14f, 0.10f, 0.07f), TextAlignmentOptions.Center);
-            bubbleText.textWrappingMode = TextWrappingModes.Normal;
-            bubbleText.overflowMode = TextOverflowModes.Overflow;
-            bubbleText.rectTransform.sizeDelta = new Vector2(50f, 16f);
-            bubbleRoot.AddComponent<Billboard>();
-            bubbleRoot.SetActive(false);
+            if (count == 3)
+            {
+                return index switch
+                {
+                    0 => new Vector3(-0.045f, 0f, -0.025f),
+                    1 => new Vector3(0.045f, 0f, 0.025f),
+                    _ => new Vector3(0f, 0.015f, 0f)
+                };
+            }
 
-            var vendor = vendorRoot.AddComponent<StandVendor>();
-            vendor.stand = stand;
-            vendor.bubbleRoot = bubbleRoot;
-            vendor.bubbleText = bubbleText;
-            vendor.greetings = kind == FoodStandKind.Healthy ? HealthyGreetings : JunkGreetings;
-            vendor.reactions = kind == FoodStandKind.Healthy ? HealthyReactions : JunkReactions;
-            vendor.radius = 3.2f;
-
-            vendorRoot.AddComponent<VendorIdle>();
+            return index switch
+            {
+                0 => new Vector3(-0.05f, 0f, -0.03f),
+                1 => new Vector3(0.05f, 0f, -0.03f),
+                2 => new Vector3(-0.05f, 0.01f, 0.03f),
+                _ => new Vector3(0.05f, 0.01f, 0.03f)
+            };
         }
 
         private static void CreatePromoBoard(Transform standTransform, FoodStandKind kind)
@@ -639,31 +590,6 @@ namespace NutriPick.Editor
                 textColor, TextAlignmentOptions.Center);
             text.textWrappingMode = TextWrappingModes.Normal;
             text.rectTransform.sizeDelta = new Vector2(34f, 20f);
-        }
-
-        private static StandScoreboard CreateScoreboard(Transform root, StandPopularityTracker tracker)
-        {
-            var scoreboardRoot = new GameObject("StandScoreboard");
-            scoreboardRoot.transform.SetParent(root, false);
-            scoreboardRoot.transform.localPosition = new Vector3(-14f, 0f, 4.5f);
-            scoreboardRoot.transform.localRotation = Quaternion.Euler(0f, 90f, 0f);
-
-            CreatePrimitivePart(PrimitiveType.Cube, scoreboardRoot.transform, "Post",
-                new Vector3(0f, 0.5f, -0.06f), new Vector3(0.08f, 1.0f, 0.08f), "M_Bazaar_WoodDark");
-            CreatePrimitivePart(PrimitiveType.Cube, scoreboardRoot.transform, "Board",
-                new Vector3(0f, 1.45f, 0f), new Vector3(1.7f, 1.1f, 0.06f), "M_Bazaar_CanvasCream");
-
-            var text = CreateWorldText(scoreboardRoot.transform, "Text",
-                "PENJUALAN HARI INI\nHealthy Food : 0\nJunk Food : 0\nUnggul: seri",
-                new Vector3(0f, 1.45f, 0.05f), Quaternion.Euler(0f, 180f, 0f), 0.032f, 26f,
-                new Color(0.14f, 0.10f, 0.07f), TextAlignmentOptions.Center);
-            text.textWrappingMode = TextWrappingModes.Normal;
-            text.rectTransform.sizeDelta = new Vector2(48f, 30f);
-
-            var scoreboard = scoreboardRoot.AddComponent<StandScoreboard>();
-            scoreboard.text = text;
-            scoreboard.tracker = tracker;
-            return scoreboard;
         }
 
         private static GameObject CreatePrimitivePart(

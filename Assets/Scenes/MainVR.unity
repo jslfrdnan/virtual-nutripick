@@ -567,6 +567,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.Content.FoodStand
   displayName: Pisang
+  kind: 0
   foods:
   - {fileID: 11400000, guid: 4374dc21b8b4c1f4eb12dae00ca41225, type: 2}
   anchors:
@@ -2075,6 +2076,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.Content.FoodStand
   displayName: Telur ceplok
+  kind: 0
   foods:
   - {fileID: 11400000, guid: ea91edb44b057d0408c7ee80ac71d97e, type: 2}
   anchors:
@@ -2397,6 +2399,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.Content.FoodStand
   displayName: Burger
+  kind: 0
   foods:
   - {fileID: 11400000, guid: 7f5912e29c707184cba9bdd549cb2614, type: 2}
   anchors:
@@ -2739,6 +2742,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.Content.FoodStand
   displayName: Tempe
+  kind: 0
   foods:
   - {fileID: 11400000, guid: 6db1d7fc5c135a14eba4c643e22f0b8f, type: 2}
   anchors:
@@ -3621,17 +3625,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8136713776900211267, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
   m_PrefabInstance: {fileID: 1140687705}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1140687713 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2158483968414228958, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-  m_PrefabInstance: {fileID: 1140687705}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b67c26e927a78345b6afcd60843fe1b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.UI.RecapPresenter
 --- !u!114 &1140687714 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 169137871138760051, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
@@ -3665,17 +3658,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 282087341cafb344490548e0e1a432ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.UI.InteractionPrompt
---- !u!114 &1140687717 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8118410626288481251, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-  m_PrefabInstance: {fileID: 1140687705}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f558ab507274e44c9ad9c4b1c1e4474, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.UI.LevelTimerDisplay
 --- !u!114 &1140687718 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4818183024183046831, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
@@ -4575,6 +4557,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.Content.FoodStand
   displayName: Telur rebus
+  kind: 0
   foods:
   - {fileID: 11400000, guid: 9aba7825da2a7b34aaf81ddf26ab09b7, type: 2}
   anchors:
@@ -4914,16 +4897,15 @@ MonoBehaviour:
   serveStation: {fileID: 1469364273}
   player: {fileID: 1924632160}
   reticle: {fileID: 1924632158}
+  carrier: {fileID: 0}
   input: {fileID: 1924632157}
   bar: {fileID: 1140687718}
-  timer: {fileID: 1140687717}
   prompt: {fileID: 1140687716}
   infoCard: {fileID: 1140687715}
   foodCards: {fileID: 1140687708}
   mealStatus: {fileID: 1140687707}
   report: {fileID: 1140687714}
   finalResult: {fileID: 1140687706}
-  recap: {fileID: 1140687713}
   pausePanel: {fileID: 1140687712}
   pauseMessage: {fileID: 1140687711}
   pauseResumeButton: {fileID: 1140687710}
@@ -5504,6 +5486,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.Content.FoodStand
   displayName: Brokoli
+  kind: 0
   foods:
   - {fileID: 11400000, guid: 5dd1324f666d9fc4a881907b37eaf98e, type: 2}
   anchors:
@@ -5555,6 +5538,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.Content.FoodStand
   displayName: Ayam goreng
+  kind: 0
   foods:
   - {fileID: 11400000, guid: c8a0304d4ab792a4e9dd67f109ac4429, type: 2}
   anchors:
@@ -6312,6 +6296,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.Content.FoodStand
   displayName: Rendang
+  kind: 0
   foods:
   - {fileID: 11400000, guid: f0b5a3980fba9ce439ac8eea306afc50, type: 2}
   anchors:
@@ -6542,6 +6527,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1807986f8c4f1f94cb2880376635d35b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.Player.GamepadInput
+  joystickProfile: {fileID: 0}
+  moveDeadzone: 0.15
+  lookDeadzone: 0.15
+  invertLookY: 0
+  mouseLookSensitivity: 0.05
 --- !u!114 &1924632158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6563,6 +6553,7 @@ MonoBehaviour:
   plate: {fileID: 361184328}
   serveStation: {fileID: 1469364273}
   maxDistance: 3
+  ignoredLayerName: NPC
 --- !u!114 &1924632159
 MonoBehaviour:
   m_ObjectHideFlags: 0

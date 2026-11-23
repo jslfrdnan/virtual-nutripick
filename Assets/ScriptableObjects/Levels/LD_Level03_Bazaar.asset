@@ -30,8 +30,6 @@ MonoBehaviour:
   minItems: 4
   requiresDrink: 1
   minimumStands: 2
-  timeLimitSeconds: 180
-  graceSeconds: 30
   isFinalLevel: 1
   learningFocus:
   - variasi

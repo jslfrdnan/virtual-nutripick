@@ -21,9 +21,8 @@ namespace NutriPick.UI
         public TMP_Text disclaimerText;
         public Button retryButton;
         public Button nextButton;
-        public Button recapButton;
 
-        public void Show(MealResult result, LevelDefinition level, Action onRetry, Action onNext, Action onRecap)
+        public void Show(MealResult result, LevelDefinition level, Action onRetry, Action onNext)
         {
             if (root != null)
                 root.SetActive(true);
@@ -65,15 +64,8 @@ namespace NutriPick.UI
             {
                 nextButton.onClick.RemoveAllListeners();
                 nextButton.onClick.AddListener(() => onNext?.Invoke());
+                nextButton.gameObject.SetActive(onNext != null);
             }
-            if (recapButton != null)
-            {
-                recapButton.onClick.RemoveAllListeners();
-                recapButton.onClick.AddListener(() => onRecap?.Invoke());
-            }
-
-            if (nextButton != null) nextButton.gameObject.SetActive(onRecap == null);
-            if (recapButton != null) recapButton.gameObject.SetActive(onRecap != null);
 
             if (EventSystem.current != null && retryButton != null)
                 EventSystem.current.SetSelectedGameObject(retryButton.gameObject);

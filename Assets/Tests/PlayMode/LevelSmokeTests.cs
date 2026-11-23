@@ -41,7 +41,6 @@ namespace NutriPick.Tests
             var flow = Object.FindFirstObjectByType<LevelFlowController>();
             Assert.IsNotNull(flow, "LevelFlowController missing.");
             Assert.IsNotNull(flow.bar, "NutritionBar missing.");
-            Assert.IsNotNull(flow.timer, "Timer missing.");
             Assert.IsNotNull(flow.infoCard, "Info card missing.");
             Assert.IsNotNull(flow.report, "Report missing.");
             Assert.IsNotNull(flow.player, "Player missing.");
@@ -131,6 +130,9 @@ namespace NutriPick.Tests
 
             var decor = Object.FindObjectsByType<DecorStall>(FindObjectsSortMode.None);
             Assert.AreEqual(10, decor.Length, "Level 3 should have ten closed stalls.");
+
+            var npcs = Object.FindObjectsByType<NutriPick.NPC.NpcMarker>(FindObjectsSortMode.None);
+            Assert.AreEqual(9, npcs.Length, "Level 3 should have nine set-dressing NPCs.");
 
             var flow = Object.FindFirstObjectByType<LevelFlowController>();
             Assert.IsNotNull(flow, "LevelFlowController missing.");

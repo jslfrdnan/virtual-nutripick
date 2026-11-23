@@ -59,7 +59,6 @@ namespace NutriPick.Editor
             Stretch(finalResult.GetComponent<RectTransform>());
 
             SetActive(root.transform, "NutritionBar", false);
-            SetActive(root.transform, "Timer", false);
             SetActive(root.transform, "InfoCard", false);
 
             var prompt = FindDeepChild(root.transform, "Prompt") as RectTransform;

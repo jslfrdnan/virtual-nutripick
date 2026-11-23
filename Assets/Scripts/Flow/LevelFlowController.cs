@@ -26,14 +26,12 @@ namespace NutriPick.Flow
         public HeldFoodCarrier carrier;
         public GamepadInput input;
         public NutritionBar bar;
-        public LevelTimerDisplay timer;
         public InteractionPrompt prompt;
         public FoodInfoCardPresenter infoCard;
         public FoodCardGridPresenter foodCards;
         public MealStatusBarPresenter mealStatus;
         public HealthReportPresenter report;
         public FinalResultPresenter finalResult;
-        public RecapPresenter recap;
         public GameObject pausePanel;
         public TMP_Text pauseMessage;
         public Button pauseResumeButton;
@@ -44,10 +42,6 @@ namespace NutriPick.Flow
         public bool IsLevelStarted => levelStarted;
         public GamepadInput Input => input;
 
-        private float timeLeft;
-        private float graceLeft;
-        private bool inGrace;
-        private bool timerRunning;
         private bool isServing;
         private bool disconnectPaused;
         private bool levelStarted;
@@ -77,16 +71,12 @@ namespace NutriPick.Flow
                 serveStation = FindAnyObjectByType<ServeStation>();
             if (bar == null)
                 bar = FindAnyObjectByType<NutritionBar>();
-            if (timer == null)
-                timer = FindAnyObjectByType<LevelTimerDisplay>();
             if (prompt == null)
                 prompt = FindAnyObjectByType<InteractionPrompt>();
             if (infoCard == null)
                 infoCard = FindAnyObjectByType<FoodInfoCardPresenter>();
             if (report == null)
                 report = FindAnyObjectByType<HealthReportPresenter>();
-            if (recap == null)
-                recap = FindAnyObjectByType<RecapPresenter>();
 
             var session = GameSession.EnsureExists();
             session.BeginLevel(level.levelIndex);
@@ -115,8 +105,6 @@ namespace NutriPick.Flow
                 report.Hide();
             if (finalResult != null)
                 finalResult.Hide();
-            if (recap != null)
-                recap.Hide();
             if (infoCard != null)
                 infoCard.Hide();
             if (prompt != null)
@@ -137,11 +125,6 @@ namespace NutriPick.Flow
                 player.SetControlEnabled(true);
             if (reticle != null)
                 reticle.enabled = true;
-
-            timeLeft = level.timeLimitSeconds;
-            timerRunning = true;
-            if (timer != null)
-                timer.SetTime(timeLeft);
 
             if (foodCards != null)
                 foodCards.Bind(level.foodPool, rules);
@@ -204,45 +187,6 @@ namespace NutriPick.Flow
             if (input.ServePressed)
                 TryServe();
 
-            if (!timerRunning)
-                return;
-
-            if (inGrace)
-            {
-                graceLeft -= Time.deltaTime;
-                if (timer != null)
-                    timer.SetGrace(graceLeft);
-                if (graceLeft <= 0f)
-                {
-                    inGrace = false;
-                    if (plate == null || plate.Count == 0)
-                        SceneLoader.Load(SceneManager.GetActiveScene().name);
-                    else
-                        ServeInternal(true);
-                }
-                return;
-            }
-
-            timeLeft -= Time.deltaTime;
-            if (timer != null)
-                timer.SetTime(timeLeft);
-
-            if (timeLeft <= 0f)
-            {
-                if (plate != null && plate.CanServe(out _))
-                {
-                    ServeInternal(true);
-                }
-                else
-                {
-                    inGrace = true;
-                    graceLeft = level.graceSeconds;
-                    if (timer != null)
-                        timer.SetGrace(graceLeft);
-                    if (prompt != null)
-                        prompt.Show("Waktu habis · Tambahkan makanan");
-                }
-            }
         }
 
         private void OnDestroy()
@@ -287,15 +231,15 @@ namespace NutriPick.Flow
         {
             if (!levelStarted)
                 return;
-            ServeInternal(false);
+            ServeInternal();
         }
 
-        private void ServeInternal(bool auto)
+        private void ServeInternal()
         {
             if (isServing || IsReportOpen || plate == null)
                 return;
 
-            if (!auto && !plate.CanServe(out var reason))
+            if (!plate.CanServe(out var reason))
             {
                 if (prompt != null)
                     prompt.Show(reason);
@@ -303,8 +247,6 @@ namespace NutriPick.Flow
             }
 
             isServing = true;
-            timerRunning = false;
-            inGrace = false;
             plate.Lock();
             if (serveStation != null)
                 serveStation.SetEnabled(false);
@@ -321,7 +263,6 @@ namespace NutriPick.Flow
                 bar.SetFinal(result);
 
             SfxPlayer.Instance?.PlayServe();
-            GamepadRumble.Pulse(0.5f, 0.5f, 0.15f);
             StartCoroutine(ShowReportAfterDelay(result));
         }
 
@@ -340,8 +281,7 @@ namespace NutriPick.Flow
             }
             else if (report != null)
             {
-                System.Action recapAction = level.isFinalLevel ? (System.Action)Recap : null;
-                report.Show(result, level, Retry, Next, recapAction);
+                report.Show(result, level, Retry, Next);
             }
             SfxPlayer.Instance?.PlayReport();
         }
@@ -356,15 +296,7 @@ namespace NutriPick.Flow
             if (!string.IsNullOrWhiteSpace(level.nextSceneName))
                 SceneLoader.Load(level.nextSceneName);
             else
-                Recap();
-        }
-
-        private void Recap()
-        {
-            if (report != null)
-                report.Hide();
-            if (recap != null)
-                recap.Show(GameSession.Instance, Restart);
+                Restart();
         }
 
         private void Restart()
@@ -418,19 +350,16 @@ namespace NutriPick.Flow
         public void PlayPickup()
         {
             SfxPlayer.Instance?.PlayPickup();
-            GamepadRumble.Pulse(0.4f, 0.4f, 0.2f);
         }
 
         public void PlayPlace()
         {
             SfxPlayer.Instance?.PlayPlace();
-            GamepadRumble.Pulse(0.3f, 0.3f, 0.1f);
         }
 
         public void PlayDrop()
         {
             SfxPlayer.Instance?.PlayDrop();
-            GamepadRumble.Pulse(0.2f, 0.2f, 0.08f);
         }
     }
 }

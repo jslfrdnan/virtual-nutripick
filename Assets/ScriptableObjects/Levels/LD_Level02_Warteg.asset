@@ -29,8 +29,6 @@ MonoBehaviour:
   minItems: 3
   requiresDrink: 0
   minimumStands: 1
-  timeLimitSeconds: 180
-  graceSeconds: 30
   isFinalLevel: 0
   learningFocus:
   - porsi

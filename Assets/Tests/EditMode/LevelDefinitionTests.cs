@@ -50,8 +50,6 @@ namespace NutriPick.Tests
             level.settingDescription = "Test";
             level.foodPool = foods;
             level.minItems = 3;
-            level.timeLimitSeconds = 180f;
-            level.graceSeconds = 30f;
             return level;
         }
 

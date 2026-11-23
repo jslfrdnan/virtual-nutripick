@@ -50,11 +50,9 @@ namespace NutriPick.Editor
                 if (flow.player == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing FirstPersonController"); }
                 if (flow.reticle == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing ReticleInteractor"); }
                 if (flow.bar == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing NutritionBar"); }
-                if (flow.timer == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing LevelTimerDisplay"); }
                 if (flow.prompt == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing InteractionPrompt"); }
                 if (flow.infoCard == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing FoodInfoCardPresenter"); }
                 if (flow.report == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing HealthReportPresenter"); }
-                if (flow.recap == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing RecapPresenter"); }
                 if (flow.pausePanel == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing PausePanel"); }
 
                 var mainCamera = Camera.main;
@@ -143,7 +141,7 @@ namespace NutriPick.Editor
                     if (eventSystems.Length != 1) { errors++; Debug.LogError($"[NutriPick] {path}: expected 1 EventSystem, found {eventSystems.Length}"); }
 
                     var foods = Object.FindObjectsByType<FoodItem>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-                    if (foods.Length != 8) { errors++; Debug.LogError($"[NutriPick] {path}: expected 8 food items, found {foods.Length}"); }
+                    if (foods.Length != 17) { errors++; Debug.LogError($"[NutriPick] {path}: expected 17 food items, found {foods.Length}"); }
 
                     if (flow.stands == null || flow.stands.Length != 2) { errors++; Debug.LogError($"[NutriPick] {path}: expected 2 bazaar stands, found {flow.stands?.Length ?? 0}"); }
                     if (flow.stands != null && flow.stands.Any(stand => stand == null || stand.foods == null || stand.foods.Length == 0)) { errors++; Debug.LogError($"[NutriPick] {path}: every bazaar stand must hold at least one food"); }
@@ -153,11 +151,6 @@ namespace NutriPick.Editor
                     var decorStalls = Object.FindObjectsByType<DecorStall>(FindObjectsInactive.Include, FindObjectsSortMode.None);
                     if (decorStalls.Length != 10) { errors++; Debug.LogError($"[NutriPick] {path}: expected 10 decorative stalls, found {decorStalls.Length}"); }
                     if (decorStalls.Any(stall => stall.GetComponentInChildren<FoodItem>(true) != null)) { errors++; Debug.LogError($"[NutriPick] {path}: a decorative stall carries food"); }
-
-                    if (Object.FindFirstObjectByType<StandPopularityTracker>() == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing StandPopularityTracker"); }
-                    if (Object.FindFirstObjectByType<StandScoreboard>() == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing StandScoreboard"); }
-                    var vendors = Object.FindObjectsByType<StandVendor>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-                    if (vendors.Length != 2) { errors++; Debug.LogError($"[NutriPick] {path}: expected 2 stand vendors, found {vendors.Length}"); }
 
                     if (GameObject.Find("Scene3Bazaar") == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing Scene3Bazaar environment"); }
                     if (GameObject.Find("SchoolCampus") == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing SchoolCampus backdrop"); }

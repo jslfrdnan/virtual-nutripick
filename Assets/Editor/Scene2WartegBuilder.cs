@@ -241,8 +241,6 @@ namespace NutriPick.Editor
             level.minItems = 3;
             level.requiresDrink = false;
             level.minimumStands = 1;
-            level.timeLimitSeconds = 180f;
-            level.graceSeconds = 30f;
             level.isFinalLevel = false;
             level.learningFocus = new[] { "porsi", "lemak", "natrium" };
             EditorUtility.SetDirty(level);
@@ -321,12 +319,10 @@ namespace NutriPick.Editor
             flow.foodCards = hud.GetComponentInChildren<FoodCardGridPresenter>(true);
             flow.mealStatus = hud.GetComponentInChildren<MealStatusBarPresenter>(true);
             flow.bar = hud.GetComponentInChildren<NutritionBar>(true);
-            flow.timer = hud.GetComponentInChildren<LevelTimerDisplay>(true);
             flow.prompt = hud.GetComponentInChildren<InteractionPrompt>(true);
             flow.infoCard = hud.GetComponentInChildren<FoodInfoCardPresenter>(true);
             flow.report = hud.GetComponentInChildren<HealthReportPresenter>(true);
             flow.finalResult = hud.GetComponentInChildren<FinalResultPresenter>(true);
-            flow.recap = hud.GetComponentInChildren<RecapPresenter>(true);
             flow.pausePanel = FindDeepChild(hud.transform, "PausePanel")?.gameObject;
             flow.pauseMessage = FindDeepChild(hud.transform, "PauseMessage")?.GetComponent<TMP_Text>();
             flow.pauseResumeButton = FindDeepChild(hud.transform, "ResumeButton")?.GetComponent<Button>();

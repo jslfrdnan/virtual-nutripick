@@ -1,10 +1,10 @@
 # NutriPick VR
 
-NutriPick VR is an educational first-person nutrition game built in Unity 6. The player uses a **Rexus gamepad** to move, aim a reticle, pick up food, plate it, and serve a meal. Scene 1 is a **home kitchen and dining room**: eight individual plates and bowls hold eight foods — one food type per plate — and the player plates a meal on the dining table. Scene 2 is **Warteg Tegal Sari**, an open-front roadside warung with a seven-dish display, benches, a cashier table, and five set-dressing NPCs. Scene 3 is the **Flamboyant bazaar district**: eight interactive stalls line both sides of Jl. Flamboyant, four closed stalls and two cafes fill the street, SMA Negeri 1 Manado stands behind a closed gate, nine NPCs populate the street, and the player serves at the Panggung Bazaar stage. A Figma-style UI Canvas shows the food-card grid, Status Makanan bar, and Final Result. A live health balance and food information cards teach balanced choices.
+NutriPick VR is an educational first-person nutrition game built in Unity 6. The player uses a **Rexus gamepad** to move, aim a reticle, pick up food, plate it, and serve a meal. Scene 1 is a **home kitchen and dining room**: eight individual plates and bowls hold eight foods - one food type per plate - and the player plates a meal on the dining table. Scene 2 is **Warteg Tegal Sari**, an open-front roadside warung with a seven-dish display, benches, a cashier table, and five set-dressing NPCs. Scene 3 is the **Flamboyant bazaar district**: two open food stands and ten closed stalls line Jl. Flamboyant, two cafes fill the street, SMA Negeri 1 Manado stands behind a closed gate, nine NPCs populate the street, and the player serves at the Panggung Bazaar stage. A Figma-style UI Canvas shows the food-card grid, Status Makanan bar, and Final Result. A live health balance and food information cards teach balanced choices.
 
 1. **Rumah** — breakfast at home (`MainVR`)
 2. **Warteg** — lunch at Warteg Tegal Sari, seven dishes and five NPCs (`Level02_Warteg`)
-3. **Bazaar** — dinner at the Flamboyant bazaar, with eight interactive stalls, four decorative stalls, two cafes, nine NPCs, and a serving stage (`Level03_Bazaar`)
+3. **Bazaar** - dinner at the Flamboyant bazaar, with two open food stands, ten decorative stalls, two cafes, nine NPCs, and a serving stage (`Level03_Bazaar`)
 
 ## Requirements
 
@@ -23,7 +23,7 @@ NutriPick VR is an educational first-person nutrition game built in Unity 6. The
 | X / West / Tab | Inspect: full food card |
 | Start / Space | Serve |
 | Select / Escape | Pause/resume |
-| D-pad / left stick | Navigate report and recap buttons |
+| D-pad / left stick | Navigate report buttons |
 
 ## Rexus Gamepad
 
@@ -41,7 +41,7 @@ The player uses the new Input System. An XInput, PS4, or Switch Pro-style Rexus 
 3. Press **Play**.
 4. Scene 1 starts directly in gameplay. Pick up three foods from the eight food plates on the dining table, place them on the serving plate, and press **Start** to serve. The eight-card food grid, Status Makanan bar, and Final Result stay visible.
 5. Scene 2 is `Assets/Scenes/Level02_Warteg.unity`. Pick any three of the seven dishes from the display case, plate them at the cashier table, and press **Start** to serve. Five NPCs — a cook, a server, and three diners — are set dressing only.
-6. Scene 3 is `Assets/Scenes/Level03_Bazaar.unity`. Pick foods from the eight stalls, plate at least four items including a drink, and serve at the Panggung Bazaar counter.
+6. Scene 3 is `Assets/Scenes/Level03_Bazaar.unity`. Pick foods from the two open stands, plate at least four items including a drink, and serve at the Panggung Bazaar counter.
 
 Build Settings contains `MainVR`, `Level02_Warteg`, and `Level03_Bazaar` in campaign order. Scene 1 uses `Assets/Models/Environment/Home/` (kitchen, island, dining, decor), `Assets/Models/Food/Plating/` (platters, plates, bowls), and `Assets/Prefabs/Interaction/ServingPlate.prefab` with `Assets/Models/Props/ceramic_plate.fbx`. Scene 2 uses the new `Assets/Models/Environment/Warteg/` kit. Scene 3 uses `Assets/Models/Environment/Bazaar/` for the school, stalls, cafes, stage, and street props. NPCs live in `Assets/Prefabs/NPC/`.
 
@@ -69,7 +69,7 @@ The Windows build is written to `Builds/Windows/NutriPick.exe`.
 ## Tests
 
 - **EditMode**: 28 tests covering classification, meal evaluation, session state, level validation, campaign chain, protein types, Final Result points, food-card formatting, and food texture assignment.
-- **PlayMode**: 19 tests covering Scene 1 food plates/table layout/direct start/card grid/Status Makanan/Final Result/replication, MainVR plate-and-serve, Scene 2 Warteg display/NPC cast, Scene 3 stall layout/decorative stalls/NPC cast/stage service, Level 2/3 smoke tests, and gamepad/generic-joystick/keyboard input. The current run is 19 passed, 0 skipped, 0 failed.
+- **PlayMode**: 22 tests covering Scene 1 food plates/table layout/direct start/card grid/Status Makanan/Final Result/replication, MainVR plate-and-serve, Scene 2 Warteg display/NPC cast, Scene 3 two-stand layout/decorative stalls/NPC cast/stage service, Level 2/3 smoke tests, and gamepad/generic-joystick/keyboard input. The current run is 22 passed, 0 skipped, 0 failed.
 
 Run them from **Window → General → Test Runner**, or headlessly:
 

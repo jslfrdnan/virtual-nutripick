@@ -435,8 +435,6 @@ namespace NutriPick.Editor
             level.minItems = minItems;
             level.requiresDrink = requiresDrink;
             level.minimumStands = minimumStands;
-            level.timeLimitSeconds = 180f;
-            level.graceSeconds = 30f;
             level.isFinalLevel = final;
             level.learningFocus = focus;
             EditorUtility.SetDirty(level);
@@ -695,12 +693,6 @@ namespace NutriPick.Editor
             bar.labelText = bandText;
             bar.countsText = countsText;
 
-            var timerGo = CreateUIRoot("Timer", hud.transform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -40f), new Vector2(240f, 60f));
-            AddPanel(timerGo, dark, false);
-            var timerText = AddText(timerGo.transform, "TimerText", "03:00", 30, Color.white, TextAlignmentOptions.Center, Vector2.zero, new Vector2(240f, 60f));
-            var timer = timerGo.AddComponent<LevelTimerDisplay>();
-            timer.text = timerText;
-
             var promptGo = CreateUIRoot("Prompt", hud.transform, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 56f), new Vector2(640f, 44f));
             AddPanel(promptGo, new Color(0.08f, 0.08f, 0.08f, 0.85f), false);
             var promptText = AddText(promptGo.transform, "PromptText", string.Empty, 24, Color.white, TextAlignmentOptions.Center, Vector2.zero, new Vector2(620f, 44f));
@@ -749,19 +741,6 @@ namespace NutriPick.Editor
             report.disclaimerText = reportRefs.disclaimer;
             report.retryButton = reportRefs.retry;
             report.nextButton = reportRefs.next;
-            report.recapButton = reportRefs.recap;
-
-            var recapController = CreateUIRoot("RecapController", hud.transform, Zero, One, Center, Vector2.zero, Vector2.zero);
-            var recap = recapController.AddComponent<RecapPresenter>();
-            recap.root = CreateRecap(hud.transform, out var recapRefs);
-            recap.titleText = recapRefs.title;
-            recap.levelsText = recapRefs.levels;
-            recap.averageText = recapRefs.average;
-            recap.strengthsText = recapRefs.strengths;
-            recap.improvementText = recapRefs.improvement;
-            recap.closingText = recapRefs.closing;
-            recap.disclaimerText = recapRefs.disclaimer;
-            recap.restartButton = recapRefs.restart;
 
             var pauseController = CreateUIRoot("PauseController", hud.transform, Zero, One, Center, Vector2.zero, Vector2.zero);
             CreatePause(hud.transform);
@@ -785,7 +764,6 @@ namespace NutriPick.Editor
             public TMP_Text disclaimer;
             public Button retry;
             public Button next;
-            public Button recap;
         }
 
         private static GameObject CreateReport(Transform parent, out ReportRefs refs)
@@ -807,41 +785,7 @@ namespace NutriPick.Editor
                 warning = AddText(panel, "Warning", string.Empty, 22, red, TextAlignmentOptions.Center, new Vector2(0f, -190f), new Vector2(1000f, 40f)),
                 disclaimer = AddText(panel, "Disclaimer", "Ini adalah game edukasi, bukan nasihat medis. Nilai gizi adalah perkiraan.", 18, muted, TextAlignmentOptions.Center, new Vector2(0f, -240f), new Vector2(1000f, 40f)),
                 retry = CreateButton(panel, "RetryButton", "Ulangi level", new Vector2(-250f, -320f), new Vector2(220f, 56f)),
-                next = CreateButton(panel, "NextButton", "Lanjut", new Vector2(0f, -320f), new Vector2(220f, 56f)),
-                recap = CreateButton(panel, "RecapButton", "Lihat rekap", new Vector2(250f, -320f), new Vector2(220f, 56f))
-            };
-            return root;
-        }
-
-        private class RecapRefs
-        {
-            public TMP_Text title;
-            public TMP_Text levels;
-            public TMP_Text average;
-            public TMP_Text strengths;
-            public TMP_Text improvement;
-            public TMP_Text closing;
-            public TMP_Text disclaimer;
-            public Button restart;
-        }
-
-        private static GameObject CreateRecap(Transform parent, out RecapRefs refs)
-        {
-            var root = CreateModal(parent, "RecapRoot", new Vector2(1200f, 760f));
-            var panel = FindDeepChild(root.transform, "Panel");
-            var ink = new Color(0.13f, 0.13f, 0.13f, 1f);
-            var muted = new Color(0.38f, 0.38f, 0.38f, 1f);
-
-            refs = new RecapRefs
-            {
-                title = AddText(panel, "Title", "Rekap NutriPick", 44, ink, TextAlignmentOptions.Center, new Vector2(0f, 310f), new Vector2(1000f, 60f)),
-                levels = AddText(panel, "Levels", string.Empty, 26, ink, TextAlignmentOptions.TopLeft, new Vector2(0f, 190f), new Vector2(900f, 150f)),
-                average = AddText(panel, "Average", string.Empty, 32, ink, TextAlignmentOptions.Center, new Vector2(0f, 100f), new Vector2(500f, 50f)),
-                strengths = AddText(panel, "Strengths", string.Empty, 24, ink, TextAlignmentOptions.TopLeft, new Vector2(0f, 10f), new Vector2(900f, 100f)),
-                improvement = AddText(panel, "Improvement", string.Empty, 24, ink, TextAlignmentOptions.TopLeft, new Vector2(0f, -80f), new Vector2(900f, 50f)),
-                closing = AddText(panel, "Closing", "Mulai dari satu perubahan kecil: tambahkan sayur di setiap makan.", 22, muted, TextAlignmentOptions.Center, new Vector2(0f, -160f), new Vector2(900f, 50f)),
-                disclaimer = AddText(panel, "Disclaimer", "Ini adalah game edukasi, bukan nasihat medis. Nilai gizi adalah perkiraan.", 18, muted, TextAlignmentOptions.Center, new Vector2(0f, -220f), new Vector2(900f, 40f)),
-                restart = CreateButton(panel, "RestartButton", "Main lagi", new Vector2(0f, -310f), new Vector2(220f, 56f))
+                next = CreateButton(panel, "NextButton", "Lanjut", new Vector2(0f, -320f), new Vector2(220f, 56f))
             };
             return root;
         }
@@ -1021,11 +965,9 @@ namespace NutriPick.Editor
             flow.input = player.GetComponent<GamepadInput>();
             flow.reticle = player.GetComponent<ReticleInteractor>();
             flow.bar = hud.GetComponentInChildren<NutritionBar>(true);
-            flow.timer = hud.GetComponentInChildren<LevelTimerDisplay>(true);
             flow.prompt = hud.GetComponentInChildren<InteractionPrompt>(true);
             flow.infoCard = hud.GetComponentInChildren<FoodInfoCardPresenter>(true);
             flow.report = hud.GetComponentInChildren<HealthReportPresenter>(true);
-            flow.recap = hud.GetComponentInChildren<RecapPresenter>(true);
             flow.pausePanel = FindDeepChild(hud.transform, "PausePanel")?.gameObject;
             flow.pauseMessage = FindDeepChild(hud.transform, "PauseMessage")?.GetComponent<TMP_Text>();
             flow.pauseResumeButton = FindDeepChild(hud.transform, "ResumeButton")?.GetComponent<Button>();

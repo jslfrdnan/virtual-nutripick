@@ -23,8 +23,6 @@ namespace NutriPick.Content
         public int minimumStands = 1;
 
         [Header("Pacing")]
-        public float timeLimitSeconds = 180f;
-        public float graceSeconds = 30f;
         public bool isFinalLevel;
 
         [Header("Learning")]
@@ -132,12 +130,6 @@ namespace NutriPick.Content
             if (!isFinalLevel && string.IsNullOrWhiteSpace(nextSceneName))
             {
                 error = "nextSceneName is required for non-final levels";
-                return false;
-            }
-
-            if (timeLimitSeconds <= 0f || graceSeconds <= 0f)
-            {
-                error = "timeLimitSeconds and graceSeconds must be positive";
                 return false;
             }
 

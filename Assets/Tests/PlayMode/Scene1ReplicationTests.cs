@@ -45,8 +45,6 @@ namespace NutriPick.Tests
             temp.minItems = 3;
             temp.requiresDrink = false;
             temp.minimumStands = 1;
-            temp.timeLimitSeconds = 180f;
-            temp.graceSeconds = 30f;
             flow.RebindLevel(temp);
 
             plate.transform.position += new Vector3(0.05f, 0f, 0f);
@@ -56,7 +54,7 @@ namespace NutriPick.Tests
             var grid = Object.FindFirstObjectByType<FoodCardGridPresenter>();
             Assert.IsNotNull(grid, "FoodCardGridPresenter missing after level swap.");
             Assert.AreEqual(8, grid.CardCount, "Replicated grid should still show 8 cards.");
-            Assert.AreEqual("ayam_goreng", grid.Cards[0].FoodId, "Card order should follow the swapped level pool.");
+            Assert.AreEqual(temp.foodPool[0].id, grid.Cards[0].FoodId, "Card order should follow the swapped level pool.");
 
             var foods = Object.FindObjectsByType<FoodItem>(FindObjectsSortMode.None);
             for (int i = 0; i < 3; i++)

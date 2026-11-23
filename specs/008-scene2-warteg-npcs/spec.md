@@ -34,6 +34,6 @@ Build Level 2 as an open-front **Warung Tegal** with a seven-dish display, then 
 ## Validation
 
 - EditMode: 28 tests pass.
-- PlayMode: 19 tests pass, including seven Level 2 foods, one display stand, five Level 2 NPCs, eight Level 3 stands, and nine Level 3 NPCs.
+- PlayMode: 22 tests pass, including seven Level 2 foods, one display stand, five Level 2 NPCs, two Level 3 open stands, and nine Level 3 NPCs.
 - Scene validator: all three scenes pass, campaign chain is `MainVR → Level02_Warteg → Level03_Bazaar`, NPC layer and animator setup are present.
 - No Windows build.

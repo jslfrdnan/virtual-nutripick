@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace NutriPick.Utilities
 {
     public static class NutritionFormat
@@ -22,16 +20,6 @@ namespace NutriPick.Utilities
         public static string Score(int value)
         {
             return value.ToString();
-        }
-
-        public static string Time(float seconds)
-        {
-            if (seconds < 0f)
-                seconds = 0f;
-            int total = Mathf.CeilToInt(seconds);
-            int minutes = total / 60;
-            int secs = total % 60;
-            return $"{minutes:00}:{secs:00}";
         }
     }
 }
