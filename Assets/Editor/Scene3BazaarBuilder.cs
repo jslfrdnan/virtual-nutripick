@@ -42,7 +42,7 @@ namespace NutriPick.Editor
 
         private const float StageX = -8f;
         private const float StageZ = 0f;
-        private const float ServeZ = 2.35f;
+        private const float ServeZ = 3.65f;
 
         private static readonly Vector3 HealthyStandPosition = new(-14.5f, 0f, 28f);
         private const float HealthyStandYaw = 90f;
@@ -226,7 +226,7 @@ namespace NutriPick.Editor
 
             level.displayName = "Level 3 - Bazaar Flamboyant";
             level.settingDescription = "Makan malam di bazar Flamboyant";
-            level.learningFocus = new[] { "variasi", "minuman manis" };
+            level.learningFocus = new[] { "variasi", "pilihan seimbang" };
             EditorUtility.SetDirty(level);
         }
 
@@ -237,7 +237,7 @@ namespace NutriPick.Editor
 
             var level = AssetDatabase.LoadAssetAtPath<LevelDefinition>(LevelPath);
             var rules = AssetDatabase.LoadAssetAtPath<NutritionRules>(RulesPath);
-            if (level == null || rules == null || level.foodPool == null || level.foodPool.Length != 8)
+            if (level == null || rules == null || level.foodPool == null || level.foodPool.Length < 6)
             {
                 Debug.LogError("[Scene3Bazaar] Missing level, rules, or eight-food pool.");
                 return;
@@ -282,7 +282,8 @@ namespace NutriPick.Editor
             if (stage != null)
             {
                 AddBox(stage.transform, "Collider_Platform", new Vector3(0f, 0.15f, 0f), new Vector3(6f, 0.3f, 6f));
-                AddBox(stage.transform, "Collider_Counter", new Vector3(0f, 0.45f, ServeZ), new Vector3(2.8f, 0.6f, 0.7f));
+                AddBox(stage.transform, "Collider_Counter", new Vector3(0f, 0.40f, ServeZ), new Vector3(2.0f, 0.5f, 0.8f));
+                CreateServingTable(stage.transform);
                 CreateWorldText(stage.transform, "Sign_Panggung", "PANGGUNG BAZAAR",
                     new Vector3(0f, 2.55f, 3.17f), Quaternion.Euler(0f, 180f, 0f), 0.130f, 36f,
                     new Color(0.35f, 0.06f, 0.04f), TextAlignmentOptions.Center);
@@ -310,14 +311,14 @@ namespace NutriPick.Editor
             var platePrefab = AssetDatabase.LoadAssetAtPath<GameObject>(ServingPlatePath);
             var plateObject = (GameObject)PrefabUtility.InstantiatePrefab(platePrefab, root.transform);
             plateObject.name = "ServingPlate";
-            plateObject.transform.localPosition = new Vector3(StageX - 0.35f, 0.78f, ServeZ);
+            plateObject.transform.localPosition = new Vector3(StageX - 0.35f, 0.652f, ServeZ);
             plateObject.transform.localRotation = Quaternion.identity;
             var plate = plateObject.GetComponent<PlateController>();
 
             var stationPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(ServeStationPath);
             var stationObject = (GameObject)PrefabUtility.InstantiatePrefab(stationPrefab, root.transform);
             stationObject.name = "ServeStation";
-            stationObject.transform.localPosition = new Vector3(StageX + 0.45f, 0.78f, ServeZ);
+            stationObject.transform.localPosition = new Vector3(StageX + 0.45f, 0.650f, ServeZ);
             stationObject.transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
             var serveStation = stationObject.GetComponent<ServeStation>();
 
@@ -434,6 +435,43 @@ namespace NutriPick.Editor
             AddBox(cafe.transform, "Collider_Table_A", new Vector3(-1.6f, 0.4f, 2.2f), new Vector3(2.2f, 0.8f, 2.2f));
             AddBox(cafe.transform, "Collider_Table_B", new Vector3(1.6f, 0.4f, 2.2f), new Vector3(2.2f, 0.8f, 2.2f));
             AddBox(cafe.transform, "Collider_Menu", new Vector3(-3f, 0.8f, 1.4f), new Vector3(1f, 1.6f, 0.5f));
+        }
+
+        private static void CreateServingTable(Transform stage)
+        {
+            var table = new GameObject("ServingTable");
+            table.transform.SetParent(stage, false);
+            table.transform.localPosition = new Vector3(0f, 0f, ServeZ);
+
+            var top = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            top.name = "ServingTableTop";
+            top.transform.SetParent(table.transform, false);
+            top.transform.localPosition = new Vector3(0f, 0.62f, 0f);
+            top.transform.localScale = new Vector3(2.0f, 0.06f, 0.8f);
+            top.GetComponent<Renderer>().sharedMaterial = Materials["M_Bazaar_WoodDark"];
+            Object.DestroyImmediate(top.GetComponent<BoxCollider>());
+
+            var cloth = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            cloth.name = "ServingTableCloth";
+            cloth.transform.SetParent(table.transform, false);
+            cloth.transform.localPosition = new Vector3(0f, 0.647f, 0f);
+            cloth.transform.localScale = new Vector3(1.9f, 0.006f, 0.75f);
+            cloth.GetComponent<Renderer>().sharedMaterial = Materials["M_Bazaar_CanvasCream"];
+            Object.DestroyImmediate(cloth.GetComponent<BoxCollider>());
+
+            for (int sx = -1; sx <= 1; sx += 2)
+            {
+                for (int sz = -1; sz <= 1; sz += 2)
+                {
+                    var leg = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                    leg.name = "ServingTableLeg";
+                    leg.transform.SetParent(table.transform, false);
+                    leg.transform.localPosition = new Vector3(sx * 0.82f, 0.45f, sz * 0.30f);
+                    leg.transform.localScale = new Vector3(0.08f, 0.34f, 0.08f);
+                    leg.GetComponent<Renderer>().sharedMaterial = Materials["M_Bazaar_WoodDark"];
+                    Object.DestroyImmediate(leg.GetComponent<BoxCollider>());
+                }
+            }
         }
 
         private static FoodStand CreateStand(Transform parent, string standName, string displayName, FoodStandKind kind, FoodData[] foods, Vector3 position, float yaw)

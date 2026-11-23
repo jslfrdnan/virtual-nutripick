@@ -76,8 +76,6 @@ namespace NutriPick.Editor
             new FoodSpec { id = "ayam_goreng", displayName = "Ayam goreng", description = "Protein baik, tetapi lapisan tepung dan minyak menambah lemak. Pilih porsi tanpa kulit bila memungkinkan.", composition = FoodCompositionCategory.Protein, processing = ProcessingLevel.Processed, isFried = true, calories = 260, protein = 20.0f, carbs = 5.0f, fat = 18.0f, fiber = 0.2f, addedSugar = 0f, sodium = 500f, portionLabel = "100 g", color = new Color(0.80f, 0.50f, 0.20f), fbxPath = "Assets/Models/Food/yamgoreng.fbx", targetSize = 0.16f },
             new FoodSpec { id = "sayur_singkong", displayName = "Sayur singkong", description = "Sayur daun singkong kaya serat dan vitamin. Santan menambah lemak, jadi jaga porsinya.", composition = FoodCompositionCategory.Vegetable, processing = ProcessingLevel.Processed, calories = 90, protein = 3.0f, carbs = 10.0f, fat = 4.0f, fiber = 4.0f, addedSugar = 0f, sodium = 300f, portionLabel = "100 g", color = new Color(0.25f, 0.50f, 0.20f), primitive = PrimitiveType.Sphere, primitiveScale = new Vector3(0.14f, 0.05f, 0.14f), targetSize = 0.14f },
             new FoodSpec { id = "burger", displayName = "Burger", description = "Praktis dan mengenyangkan, tetapi tinggi natrium, lemak, dan kalori. Padukan dengan sayur.", composition = FoodCompositionCategory.Protein | FoodCompositionCategory.Carbohydrate, processing = ProcessingLevel.UltraProcessed, calories = 450, protein = 20.0f, carbs = 40.0f, fat = 25.0f, fiber = 2.0f, addedSugar = 8.0f, sodium = 900f, portionLabel = "1 buah (200 g)", color = new Color(0.60f, 0.35f, 0.20f), fbxPath = "Assets/Models/Food/BURGER.fbx", targetSize = 0.16f },
-            new FoodSpec { id = "air_putih", displayName = "Air putih", description = "Pilihan minuman terbaik: tanpa gula dan kalori, membantu hidrasi.", composition = FoodCompositionCategory.Drink, processing = ProcessingLevel.Minimal, isDrink = true, calories = 0, protein = 0f, carbs = 0f, fat = 0f, fiber = 0f, addedSugar = 0f, sodium = 0f, portionLabel = "250 ml", color = new Color(0.60f, 0.85f, 1.00f), primitive = PrimitiveType.Cylinder, primitiveScale = new Vector3(0.08f, 0.06f, 0.08f), targetSize = 0.12f },
-            new FoodSpec { id = "teh_manis", displayName = "Teh manis", description = "Teh mengandung antioksidan, tetapi gula tambahannya tinggi. Kurangi gula atau pilih tawar.", composition = FoodCompositionCategory.Drink, processing = ProcessingLevel.Processed, isDrink = true, calories = 90, protein = 0f, carbs = 22.0f, fat = 0f, fiber = 0f, addedSugar = 22.0f, sodium = 5f, portionLabel = "250 ml", color = new Color(0.45f, 0.25f, 0.10f), primitive = PrimitiveType.Cylinder, primitiveScale = new Vector3(0.08f, 0.06f, 0.08f), targetSize = 0.12f }
         };
 
         [MenuItem("NutriPick/Build All")]
@@ -103,8 +101,8 @@ namespace NutriPick.Editor
                 "Sarapan di warteg", new[] { "rendang", "burger", "telur_rebus", "telur_ceplok", "tempe", "brokoli", "pisang", "mie_goreng" },
                 3, false, 1, false, new[] { "piring dasar", "pilih sayur dan protein" }, foods);
             var level3 = CreateLevel("level_03_bazaar", "Level 3 — Bazaar", "Level03_Bazaar", string.Empty, 3,
-                "Makan malam di bazaar", new[] { "mie_goreng", "burger", "telur_rebus", "tempe", "brokoli", "pisang", "air_putih", "teh_manis" },
-                4, true, 4, true, new[] { "variasi", "minuman manis" }, foods);
+                "Makan malam di bazaar", new[] { "mie_goreng", "burger", "telur_rebus", "tempe", "brokoli", "pisang" },
+                4, false, 2, true, new[] { "variasi", "pilihan seimbang" }, foods);
 
             AssetDatabase.SaveAssets();
 
@@ -120,7 +118,7 @@ namespace NutriPick.Editor
             AddScenesToBuildSettings();
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            Debug.Log("[NutriPick] Build complete: 14 foods, 3 levels (MainVR + 2 generated scenes).");
+            Debug.Log("[NutriPick] Build complete: 12 foods, 3 levels (MainVR + 2 generated scenes).");
         }
 
         [MenuItem("NutriPick/Build Windows")]
@@ -940,7 +938,6 @@ namespace NutriPick.Editor
                 AddStand(stands, standPrefab, foods, "Mie & Jajanan", new[] { "mie_goreng", "burger" }, new Vector3(0f, 0f, 5f), Quaternion.Euler(0f, 0f, 0f));
                 AddStand(stands, standPrefab, foods, "Lauk", new[] { "telur_rebus", "tempe" }, new Vector3(5f, 0f, 0f), Quaternion.Euler(0f, 90f, 0f));
                 AddStand(stands, standPrefab, foods, "Sayur & Buah", new[] { "brokoli", "pisang" }, new Vector3(0f, 0f, -5f), Quaternion.Euler(0f, 180f, 0f));
-                AddStand(stands, standPrefab, foods, "Minuman", new[] { "air_putih", "teh_manis" }, new Vector3(-5f, 0f, 0f), Quaternion.Euler(0f, -90f, 0f));
             }
             else
             {

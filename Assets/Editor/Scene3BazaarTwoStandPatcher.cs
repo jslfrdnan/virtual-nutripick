@@ -26,12 +26,12 @@ namespace NutriPick.Editor
 
         private static readonly string[] HealthyIds =
         {
-            "brokoli", "pisang", "tempe", "telur_rebus", "air_putih"
+            "brokoli", "pisang", "tempe", "telur_rebus"
         };
 
         private static readonly string[] JunkIds =
         {
-            "mie_goreng", "burger", "teh_manis"
+            "mie_goreng", "burger"
         };
 
         private static readonly Vector3 HealthyPosition = new Vector3(-14.5f, 0f, 28f);
@@ -97,7 +97,7 @@ namespace NutriPick.Editor
             }
 
             var healthyStand = sourceStands["mie_goreng"];
-            var junkStand = sourceStands["teh_manis"];
+            var junkStand = sourceStands["burger"];
 
             // Park every dish outside the stands before rebuilding, otherwise a dish that
             // belongs to the other group is destroyed with its old stand's children.

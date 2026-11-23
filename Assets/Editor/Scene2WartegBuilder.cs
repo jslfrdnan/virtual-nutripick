@@ -359,42 +359,195 @@ namespace NutriPick.Editor
 
         private static void CreateNeighbours(Transform root)
         {
-            CreateNeighbour(root, "Neighbour_West", new Vector3(-9.8f, 0f, 1.4f));
-            CreateNeighbour(root, "Neighbour_East", new Vector3(9.8f, 0f, 1.4f));
+            CreateShophouse(root, "Ruko_West_1", new Vector3(-9.8f, 0f, 1.4f), 4.4f, 5.2f, 3.4f, 0f, true, 0);
+            CreateShophouse(root, "Ruko_West_2", new Vector3(-15.0f, 0f, 1.4f), 4.4f, 5.2f, 4.0f, 0f, false, 1);
+            CreateShophouse(root, "Ruko_East_1", new Vector3(9.8f, 0f, 1.4f), 4.4f, 5.2f, 3.6f, 180f, true, 2);
+            CreateShophouse(root, "Ruko_East_2", new Vector3(15.0f, 0f, 1.4f), 4.4f, 5.2f, 4.2f, 180f, false, 3);
+            CreateShophouse(root, "Building_North_1", new Vector3(-7f, 0f, 21f), 6f, 5f, 5.2f, 180f, false, 4);
+            CreateShophouse(root, "Building_North_2", new Vector3(7f, 0f, 21f), 6f, 5f, 4.6f, 180f, false, 5);
+
+            CreateStreetFence(root);
+            CreateStreetLamp(root, new Vector3(-10.6f, 0f, 9.8f));
+            CreateStreetLamp(root, new Vector3(10.6f, 0f, 9.8f));
         }
 
-        private static void CreateNeighbour(Transform root, string name, Vector3 position)
+        private static void CreateShophouse(
+            Transform root,
+            string name,
+            Vector3 position,
+            float width,
+            float depth,
+            float height,
+            float yaw,
+            bool collide,
+            int variant)
         {
+            var wallMaterials = new[]
+            {
+                "M_Warteg_WallWarm", "M_Warteg_WallCream", "M_Warteg_Terracotta",
+                "M_Warteg_WallLight", "M_Warteg_WallWarm", "M_Warteg_WallCream"
+            };
+            var roofMaterials = new[]
+            {
+                "M_Warteg_MetalDark", "M_Warteg_CrateRed", "M_Warteg_Terracotta",
+                "M_Warteg_MetalDark", "M_Warteg_CrateRed", "M_Warteg_MetalDark"
+            };
+            var awningMaterials = new[]
+            {
+                "M_Warteg_AwningRed", "M_Warteg_AwningCream", "M_Warteg_SignGreen",
+                "M_Warteg_AwningRed", "M_Warteg_AwningCream", "M_Warteg_CrateBlue"
+            };
+
+            var building = new GameObject(name);
+            building.transform.SetParent(root, false);
+            building.transform.localPosition = position;
+            building.transform.localRotation = Quaternion.Euler(0f, yaw, 0f);
+
             var body = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            body.name = name;
-            body.transform.SetParent(root, false);
-            body.transform.localPosition = position + new Vector3(0f, 1.6f, 0f);
-            body.transform.localScale = new Vector3(4.4f, 3.2f, 5.2f);
-            body.GetComponent<Renderer>().sharedMaterial = Materials["M_Warteg_WallWarm"];
+            body.name = name + "_Body";
+            body.transform.SetParent(building.transform, false);
+            body.transform.localPosition = new Vector3(0f, height * 0.5f, 0f);
+            body.transform.localScale = new Vector3(width, height, depth);
+            body.GetComponent<Renderer>().sharedMaterial = Materials[wallMaterials[variant % wallMaterials.Length]];
+            if (!collide)
+                Object.DestroyImmediate(body.GetComponent<BoxCollider>());
 
             var roof = GameObject.CreatePrimitive(PrimitiveType.Cube);
             roof.name = name + "_Roof";
-            roof.transform.SetParent(root, false);
-            roof.transform.localPosition = position + new Vector3(0f, 3.35f, 0f);
-            roof.transform.localScale = new Vector3(5.0f, 0.28f, 5.8f);
-            roof.GetComponent<Renderer>().sharedMaterial = Materials["M_Warteg_MetalDark"];
+            roof.transform.SetParent(building.transform, false);
+            roof.transform.localPosition = new Vector3(0f, height + 0.15f, 0f);
+            roof.transform.localScale = new Vector3(width + 0.6f, 0.3f, depth + 0.8f);
+            roof.GetComponent<Renderer>().sharedMaterial = Materials[roofMaterials[variant % roofMaterials.Length]];
             Object.DestroyImmediate(roof.GetComponent<BoxCollider>());
+
+            var band = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            band.name = name + "_FloorBand";
+            band.transform.SetParent(building.transform, false);
+            band.transform.localPosition = new Vector3(0f, height * 0.66f, 0f);
+            band.transform.localScale = new Vector3(width + 0.12f, 0.12f, depth + 0.12f);
+            band.GetComponent<Renderer>().sharedMaterial = Materials["M_Warteg_WoodDark"];
+            Object.DestroyImmediate(band.GetComponent<BoxCollider>());
 
             var door = GameObject.CreatePrimitive(PrimitiveType.Cube);
             door.name = name + "_Door";
-            door.transform.SetParent(root, false);
-            door.transform.localPosition = position + new Vector3(0f, 0.95f, -2.62f);
-            door.transform.localScale = new Vector3(0.95f, 1.9f, 0.08f);
+            door.transform.SetParent(building.transform, false);
+            door.transform.localPosition = new Vector3(0f, 0.95f, depth * 0.5f + 0.05f);
+            door.transform.localScale = new Vector3(1.0f, 1.9f, 0.08f);
             door.GetComponent<Renderer>().sharedMaterial = Materials["M_Warteg_WoodDark"];
             Object.DestroyImmediate(door.GetComponent<BoxCollider>());
 
-            var window = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            window.name = name + "_Window";
-            window.transform.SetParent(root, false);
-            window.transform.localPosition = position + new Vector3(1.4f, 1.9f, -2.62f);
-            window.transform.localScale = new Vector3(1.1f, 0.85f, 0.06f);
-            window.GetComponent<Renderer>().sharedMaterial = Materials["M_Warteg_Glass"];
-            Object.DestroyImmediate(window.GetComponent<BoxCollider>());
+            for (int side = -1; side <= 1; side += 2)
+            {
+                var frame = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                frame.name = name + (side < 0 ? "_WindowL_Frame" : "_WindowR_Frame");
+                frame.transform.SetParent(building.transform, false);
+                frame.transform.localPosition = new Vector3(side * width * 0.28f, 1.75f, depth * 0.5f + 0.035f);
+                frame.transform.localScale = new Vector3(1.15f, 1.0f, 0.05f);
+                frame.GetComponent<Renderer>().sharedMaterial = Materials["M_Warteg_WoodDark"];
+                Object.DestroyImmediate(frame.GetComponent<BoxCollider>());
+
+                var glass = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                glass.name = name + (side < 0 ? "_WindowL" : "_WindowR");
+                glass.transform.SetParent(building.transform, false);
+                glass.transform.localPosition = new Vector3(side * width * 0.28f, 1.75f, depth * 0.5f + 0.065f);
+                glass.transform.localScale = new Vector3(1.0f, 0.82f, 0.03f);
+                glass.GetComponent<Renderer>().sharedMaterial = Materials["M_Warteg_Glass"];
+                Object.DestroyImmediate(glass.GetComponent<BoxCollider>());
+            }
+
+            var awning = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            awning.name = name + "_Awning";
+            awning.transform.SetParent(building.transform, false);
+            awning.transform.localPosition = new Vector3(0f, 2.45f, depth * 0.5f + 0.55f);
+            awning.transform.localRotation = Quaternion.Euler(10f, 0f, 0f);
+            awning.transform.localScale = new Vector3(width * 0.85f, 0.06f, 1.1f);
+            awning.GetComponent<Renderer>().sharedMaterial = Materials[awningMaterials[variant % awningMaterials.Length]];
+            Object.DestroyImmediate(awning.GetComponent<BoxCollider>());
+
+            var signBoard = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            signBoard.name = name + "_Sign";
+            signBoard.transform.SetParent(building.transform, false);
+            signBoard.transform.localPosition = new Vector3(0f, height - 0.55f, depth * 0.5f + 0.05f);
+            signBoard.transform.localScale = new Vector3(width * 0.55f, 0.42f, 0.06f);
+            signBoard.GetComponent<Renderer>().sharedMaterial = Materials["M_Warteg_SignGreen"];
+            Object.DestroyImmediate(signBoard.GetComponent<BoxCollider>());
+
+            var signInner = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            signInner.name = name + "_SignInner";
+            signInner.transform.SetParent(building.transform, false);
+            signInner.transform.localPosition = new Vector3(0f, height - 0.55f, depth * 0.5f + 0.085f);
+            signInner.transform.localScale = new Vector3(width * 0.45f, 0.30f, 0.03f);
+            signInner.GetComponent<Renderer>().sharedMaterial = Materials["M_Warteg_SignGold"];
+            Object.DestroyImmediate(signInner.GetComponent<BoxCollider>());
+
+            if (height > 4.2f)
+            {
+                var upperWindow = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                upperWindow.name = name + "_UpperWindow";
+                upperWindow.transform.SetParent(building.transform, false);
+                upperWindow.transform.localPosition = new Vector3(0f, height * 0.78f, depth * 0.5f + 0.04f);
+                upperWindow.transform.localScale = new Vector3(width * 0.38f, 0.72f, 0.04f);
+                upperWindow.GetComponent<Renderer>().sharedMaterial = Materials["M_Warteg_Glass"];
+                Object.DestroyImmediate(upperWindow.GetComponent<BoxCollider>());
+            }
+        }
+
+        private static void CreateStreetFence(Transform root)
+        {
+            var railMaterial = Materials["M_Warteg_MetalDark"];
+            for (int i = 0; i <= 10; i++)
+            {
+                var post = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                post.name = $"StreetFence_Post_{i}";
+                post.transform.SetParent(root, false);
+                post.transform.localPosition = new Vector3(-10f + i * 2f, 0.55f, 9.65f);
+                post.transform.localScale = new Vector3(0.08f, 1.1f, 0.08f);
+                post.GetComponent<Renderer>().sharedMaterial = railMaterial;
+                Object.DestroyImmediate(post.GetComponent<BoxCollider>());
+            }
+
+            var rail = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            rail.name = "StreetFence_Rail";
+            rail.transform.SetParent(root, false);
+            rail.transform.localPosition = new Vector3(0f, 1.0f, 9.65f);
+            rail.transform.localScale = new Vector3(20f, 0.06f, 0.06f);
+            rail.GetComponent<Renderer>().sharedMaterial = railMaterial;
+            Object.DestroyImmediate(rail.GetComponent<BoxCollider>());
+        }
+
+        private static void CreateStreetLamp(Transform root, Vector3 position)
+        {
+            var pole = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+            pole.name = "StreetLamp_Pole";
+            pole.transform.SetParent(root, false);
+            pole.transform.localPosition = position + new Vector3(0f, 1.8f, 0f);
+            pole.transform.localScale = new Vector3(0.08f, 1.8f, 0.08f);
+            pole.GetComponent<Renderer>().sharedMaterial = Materials["M_Warteg_MetalDark"];
+            Object.DestroyImmediate(pole.GetComponent<CapsuleCollider>());
+
+            var arm = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            arm.name = "StreetLamp_Arm";
+            arm.transform.SetParent(root, false);
+            arm.transform.localPosition = position + new Vector3(0f, 3.55f, 0.35f);
+            arm.transform.localScale = new Vector3(0.9f, 0.08f, 0.08f);
+            arm.GetComponent<Renderer>().sharedMaterial = Materials["M_Warteg_MetalDark"];
+            Object.DestroyImmediate(arm.GetComponent<BoxCollider>());
+
+            var head = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            head.name = "StreetLamp_Head";
+            head.transform.SetParent(root, false);
+            head.transform.localPosition = position + new Vector3(0f, 3.45f, 0.8f);
+            head.transform.localScale = new Vector3(0.35f, 0.12f, 0.35f);
+            head.GetComponent<Renderer>().sharedMaterial = Materials["M_Warteg_MetalDark"];
+            Object.DestroyImmediate(head.GetComponent<BoxCollider>());
+
+            var bulb = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            bulb.name = "StreetLamp_Bulb";
+            bulb.transform.SetParent(root, false);
+            bulb.transform.localPosition = position + new Vector3(0f, 3.35f, 0.8f);
+            bulb.transform.localScale = Vector3.one * 0.22f;
+            bulb.GetComponent<Renderer>().sharedMaterial = Materials["M_Warteg_Bulb"];
+            Object.DestroyImmediate(bulb.GetComponent<SphereCollider>());
         }
 
         private static void CreateStreetTrees(Transform root)
@@ -508,14 +661,19 @@ namespace NutriPick.Editor
                 if (dish != null)
                     dish.transform.localScale = Vector3.one * 0.58f;
 
-                var instance = (GameObject)PrefabUtility.InstantiatePrefab(food.prefab, foodRoot.transform);
-                instance.name = food.id;
-                instance.transform.position = anchor.transform.position;
-                instance.transform.rotation = anchor.transform.rotation;
-                var item = instance.GetComponent<FoodItem>();
-                item.data = food;
-                item.SetHome(display, anchor.transform.position, anchor.transform.rotation);
-                instance.transform.SetParent(foodRoot.transform, true);
+                const int portionCount = 3;
+                for (int portion = 0; portion < portionCount; portion++)
+                {
+                    var instance = (GameObject)PrefabUtility.InstantiatePrefab(food.prefab, foodRoot.transform);
+                    instance.name = portion == 0 ? food.id : $"{food.id}_{portion + 1}";
+                    var spawnPosition = anchor.transform.position + anchor.transform.rotation * PortionOffset(portion, portionCount);
+                    instance.transform.position = spawnPosition;
+                    instance.transform.rotation = anchor.transform.rotation;
+                    var item = instance.GetComponent<FoodItem>();
+                    item.data = food;
+                    item.SetHome(display, spawnPosition, anchor.transform.rotation);
+                    instance.transform.SetParent(foodRoot.transform, true);
+                }
             }
 
             return display;
@@ -596,6 +754,24 @@ namespace NutriPick.Editor
         private static bool IsBowl(string foodId)
         {
             return foodId == "rendang" || foodId == "sayur_singkong";
+        }
+
+        private static Vector3 PortionOffset(int portion, int count)
+        {
+            if (count <= 1)
+                return Vector3.zero;
+
+            if (count == 3)
+            {
+                if (portion == 0)
+                    return new Vector3(-0.045f, 0f, -0.028f);
+                if (portion == 1)
+                    return new Vector3(0.045f, 0f, -0.028f);
+                return new Vector3(0f, 0f, 0.045f);
+            }
+
+            float step = 0.09f;
+            return new Vector3((portion - (count - 1) * 0.5f) * step, 0f, 0f);
         }
 
         private static GameObject InstantiateModel(string path, Transform parent, string name, Vector3 localPosition, Quaternion localRotation)

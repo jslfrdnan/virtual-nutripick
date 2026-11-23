@@ -27,8 +27,8 @@ namespace NutriPick.Editor
 
             var visual = (GameObject)PrefabUtility.InstantiatePrefab(plateModel, root.transform);
             visual.name = "PlateVisual";
-            visual.transform.localPosition = new Vector3(0f, -0.015f, 0f);
-            visual.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
+            visual.transform.localPosition = Vector3.zero;
+            visual.transform.localRotation = Quaternion.Euler(-90f, 0f, 0f);
 
             var highlightMaterial = AssetDatabase.LoadAssetAtPath<Material>(HighlightMaterialPath);
             var positions = new[]

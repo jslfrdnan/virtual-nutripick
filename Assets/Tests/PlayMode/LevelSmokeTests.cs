@@ -81,7 +81,7 @@ namespace NutriPick.Tests
         }
 
         [UnityTest]
-        public IEnumerator Level2WartegSpawnsSevenFoods()
+        public IEnumerator Level2WartegSpawns21Foods()
         {
             if (!Application.CanStreamedLevelBeLoaded("Level02_Warteg"))
             {
@@ -98,7 +98,7 @@ namespace NutriPick.Tests
             Assert.AreEqual(7, stands[0].foods.Length, "Level 2 display should hold 7 foods.");
 
             var foods = Object.FindObjectsByType<FoodItem>(FindObjectsSortMode.None);
-            Assert.AreEqual(7, foods.Length, "Level 2 should have 7 interactive foods.");
+            Assert.AreEqual(21, foods.Length, "Level 2 should have 21 interactive foods (3 portions x 7 dishes).");
 
             var npcs = Object.FindObjectsByType<NutriPick.NPC.NpcMarker>(FindObjectsSortMode.None);
             Assert.AreEqual(5, npcs.Length, "Level 2 should have five set-dressing NPCs.");
@@ -110,7 +110,7 @@ namespace NutriPick.Tests
         }
 
         [UnityTest]
-        public IEnumerator Level03HasTwoStandsAndDrinkRequirement()
+        public IEnumerator Level03HasTwoStandsWithoutDrinkRequirement()
         {
             if (!Application.CanStreamedLevelBeLoaded("Level03_Bazaar"))
             {
@@ -126,7 +126,7 @@ namespace NutriPick.Tests
             Assert.AreEqual(2, stands.Length, "Level 3 should have two open stalls.");
 
             var foods = Object.FindObjectsByType<FoodItem>(FindObjectsSortMode.None);
-            Assert.AreEqual(17, foods.Length, "Level 3 should spawn 17 interactive foods across the two stands.");
+            Assert.AreEqual(15, foods.Length, "Level 3 should spawn 15 interactive foods across the two stands.");
 
             var decor = Object.FindObjectsByType<DecorStall>(FindObjectsSortMode.None);
             Assert.AreEqual(10, decor.Length, "Level 3 should have ten closed stalls.");
@@ -137,7 +137,7 @@ namespace NutriPick.Tests
             var flow = Object.FindFirstObjectByType<LevelFlowController>();
             Assert.IsNotNull(flow, "LevelFlowController missing.");
             Assert.AreEqual(3, flow.level.levelIndex);
-            Assert.IsTrue(flow.level.requiresDrink);
+            Assert.IsFalse(flow.level.requiresDrink, "Level 3 should not require a drink.");
             Assert.IsNotNull(flow.plate, "Plate missing.");
             Assert.AreEqual(4, flow.plate.slots.Length);
         }

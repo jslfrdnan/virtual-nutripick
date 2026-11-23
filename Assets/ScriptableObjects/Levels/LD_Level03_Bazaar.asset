@@ -25,12 +25,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6db1d7fc5c135a14eba4c643e22f0b8f, type: 2}
   - {fileID: 11400000, guid: 5dd1324f666d9fc4a881907b37eaf98e, type: 2}
   - {fileID: 11400000, guid: 4374dc21b8b4c1f4eb12dae00ca41225, type: 2}
-  - {fileID: 11400000, guid: 236b20001e907004e8a52e8e4e0898d4, type: 2}
-  - {fileID: 11400000, guid: 590222e25910c1441863f4decb7399a0, type: 2}
   minItems: 4
-  requiresDrink: 1
+  requiresDrink: 0
   minimumStands: 2
   isFinalLevel: 1
   learningFocus:
   - variasi
-  - minuman manis
+  - pilihan seimbang

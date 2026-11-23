@@ -120,10 +120,11 @@ namespace NutriPick.Editor
                     if (eventSystems.Length != 1) { errors++; Debug.LogError($"[NutriPick] {path}: expected 1 EventSystem, found {eventSystems.Length}"); }
 
                     var foods = Object.FindObjectsByType<FoodItem>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-                    if (foods.Length != 7) { errors++; Debug.LogError($"[NutriPick] {path}: expected 7 food items, found {foods.Length}"); }
+                    if (foods.Length != 21) { errors++; Debug.LogError($"[NutriPick] {path}: expected 21 food items (3 portions x 7 dishes), found {foods.Length}"); }
 
                     if (flow.stands == null || flow.stands.Length != 1) { errors++; Debug.LogError($"[NutriPick] {path}: expected 1 food display, found {flow.stands?.Length ?? 0}"); }
                     if (flow.stands != null && flow.stands.Any(stand => stand == null || stand.foods == null || stand.foods.Length != 7)) { errors++; Debug.LogError($"[NutriPick] {path}: the Warteg display must hold seven foods"); }
+                    if (GameObject.Find("Ruko_West_1") == null || GameObject.Find("Ruko_East_1") == null || GameObject.Find("Building_North_1") == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing the new shophouse world"); }
 
                     if (GameObject.Find("Scene2Warteg") == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing Scene2Warteg environment"); }
                     if (GameObject.Find("WartegTegalSari") == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing WartegTegalSari"); }
@@ -141,7 +142,7 @@ namespace NutriPick.Editor
                     if (eventSystems.Length != 1) { errors++; Debug.LogError($"[NutriPick] {path}: expected 1 EventSystem, found {eventSystems.Length}"); }
 
                     var foods = Object.FindObjectsByType<FoodItem>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-                    if (foods.Length != 17) { errors++; Debug.LogError($"[NutriPick] {path}: expected 17 food items, found {foods.Length}"); }
+                    if (foods.Length != 15) { errors++; Debug.LogError($"[NutriPick] {path}: expected 15 food items, found {foods.Length}"); }
 
                     if (flow.stands == null || flow.stands.Length != 2) { errors++; Debug.LogError($"[NutriPick] {path}: expected 2 bazaar stands, found {flow.stands?.Length ?? 0}"); }
                     if (flow.stands != null && flow.stands.Any(stand => stand == null || stand.foods == null || stand.foods.Length == 0)) { errors++; Debug.LogError($"[NutriPick] {path}: every bazaar stand must hold at least one food"); }

@@ -96,21 +96,28 @@ namespace NutriPick.Tests
         }
 
         [Test]
-        public void LevelThreeRequiresDrink()
+        public void AllCampaignLevelsAreDrinkFree()
         {
-            var level = Level(
-                Food("a", FoodCompositionCategory.Vegetable),
-                Food("b", FoodCompositionCategory.Protein),
-                Food("c", FoodCompositionCategory.Carbohydrate),
-                Food("d", FoodCompositionCategory.Fruit),
-                Food("e", FoodCompositionCategory.Snack),
-                Food("f", FoodCompositionCategory.Snack));
-            level.levelIndex = 3;
-            level.isFinalLevel = true;
-            level.requiresDrink = true;
-            level.minimumStands = 3;
-            Assert.IsFalse(level.IsValid(out _));
-            Object.DestroyImmediate(level);
+            var paths = new[]
+            {
+                "Assets/ScriptableObjects/Levels/LD_MainVR.asset",
+                "Assets/ScriptableObjects/Levels/LD_Level02_Warteg.asset",
+                "Assets/ScriptableObjects/Levels/LD_Level03_Bazaar.asset"
+            };
+
+            foreach (var path in paths)
+            {
+                var level = AssetDatabase.LoadAssetAtPath<LevelDefinition>(path);
+                Assert.IsNotNull(level, path);
+                Assert.IsFalse(level.requiresDrink, $"{path} must not require a drink.");
+                Assert.IsNotNull(level.foodPool, $"{path} has no food pool.");
+
+                foreach (var food in level.foodPool)
+                {
+                    Assert.IsNotNull(food, $"{path} contains a null food.");
+                    Assert.IsFalse(food.isDrink, $"{path} still contains drink '{food.id}'.");
+                }
+            }
         }
     }
 }

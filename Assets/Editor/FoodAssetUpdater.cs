@@ -75,8 +75,6 @@ namespace NutriPick.Editor
         {
             WriteTextureIfMissing("M_Food_Kerupuk_Albedo", GenerateCrackerTexture);
             WriteTextureIfMissing("M_Food_NasiPutih_Albedo", GenerateRiceTexture);
-            WriteTextureIfMissing("M_Food_TehManis_Albedo", GenerateTeaTexture);
-            WriteTextureIfMissing("M_Food_AirPutih_Albedo", GenerateWaterTexture);
             AssetDatabase.Refresh();
         }
 
@@ -85,8 +83,6 @@ namespace NutriPick.Editor
         {
             CreateMaterial("M_Food_Kerupuk", "M_Food_Kerupuk_Albedo", new Vector2(2f, 2f));
             CreateMaterial("M_Food_NasiPutih", "M_Food_NasiPutih_Albedo", new Vector2(2f, 2f));
-            CreateMaterial("M_Food_TehManis", "M_Food_TehManis_Albedo", new Vector2(1f, 1f));
-            CreateMaterial("M_Food_AirPutih", "M_Food_AirPutih_Albedo", new Vector2(2f, 2f));
             CreateMaterial("M_Food_Sayur", "M_Food_Sayur_Albedo", new Vector2(3f, 3f));
             AssetDatabase.SaveAssets();
         }
@@ -129,10 +125,6 @@ namespace NutriPick.Editor
             ApplyMesh("kerupuk", "Food_kerupuk", "M_Food_Kerupuk");
             ApplyMesh("nasi_putih", "Food_nasi_putih", "M_Food_NasiPutih");
             ApplyMesh("sayur_singkong", "Food_sayur_singkong", "M_Food_Sayur", 3);
-
-            // The drink cylinders were sunk 3 cm below their own pivot.
-            FixDrinkPivot("air_putih", "M_Food_AirPutih");
-            FixDrinkPivot("teh_manis", "M_Food_TehManis");
         }
 
         private static void ApplyMesh(string prefabName, string meshAssetName, string materialName, int materialSlots = 1)
@@ -178,49 +170,6 @@ namespace NutriPick.Editor
                 RefitCollider(root, model, mesh);
                 PrefabUtility.SaveAsPrefabAsset(root, prefabPath);
                 Debug.Log($"[FoodAssets] {prefabName}: mesh '{mesh.name}' ({mesh.vertexCount} verts, {mesh.subMeshCount} submesh) applied.");
-            }
-            finally
-            {
-                PrefabUtility.UnloadPrefabContents(root);
-            }
-        }
-
-        private static void FixDrinkPivot(string prefabName, string materialName)
-        {
-            string prefabPath = $"{PrefabFolder}/{prefabName}.prefab";
-            var material = AssetDatabase.LoadAssetAtPath<Material>($"{MaterialFolder}/{materialName}.mat");
-            if (material == null)
-            {
-                Debug.LogError($"[FoodAssets] Missing material {materialName}.");
-                return;
-            }
-
-            var root = PrefabUtility.LoadPrefabContents(prefabPath);
-            try
-            {
-                var model = root.transform.Find("Model");
-                if (model == null)
-                    return;
-
-                var meshFilter = model.GetComponent<MeshFilter>();
-                var mesh = meshFilter != null ? meshFilter.sharedMesh : null;
-                if (mesh == null)
-                    return;
-
-                var renderer = model.GetComponent<MeshRenderer>();
-                if (renderer != null)
-                    renderer.sharedMaterials = new[] { material };
-
-                // Primitives are centred on their own pivot: lift the model so its
-                // bottom sits on the prefab origin.
-                model.localPosition = new Vector3(
-                    model.localPosition.x,
-                    mesh.bounds.extents.y * model.localScale.y,
-                    model.localPosition.z);
-
-                RefitCollider(root, model, mesh);
-                PrefabUtility.SaveAsPrefabAsset(root, prefabPath);
-                Debug.Log($"[FoodAssets] {prefabName}: pivot lifted to {model.localPosition.y:F3}.");
             }
             finally
             {
@@ -346,58 +295,6 @@ namespace NutriPick.Editor
                     float speck = Hash(x, y, Size, 41);
                     if (speck > 0.97f)
                         color = Color.Lerp(color, shadow, 0.55f);
-
-                    pixels[y * Size + x] = color;
-                }
-            }
-
-            return pixels;
-        }
-
-        private static Color32[] GenerateTeaTexture()
-        {
-            var pixels = new Color32[Size * Size];
-            var deep = new Color(0.42f, 0.18f, 0.03f);
-            var light = new Color(0.78f, 0.48f, 0.12f);
-
-            for (int y = 0; y < Size; y++)
-            {
-                for (int x = 0; x < Size; x++)
-                {
-                    float u = x / (float)Size;
-                    float v = y / (float)Size;
-
-                    // Nearly flat amber: the drink is a simple cylinder, so strong
-                    // patterns would expose its cap/seam UVs.
-                    float body = 0.62f;
-                    body += (ValueNoise(u, v, 7, 3) - 0.5f) * 0.07f;
-                    body += (Hash(x, y, Size, 71) - 0.5f) * 0.03f;
-
-                    pixels[y * Size + x] = Color.Lerp(deep, light, Mathf.Clamp01(body));
-                }
-            }
-
-            return pixels;
-        }
-
-        private static Color32[] GenerateWaterTexture()
-        {
-            var pixels = new Color32[Size * Size];
-            var deep = new Color(0.72f, 0.88f, 0.94f);
-            var light = new Color(0.92f, 0.98f, 1f);
-
-            for (int y = 0; y < Size; y++)
-            {
-                for (int x = 0; x < Size; x++)
-                {
-                    float u = x / (float)Size;
-                    float v = y / (float)Size;
-                    float ripple = ValueNoise(u, v, 7, 5) * 0.6f + ValueNoise(u, v, 31, 17) * 0.4f;
-                    Color color = Color.Lerp(deep, light, ripple);
-
-                    float bubble = Hash(x, y, Size, 53);
-                    if (bubble > 0.985f)
-                        color = Color.Lerp(color, Color.white, 0.7f);
 
                     pixels[y * Size + x] = color;
                 }

@@ -20,6 +20,7 @@ namespace NutriPick.Interaction
 
         private Vector3 homePosition;
         private Quaternion homeRotation;
+        private RigidbodyInterpolation originalInterpolation = RigidbodyInterpolation.None;
 
         private void Awake()
         {
@@ -27,6 +28,8 @@ namespace NutriPick.Interaction
                 body = GetComponent<Rigidbody>();
             if (itemCollider == null)
                 itemCollider = GetComponent<Collider>();
+            if (body != null)
+                originalInterpolation = body.interpolation;
 
             // Foods placed directly in a scene never go through SetHome, so remember
             // their starting spot here; foods spawned by a stand overwrite this in SetHome.
@@ -48,14 +51,11 @@ namespace NutriPick.Interaction
 
             if (carried)
             {
+                CancelInvoke();
                 if (PlatedSlot != null)
                     PlatedSlot.Remove(this);
 
-                if (body != null)
-                {
-                    StopMotion();
-                    body.isKinematic = true;
-                }
+                SetPhysicsCarried(true);
                 if (itemCollider != null)
                     itemCollider.enabled = false;
 
@@ -66,10 +66,29 @@ namespace NutriPick.Interaction
             else
             {
                 transform.SetParent(null);
-                if (body != null)
-                    body.isKinematic = false;
+                SetPhysicsCarried(false);
                 if (itemCollider != null)
                     itemCollider.enabled = true;
+            }
+        }
+
+        private void SetPhysicsCarried(bool carried)
+        {
+            if (body == null)
+                return;
+
+            if (carried)
+            {
+                StopMotion();
+                body.isKinematic = true;
+                body.interpolation = RigidbodyInterpolation.None;
+                body.detectCollisions = false;
+            }
+            else
+            {
+                body.isKinematic = false;
+                body.interpolation = originalInterpolation;
+                body.detectCollisions = true;
             }
         }
 
@@ -85,6 +104,8 @@ namespace NutriPick.Interaction
             {
                 StopMotion();
                 body.isKinematic = true;
+                body.interpolation = RigidbodyInterpolation.None;
+                body.detectCollisions = true;
             }
             if (itemCollider != null)
                 itemCollider.enabled = true;
@@ -98,7 +119,7 @@ namespace NutriPick.Interaction
 
             if (body != null)
             {
-                body.isKinematic = false;
+                SetPhysicsCarried(false);
                 body.linearVelocity = Vector3.zero;
                 body.angularVelocity = Vector3.zero;
             }
@@ -117,7 +138,7 @@ namespace NutriPick.Interaction
 
             if (body != null)
             {
-                body.isKinematic = false;
+                SetPhysicsCarried(false);
                 body.linearVelocity = Vector3.zero;
                 body.angularVelocity = Vector3.zero;
             }
@@ -157,6 +178,8 @@ namespace NutriPick.Interaction
             {
                 StopMotion();
                 body.isKinematic = true;
+                body.interpolation = originalInterpolation;
+                body.detectCollisions = true;
             }
 
             if (itemCollider != null)

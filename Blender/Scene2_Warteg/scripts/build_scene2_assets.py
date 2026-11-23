@@ -31,6 +31,13 @@ scene.unit_settings.system = "METRIC"
 scene.unit_settings.scale_length = 1.0
 scene.render.fps = 30
 
+# Interior height. The ceiling is raised without moving the counter or signage.
+CEILING_Z = 3.40
+WALL_HEIGHT = 3.34
+WALL_CENTER_Z = 0.16 + WALL_HEIGHT / 2
+ROOF_Z = 3.56
+ROOF_RIDGE_Z = 3.68
+
 # ---------------------------------------------------------------------------
 # Materials
 # ---------------------------------------------------------------------------
@@ -117,6 +124,31 @@ def apply_scale(obj):
     bpy.ops.object.select_all(action="DESELECT")
     obj.select_set(True)
     bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+
+
+def bevel_object(obj, width, segments=1):
+    modifier = obj.modifiers.new("Bevel", "BEVEL")
+    modifier.width = width
+    modifier.segments = segments
+    bpy.context.view_layer.objects.active = obj
+    bpy.ops.object.modifier_apply(modifier=modifier.name)
+    return obj
+
+
+def torus(name, major_radius, minor_radius, loc, material, target,
+          major_segments=12, minor_segments=6):
+    bpy.ops.mesh.primitive_torus_add(
+        major_radius=major_radius,
+        minor_radius=minor_radius,
+        major_segments=major_segments,
+        minor_segments=minor_segments,
+        location=loc,
+    )
+    obj = bpy.context.object
+    obj.name = name
+    obj.data.materials.append(material)
+    move_to(obj, target)
+    return obj
 
 
 def box(name, size, loc, material, target, rot=(0, 0, 0), bevel=0.0):
@@ -207,10 +239,10 @@ box("FloorBorder_E", (0.25, 5.6, 0.02), (3.85, 0, 0.17), M_TILE, COL_SHELL)
 box("FloorMat", (2.2, 1.1, 0.02), (0, -1.9, 0.18), M_TILE_DARK, COL_SHELL)
 box("StepFront", (8.2, 0.85, 0.12), (0, -3.45, 0.06), M_CONCRETE, COL_SHELL)
 
-box("BackWall", (8.2, 0.16, 2.8), (0, 3.0, 1.56), M_WALL, COL_SHELL)
-box("LeftWall", (0.16, 6.0, 2.8), (-4.05, 0, 1.56), M_WALL, COL_SHELL)
-box("RightWall", (0.16, 6.0, 2.8), (4.05, 0, 1.56), M_WALL, COL_SHELL)
-box("FrontLintel", (8.2, 0.18, 0.55), (0, -3.0, 2.685), M_WALL, COL_SHELL)
+box("BackWall", (8.2, 0.16, WALL_HEIGHT), (0, 3.0, WALL_CENTER_Z), M_WALL, COL_SHELL)
+box("LeftWall", (0.16, 6.0, WALL_HEIGHT), (-4.05, 0, WALL_CENTER_Z), M_WALL, COL_SHELL)
+box("RightWall", (0.16, 6.0, WALL_HEIGHT), (4.05, 0, WALL_CENTER_Z), M_WALL, COL_SHELL)
+box("FrontLintel", (8.2, 0.18, 1.10), (0, -3.0, 2.96), M_WALL, COL_SHELL)
 box("PillarL", (0.28, 0.30, 2.25), (-3.95, -3.0, 1.285), M_WALL_WARM, COL_SHELL, bevel=0.01)
 box("PillarR", (0.28, 0.30, 2.25), (3.95, -3.0, 1.285), M_WALL_WARM, COL_SHELL, bevel=0.01)
 
@@ -221,11 +253,11 @@ box("ChairRailBack", (8.0, 0.07, 0.07), (0, 2.86, 1.31), M_WOOD_DARK, COL_SHELL)
 box("ChairRailL", (0.07, 5.8, 0.07), (-3.92, 0, 1.31), M_WOOD_DARK, COL_SHELL)
 box("ChairRailR", (0.07, 5.8, 0.07), (3.92, 0, 1.31), M_WOOD_DARK, COL_SHELL)
 
-box("Ceiling", (7.8, 5.8, 0.06), (0, 0.1, 2.90), M_WALL_LIGHT, COL_SHELL)
-box("Roof", (8.8, 6.8, 0.18), (0, 0.1, 3.05), M_METAL_DARK, COL_SHELL)
+box("Ceiling", (7.8, 5.8, 0.06), (0, 0.1, CEILING_Z), M_WALL_LIGHT, COL_SHELL)
+box("Roof", (8.8, 6.8, 0.18), (0, 0.1, ROOF_Z), M_METAL_DARK, COL_SHELL)
 for i in range(10):
     x = -4.0 + i * 0.8
-    box(f"RoofRidge_{i:02d}", (0.06, 6.6, 0.06), (x, 0.1, 3.17), M_METAL, COL_SHELL)
+    box(f"RoofRidge_{i:02d}", (0.06, 6.6, 0.06), (x, 0.1, ROOF_RIDGE_Z), M_METAL, COL_SHELL)
 
 awning_rot = (math.radians(10.6), 0, 0)
 box("Awning", (8.8, 2.7, 0.06), (0, -4.35, 2.45), M_AWNING, COL_SHELL, rot=awning_rot)
@@ -266,11 +298,11 @@ box("PosterRInner", (0.015, 0.7, 0.5), (3.92, 1.9, 2.05), M_TERRACOTTA, COL_SHEL
 # ===========================================================================
 # COUNTER
 # ===========================================================================
-box("CounterBase", (6.4, 0.95, 0.78), (0, 1.4, 0.55), M_WOOD_DARK, COL_COUNTER, bevel=0.01)
+box("CounterBase", (6.4, 0.95, 0.78), (0, 1.4, 0.55), M_WOOD_DARK, COL_COUNTER, bevel=0.012)
 for i in range(7):
     x = -2.7 + i * 0.9
-    box(f"CounterPanel_{i}", (0.74, 0.03, 0.62), (x, 0.915, 0.53), M_WOOD, COL_COUNTER)
-box("CounterTop", (6.7, 1.05, 0.06), (0, 1.4, 0.97), M_METAL, COL_COUNTER, bevel=0.005)
+    box(f"CounterPanel_{i}", (0.74, 0.03, 0.62), (x, 0.915, 0.53), M_WOOD, COL_COUNTER, bevel=0.004)
+box("CounterTop", (6.7, 1.05, 0.06), (0, 1.4, 0.97), M_METAL, COL_COUNTER, bevel=0.010)
 for i in range(7):
     x = -2.7 + i * 0.9
     box(f"TrayWell_{i}", (0.72, 0.48, 0.04), (x, 1.45, 1.02), M_METAL_DARK, COL_COUNTER)
@@ -294,17 +326,20 @@ for y in (0.95, 1.58):
     box(f"DisplayFrameBottom_{y:.2f}", (6.45, 0.05, 0.04), (0, y, 1.03), M_METAL, COL_COUNTER)
 box("DisplayLight", (6.0, 0.05, 0.03), (0, 1.25, 1.44), M_BULB, COL_COUNTER)
 
-box("CashierTop", (1.4, 0.7, 0.06), (2.7, -1.6, 0.76), M_WOOD, COL_COUNTER, bevel=0.005)
+box("CashierTop", (1.4, 0.7, 0.06), (2.7, -1.6, 0.76), M_WOOD, COL_COUNTER, bevel=0.010)
+box("CashierApron", (1.25, 0.55, 0.05), (2.7, -1.6, 0.70), M_WOOD, COL_COUNTER, bevel=0.005)
+box("CashierShelf", (1.20, 0.50, 0.03), (2.7, -1.6, 0.30), M_WOOD_DARK, COL_COUNTER, bevel=0.004)
 for dx in (-0.6, 0.6):
     for dy in (-0.28, 0.28):
-        box(f"CashierLeg_{dx:+.1f}_{dy:+.2f}", (0.07, 0.07, 0.60), (2.7 + dx, -1.6 + dy, 0.46), M_WOOD_DARK, COL_COUNTER)
-box("CashierPanel", (1.3, 0.03, 0.38), (2.7, -1.94, 0.56), M_WALL_WARM, COL_COUNTER)
-box("CashierBoard", (0.55, 0.03, 0.20), (2.7, -1.24, 1.05), M_WOOD_DARK, COL_COUNTER, rot=(math.radians(-18), 0, 0))
+        box(f"CashierLeg_{dx:+.1f}_{dy:+.2f}", (0.07, 0.07, 0.60), (2.7 + dx, -1.6 + dy, 0.46), M_WOOD_DARK, COL_COUNTER, bevel=0.004)
+box("CashierPanel", (1.3, 0.03, 0.38), (2.7, -1.94, 0.56), M_WALL_WARM, COL_COUNTER, bevel=0.004)
+box("CashierBoard", (0.55, 0.03, 0.20), (2.7, -1.24, 1.05), M_WOOD_DARK, COL_COUNTER, rot=(math.radians(-18), 0, 0), bevel=0.004)
 box("CashierBoxA", (0.22, 0.16, 0.08), (3.15, -1.55, 0.83), M_CERAMIC, COL_COUNTER)
 box("CashierBoxB", (0.22, 0.16, 0.08), (3.15, -1.55, 0.91), M_CERAMIC, COL_COUNTER)
 
-box("PrepTableBase", (1.35, 0.55, 0.74), (3.3, 2.35, 0.53), M_WOOD_DARK, COL_COUNTER)
-box("PrepTableTop", (1.45, 0.62, 0.05), (3.3, 2.35, 0.93), M_METAL, COL_COUNTER)
+box("PrepTableBase", (1.35, 0.55, 0.74), (3.3, 2.35, 0.53), M_WOOD_DARK, COL_COUNTER, bevel=0.008)
+box("PrepTableTop", (1.45, 0.62, 0.05), (3.3, 2.35, 0.93), M_METAL, COL_COUNTER, bevel=0.006)
+box("PrepTableShelf", (1.20, 0.45, 0.03), (3.3, 2.35, 0.30), M_WOOD, COL_COUNTER, bevel=0.004)
 cyl("GasCylinder", 0.16, 0.58, (3.75, 2.55, 0.47), M_GAS, COL_COUNTER, vertices=12)
 cyl("GasValve", 0.05, 0.10, (3.75, 2.55, 0.81), M_METAL_DARK, COL_COUNTER, vertices=8)
 cyl("RiceCookerBody", 0.20, 0.28, (2.95, 2.35, 1.10), M_CERAMIC, COL_COUNTER, vertices=14)
@@ -322,25 +357,35 @@ for i, x in enumerate((1.86, 2.05, 2.24)):
 # ===========================================================================
 # FURNITURE
 # ===========================================================================
-box("TableTopLong", (0.78, 2.6, 0.07), (-2.6, -1.4, 0.745), M_WOOD, COL_FURNITURE, bevel=0.006)
+box("TableTopLong", (0.78, 2.6, 0.07), (-2.6, -1.4, 0.745), M_WOOD, COL_FURNITURE, bevel=0.012)
+box("TableApronLong", (0.62, 2.42, 0.06), (-2.6, -1.4, 0.68), M_WOOD, COL_FURNITURE, bevel=0.006)
+for dy in (-0.30, -2.50):
+    box(f"TableCrossStretcher_{dy:+.2f}", (0.62, 0.06, 0.06), (-2.6, dy, 0.28), M_WOOD_DARK, COL_FURNITURE, bevel=0.004)
+box("TableStretcher", (0.06, 2.30, 0.06), (-2.6, -1.4, 0.28), M_WOOD_DARK, COL_FURNITURE, bevel=0.004)
 for dx in (-0.30, 0.30):
     for dy in (-1.10, 1.10):
-        box(f"TableLeg_{dx:+.2f}_{dy:+.2f}", (0.07, 0.07, 0.62), (-2.6 + dx, -1.4 + dy, 0.47), M_WOOD_DARK, COL_FURNITURE)
+        box(f"TableLeg_{dx:+.2f}_{dy:+.2f}", (0.07, 0.07, 0.62), (-2.6 + dx, -1.4 + dy, 0.47), M_WOOD_DARK, COL_FURNITURE, bevel=0.006)
 
 for label, x in (("West", -3.25), ("East", -1.95)):
-    box(f"Bench{label}Top", (0.32, 2.6, 0.06), (x, -1.4, 0.45), M_WOOD_DARK, COL_FURNITURE, bevel=0.004)
+    box(f"Bench{label}Top", (0.32, 2.6, 0.06), (x, -1.4, 0.45), M_WOOD_DARK, COL_FURNITURE, bevel=0.010)
+    box(f"Bench{label}Apron", (0.26, 2.42, 0.05), (x, -1.4, 0.395), M_WOOD, COL_FURNITURE, bevel=0.005)
+    box(f"Bench{label}Stretcher", (0.06, 2.30, 0.05), (x, -1.4, 0.24), M_WOOD_DARK, COL_FURNITURE, bevel=0.004)
     for dx in (-0.11, 0.11):
         for dy in (-1.08, 1.08):
             box(f"Bench{label}Leg_{dx:+.2f}_{dy:+.2f}", (0.06, 0.06, 0.29),
-                (x + dx, -1.4 + dy, 0.305), M_WOOD, COL_FURNITURE)
+                (x + dx, -1.4 + dy, 0.305), M_WOOD, COL_FURNITURE, bevel=0.004)
 
 for i, (x, y) in enumerate(((1.75, -1.05), (2.45, -0.75))):
-    cyl(f"StoolSeat_{i}", 0.20, 0.06, (x, y, 0.47), M_WOOD, COL_FURNITURE, vertices=12)
+    seat = cyl(f"StoolSeat_{i}", 0.20, 0.06, (x, y, 0.47), M_WOOD, COL_FURNITURE, vertices=12)
+    bevel_object(seat, 0.008, 2)
     for j in range(3):
         angle = j * math.tau / 3
         px = x + math.cos(angle) * 0.12
         py = y + math.sin(angle) * 0.12
-        cyl(f"StoolLeg_{i}_{j}", 0.025, 0.45, (px, py, 0.235), M_WOOD_DARK, COL_FURNITURE, vertices=8)
+        # The legs start at the interior floor (z=0.16) and reach the seat underside.
+        leg = cyl(f"StoolLeg_{i}_{j}", 0.025, 0.295, (px, py, 0.3075), M_WOOD_DARK, COL_FURNITURE, vertices=8)
+        bevel_object(leg, 0.004, 1)
+    torus(f"StoolStretcher_{i}", 0.12, 0.012, (x, y, 0.30), M_WOOD_DARK, COL_FURNITURE)
 
 # ===========================================================================
 # PROPS
@@ -356,7 +401,7 @@ cyl("Bucket", 0.16, 0.30, (-3.45, -2.25, 0.31), M_CRATE_BLUE, COL_PROPS, vertice
 cyl("BucketHandle", 0.15, 0.02, (-3.45, -2.25, 0.46), M_METAL_DARK, COL_PROPS, vertices=12)
 
 for i, x in enumerate((-2.0, 0.0, 2.0)):
-    cyl(f"PendantCord_{i}", 0.008, 0.45, (x, 0.25, 2.62), M_METAL_DARK, COL_PROPS, vertices=6)
+    cyl(f"PendantCord_{i}", 0.008, 0.98, (x, 0.25, 2.885), M_METAL_DARK, COL_PROPS, vertices=6)
     cone(f"PendantShade_{i}", 0.18, 0.06, 0.16, (x, 0.25, 2.35), M_AWNING, COL_PROPS, vertices=12)
     sphere(f"PendantBulb_{i}", 0.055, (x, 0.25, 2.27), M_BULB, COL_PROPS, segments=10, rings=6)
 

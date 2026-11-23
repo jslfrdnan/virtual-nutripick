@@ -40,16 +40,16 @@ namespace NutriPick.Tests
 
             var healthy = stands.First(stand => stand.displayName == "Healthy Food");
             var junk = stands.First(stand => stand.displayName == "Junk Food");
-            Assert.AreEqual(5, healthy.foods.Length, "Healthy Food should hold five foods.");
-            Assert.AreEqual(3, junk.foods.Length, "Junk Food should hold three foods.");
+            Assert.AreEqual(4, healthy.foods.Length, "Healthy Food should hold four foods.");
+            Assert.AreEqual(2, junk.foods.Length, "Junk Food should hold two foods.");
             Assert.Greater(healthy.transform.position.z, 0f, "Healthy Food should sit on the north side.");
             Assert.Less(junk.transform.position.z, 0f, "Junk Food should sit on the south side.");
 
             var foodItems = Object.FindObjectsByType<FoodItem>(FindObjectsSortMode.None);
-            Assert.AreEqual(17, foodItems.Length,
-                "Four bananas, three tempe slices, three broccoli florets, three ayam goreng pieces, and the other four foods should be available across the two stalls.");
-            Assert.AreEqual(8, foodItems.Select(food => food.data).Distinct().Count(),
-                "All eight unique foods should still be available across the two stalls.");
+            Assert.AreEqual(15, foodItems.Length,
+                "Four bananas, three tempe slices, three broccoli florets, three ayam goreng pieces, and the other two foods should be available across the two stalls.");
+            Assert.AreEqual(6, foodItems.Select(food => food.data).Distinct().Count(),
+                "All six unique foods should still be available across the two stalls.");
             Assert.AreEqual(10, Object.FindObjectsByType<DecorStall>(FindObjectsSortMode.None).Length,
                 "Ten closed stalls should complete the street.");
 
@@ -57,12 +57,12 @@ namespace NutriPick.Tests
             Assert.IsNotNull(plate, "Serving plate missing.");
             Assert.AreEqual(4, plate.slots.Length, "Serving plate should have four slots.");
             Assert.That(plate.transform.position.x, Is.EqualTo(-8.35f).Within(0.2f));
-            Assert.That(plate.transform.position.y, Is.EqualTo(0.78f).Within(0.05f));
-            Assert.That(plate.transform.position.z, Is.EqualTo(2.35f).Within(0.2f));
+            Assert.That(plate.transform.position.y, Is.EqualTo(0.652f).Within(0.02f));
+            Assert.That(plate.transform.position.z, Is.EqualTo(3.65f).Within(0.2f));
 
             var station = Object.FindFirstObjectByType<ServeStation>();
             Assert.IsNotNull(station, "Serve station missing.");
-            Assert.That(station.transform.position.z, Is.EqualTo(2.35f).Within(0.2f));
+            Assert.That(station.transform.position.z, Is.EqualTo(3.65f).Within(0.2f));
 
             Assert.IsNotNull(GameObject.Find("Scene3Bazaar"), "Scene3Bazaar root missing.");
             Assert.IsNotNull(GameObject.Find("SchoolCampus"), "School backdrop missing.");
@@ -74,7 +74,7 @@ namespace NutriPick.Tests
             Assert.IsNotNull(flow, "LevelFlowController missing.");
             Assert.AreEqual(3, flow.level.levelIndex);
             Assert.IsTrue(flow.IsLevelStarted, "Level 3 should start immediately.");
-            Assert.IsTrue(flow.level.requiresDrink, "Level 3 should require a drink.");
+            Assert.IsFalse(flow.level.requiresDrink, "Level 3 should not require a drink.");
             Assert.AreEqual(2, flow.stands.Length, "Flow should know both open stalls.");
             Assert.Less(flow.serveStation.transform.position.x, 2f, "Serving must happen outside the school campus.");
 
@@ -117,7 +117,7 @@ namespace NutriPick.Tests
             Assert.IsNotNull(plate, "Serving plate missing.");
             Assert.IsNotNull(flow, "LevelFlowController missing.");
 
-            var picks = new[] { "brokoli", "pisang", "ayam_goreng", "teh_manis" }
+            var picks = new[] { "brokoli", "pisang", "ayam_goreng", "burger" }
                 .Select(id => foods.First(food => food.data != null && food.data.id == id))
                 .ToArray();
 
@@ -183,7 +183,7 @@ namespace NutriPick.Tests
             var foods = Object.FindObjectsByType<FoodItem>(FindObjectsSortMode.None)
                 .Where(food => food.gameObject.scene == activeScene)
                 .ToArray();
-            Assert.AreEqual(17, foods.Length, "Level 3 should keep every interactive food portion.");
+            Assert.AreEqual(15, foods.Length, "Level 3 should keep every interactive food portion.");
 
             for (int i = 0; i < foods.Length; i++)
             {
@@ -193,33 +193,6 @@ namespace NutriPick.Tests
                     Assert.Greater(distance, 0.02f,
                         $"{foods[i].name} and {foods[j].name} are stacked on the same spot ({distance:F3} m).");
                 }
-            }
-        }
-
-        [UnityTest]
-        public IEnumerator DrinksAreHeldBelowTheReticle()
-        {
-            SceneManager.LoadScene("Level03_Bazaar");
-            yield return null;
-            yield return null;
-
-            var carrier = Object.FindFirstObjectByType<HeldFoodCarrier>();
-            var foods = Object.FindObjectsByType<FoodItem>(FindObjectsSortMode.None);
-            Assert.IsNotNull(carrier, "HeldFoodCarrier missing.");
-
-            foreach (var id in new[] { "air_putih", "teh_manis" })
-            {
-                var drink = foods.First(food => food.data != null && food.data.id == id);
-                carrier.Hold(drink);
-                yield return null;
-
-                Assert.AreEqual(carrier.holdAnchor, drink.transform.parent, $"{id} is not parented to the hold anchor.");
-                Assert.Less(drink.transform.localPosition.y, -0.05f,
-                    $"{id} should sit below the reticle while held.");
-
-                carrier.Release();
-                drink.ReturnHome();
-                yield return null;
             }
         }
 
@@ -258,7 +231,7 @@ namespace NutriPick.Tests
             flow.StartLevel();
             yield return null;
 
-            var picks = new[] { "air_putih", "ayam_goreng", "telur_rebus", "tempe" }
+            var picks = new[] { "burger", "ayam_goreng", "telur_rebus", "tempe" }
                 .Select(id => foods.First(food => food.data.id == id))
                 .ToArray();
 
