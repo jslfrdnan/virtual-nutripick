@@ -35,12 +35,14 @@ namespace NutriPick.Editor
         {
             "Road_Flamboyant", "Sidewalk_West", "Sidewalk_East", "Plaza_Center", "Forecourt_Gate",
             "Campus_Ground", "Pramuka_Road", "Pramuka_Sidewalk", "Pramuka_Apron", "SMK_Ground",
-            "Curb_West", "Curb_East", "Curb_Pramuka"
+            "Curb_West", "Curb_East", "Curb_Pramuka", "Road_Flamboyant_Cross",
+            "Sidewalk_Flamboyant_North", "Sidewalk_Flamboyant_South", "Intersection_Plaza",
+            "Curb_Flamboyant_North", "Curb_Flamboyant_South"
         };
 
         private static readonly string[] PropPrefixes =
         {
-            "BazaarStand_", "DecorStall_Closed_", "PanggungBazaar", "Cafe_", "SchoolCampus"
+            "BazaarStand_", "PanggungBazaar", "Cafe_", "SchoolCampus", "CoffeeShop_", "SMK_Building"
         };
 
         [MenuItem("NutriPick/Bazaar/Build Grass Field")]

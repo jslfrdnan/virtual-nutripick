@@ -22,7 +22,7 @@ namespace NutriPick.Editor
 
             var root = new GameObject("ServingPlate");
             var controller = root.AddComponent<PlateController>();
-            controller.minItems = 3;
+            controller.minItems = 4;
             controller.requiresDrink = false;
 
             var visual = (GameObject)PrefabUtility.InstantiatePrefab(plateModel, root.transform);

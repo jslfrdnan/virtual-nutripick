@@ -10,13 +10,18 @@ namespace NutriPick.Player
         public GamepadInput input;
         [Header("Movement")]
         [Range(0.5f, 6f)] public float moveSpeed = 2.0f;
+        [Header("Sprint")]
+        [Range(1f, 4f)] public float sprintMultiplier = 2.0f;
         [Header("Look")]
         [Range(30f, 360f)] public float lookSpeed = 120f;
         public float gravity = -9.81f;
 
+        public bool IsSprinting => sprinting;
+
         private float pitch;
         private float verticalVelocity;
         private bool controlEnabled = true;
+        private bool sprinting;
 
         private void Awake()
         {
@@ -49,8 +54,12 @@ namespace NutriPick.Player
             if (!controlEnabled || input == null || controller == null)
                 return;
 
+            if (input.SprintTogglePressed)
+                sprinting = !sprinting;
+
             Vector3 move = transform.right * input.Move.x + transform.forward * input.Move.y;
-            controller.Move(move * moveSpeed * Time.deltaTime);
+            float speed = moveSpeed * (sprinting ? sprintMultiplier : 1f);
+            controller.Move(move * speed * Time.deltaTime);
 
             if (controller.isGrounded && verticalVelocity < 0f)
                 verticalVelocity = -2f;
@@ -69,6 +78,8 @@ namespace NutriPick.Player
         public void SetControlEnabled(bool enabled)
         {
             controlEnabled = enabled;
+            if (!enabled)
+                sprinting = false;
             Cursor.lockState = enabled ? CursorLockMode.Locked : CursorLockMode.None;
             Cursor.visible = !enabled;
         }

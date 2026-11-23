@@ -15,7 +15,7 @@ MonoBehaviour:
   id: mie_goreng
   displayName: Mie goreng
   description: Mengenyangkan, tetapi tinggi natrium dan lemak. Batasi porsinya dan tambahkan sayur.
-  composition: 36
+  composition: 4
   processing: 2
   isFried: 1
   isDrink: 0

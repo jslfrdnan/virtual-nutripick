@@ -17,7 +17,11 @@ namespace NutriPick.Tests
         public void SetUp()
         {
             if (GameSession.Instance != null)
+                {
                 GameSession.Instance.ResetSession();
+                GameSession.Instance.MarkIntroSeen();
+                GameSession.Instance.sessionActive = true;
+            }
         }
 
         [UnityTest]
@@ -42,7 +46,7 @@ namespace NutriPick.Tests
             temp.nextSceneName = "Level02_Warteg";
             temp.levelIndex = 1;
             temp.foodPool = original.foodPool.Reverse().ToArray();
-            temp.minItems = 3;
+            temp.minItems = 4;
             temp.requiresDrink = false;
             temp.minimumStands = 1;
             flow.RebindLevel(temp);
@@ -57,8 +61,11 @@ namespace NutriPick.Tests
             Assert.AreEqual(temp.foodPool[0].id, grid.Cards[0].FoodId, "Card order should follow the swapped level pool.");
 
             var foods = Object.FindObjectsByType<FoodItem>(FindObjectsSortMode.None);
-            for (int i = 0; i < 3; i++)
-                Assert.IsTrue(plate.slots[i].TryPlace(foods[i]), "Could not place replicated food " + i);
+            var picks = new[] { "burger", "rendang", "brokoli", "pisang" }
+                .Select(id => foods.First(food => food.data != null && food.data.id == id))
+                .ToArray();
+            for (int i = 0; i < picks.Length; i++)
+                Assert.IsTrue(plate.slots[i].TryPlace(picks[i]), "Could not place replicated food " + picks[i].data.id);
 
             flow.TryServe();
             yield return new WaitForSeconds(1.2f);

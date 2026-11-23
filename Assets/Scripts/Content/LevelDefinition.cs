@@ -18,7 +18,7 @@ namespace NutriPick.Content
 
         [Header("Content")]
         public FoodData[] foodPool;
-        public int minItems = 3;
+        public int minItems = 4;
         public bool requiresDrink;
         public int minimumStands = 1;
 

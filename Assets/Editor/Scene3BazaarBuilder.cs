@@ -49,6 +49,49 @@ namespace NutriPick.Editor
         private static readonly Vector3 JunkStandPosition = new(-3.5f, 0f, -23f);
         private const float JunkStandYaw = -90f;
 
+        private struct FoodPair
+        {
+            public readonly string first;
+            public readonly string second;
+
+            public FoodPair(string first, string second)
+            {
+                this.first = first;
+                this.second = second;
+            }
+        }
+
+        private struct StallPlacement
+        {
+            public readonly Vector3 position;
+            public readonly float yaw;
+
+            public StallPlacement(Vector3 position, float yaw)
+            {
+                this.position = position;
+                this.yaw = yaw;
+            }
+        }
+
+        private static readonly FoodPair[] StallMenus =
+        {
+            new FoodPair("burger", "ayam_goreng"),
+            new FoodPair("burger", "telur_rebus"),
+            new FoodPair("burger", "tempe"),
+            new FoodPair("burger", "brokoli"),
+            new FoodPair("burger", "pisang"),
+            new FoodPair("ayam_goreng", "telur_rebus"),
+            new FoodPair("ayam_goreng", "tempe"),
+            new FoodPair("ayam_goreng", "brokoli"),
+            new FoodPair("ayam_goreng", "pisang"),
+            new FoodPair("telur_rebus", "tempe"),
+            new FoodPair("telur_rebus", "brokoli"),
+            new FoodPair("telur_rebus", "pisang"),
+            new FoodPair("tempe", "brokoli"),
+            new FoodPair("tempe", "pisang"),
+            new FoodPair("brokoli", "pisang")
+        };
+
         private static readonly Vector3[] ClosedStandPositions =
         {
             new(-3.5f, 0f, 23f),
@@ -124,6 +167,7 @@ namespace NutriPick.Editor
             EnsureMaterials();
             UpdateLevel();
             BuildScene();
+            ApplyBazaarDressing();
             UpdateBuildSettings();
 
             AssetDatabase.SaveAssets();
@@ -132,7 +176,15 @@ namespace NutriPick.Editor
             NutriPickSceneValidator.ValidateScenes();
             NutriPickSceneValidator.CaptureScenePreviews();
 
-            Debug.Log("[Scene3Bazaar] Built Flamboyant bazaar: 2 open stalls (Healthy Food, Junk Food), 10 closed stalls, 2 cafes, school backdrop, and serving stage.");
+            Debug.Log("[Scene3Bazaar] Built Flamboyant bazaar: 30 open food stalls, 120 foods, 2 intersections, 4 coffee shops, school/SMK backdrop, and serving stage.");
+        }
+
+        private static void ApplyBazaarDressing()
+        {
+            BazaarFoodPolish.RunAll();
+            BazaarEveningSetup.ApplyGoldenHour();
+            BazaarStreetLamps.Build();
+            BazaarGrassScatter.Build();
         }
 
         private static void ConfigureModelImporters()
@@ -289,23 +341,9 @@ namespace NutriPick.Editor
                     new Color(0.35f, 0.06f, 0.04f), TextAlignmentOptions.Center);
             }
 
-            var healthyFoods = level.foodPool
-                .Where(food => food != null && FoodClassifier.Resolve(food, rules) == FoodHealthLabel.Healthy)
-                .ToArray();
-            var junkFoods = level.foodPool
-                .Where(food => food != null && FoodClassifier.Resolve(food, rules) != FoodHealthLabel.Healthy)
-                .ToArray();
-
-            if (healthyFoods.Length == 0 || junkFoods.Length == 0)
-                Debug.LogError("[Scene3Bazaar] Food pool must contain both healthy and less healthy foods.");
-
-            var healthyStand = CreateStand(root.transform, "BazaarStand_HealthyFood", "Healthy Food",
-                FoodStandKind.Healthy, healthyFoods, HealthyStandPosition, HealthyStandYaw);
-            var junkStand = CreateStand(root.transform, "BazaarStand_JunkFood", "Junk Food",
-                FoodStandKind.Junk, junkFoods, JunkStandPosition, JunkStandYaw);
-            var stands = new[] { healthyStand, junkStand };
-
-            CreateDecorStalls(root.transform);
+            var stands = CreateFoodStalls(root.transform, level, rules);
+            CreateCoffeeShops(root.transform);
+            CreateSmkBuilding(root.transform);
             CreateNpcCast(root.transform);
 
             var platePrefab = AssetDatabase.LoadAssetAtPath<GameObject>(ServingPlatePath);
@@ -325,7 +363,7 @@ namespace NutriPick.Editor
             var playerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(PlayerRigPath);
             var playerObject = (GameObject)PrefabUtility.InstantiatePrefab(playerPrefab);
             playerObject.name = "PlayerRig";
-            playerObject.transform.position = new Vector3(-9f, 0.02f, 41.5f);
+            playerObject.transform.position = new Vector3(-8.35f, 0.02f, 6.2f);
             playerObject.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
             var player = playerObject.GetComponent<FirstPersonController>();
             var reticle = playerObject.GetComponent<ReticleInteractor>();
@@ -384,11 +422,17 @@ namespace NutriPick.Editor
             GroundBox(root, "Pramuka_Sidewalk", new Vector3(13f, 0.005f, -38.5f), new Vector3(62f, 0.01f, 3f), "M_Bazaar_Sidewalk", false);
             GroundBox(root, "Pramuka_Apron", new Vector3(25f, 0.005f, -33.5f), new Vector3(38f, 0.01f, 7f), "M_Bazaar_Concrete", false);
             GroundBox(root, "SMK_Ground", new Vector3(25f, 0.005f, -54f), new Vector3(38f, 0.01f, 12f), "M_Bazaar_Concrete", false);
+            GroundBox(root, "Road_Flamboyant_Cross", new Vector3(-9f, 0.005f, 38f), new Vector3(120f, 0.01f, 6f), "M_Bazaar_Asphalt", false);
+            GroundBox(root, "Sidewalk_Flamboyant_North", new Vector3(-9f, 0.005f, 41.5f), new Vector3(120f, 0.01f, 3f), "M_Bazaar_Sidewalk", false);
+            GroundBox(root, "Sidewalk_Flamboyant_South", new Vector3(-9f, 0.005f, 34.5f), new Vector3(120f, 0.01f, 3f), "M_Bazaar_Sidewalk", false);
+            GroundBox(root, "Intersection_Plaza", new Vector3(-9f, 0.007f, 38f), new Vector3(12f, 0.014f, 12f), "M_Bazaar_Plaza", false);
 
             // Curbs, kept visual so the player can cross the pedestrian street.
             GroundBox(root, "Curb_West", new Vector3(-12.1f, 0.06f, -2f), new Vector3(0.2f, 0.12f, 88f), "M_Bazaar_Curb", false);
             GroundBox(root, "Curb_East", new Vector3(-5.9f, 0.06f, -2f), new Vector3(0.2f, 0.12f, 88f), "M_Bazaar_Curb", false);
             GroundBox(root, "Curb_Pramuka", new Vector3(13f, 0.06f, -39.9f), new Vector3(62f, 0.12f, 0.2f), "M_Bazaar_Curb", false);
+            GroundBox(root, "Curb_Flamboyant_North", new Vector3(-9f, 0.06f, 41.6f), new Vector3(120f, 0.12f, 0.2f), "M_Bazaar_Curb", false);
+            GroundBox(root, "Curb_Flamboyant_South", new Vector3(-9f, 0.06f, 34.4f), new Vector3(120f, 0.12f, 0.2f), "M_Bazaar_Curb", false);
 
             // Crosswalks and a light dashed center line.
             for (int i = 0; i < 6; i++)
@@ -396,6 +440,7 @@ namespace NutriPick.Editor
                 float x = -11.4f + i * 0.9f;
                 GroundBox(root, $"Crosswalk_N_{i}", new Vector3(x, 0.012f, 8f), new Vector3(0.55f, 0.012f, 4f), "M_Bazaar_RoadLine", false);
                 GroundBox(root, $"Crosswalk_S_{i}", new Vector3(x, 0.012f, -8f), new Vector3(0.55f, 0.012f, 4f), "M_Bazaar_RoadLine", false);
+                GroundBox(root, $"Crosswalk_Flamboyant_{i}", new Vector3(x, 0.012f, 38f), new Vector3(0.55f, 0.012f, 4f), "M_Bazaar_RoadLine", false);
             }
 
             for (int i = 0; i < 15; i++)
@@ -404,11 +449,17 @@ namespace NutriPick.Editor
                 GroundBox(root, $"CenterLine_{i}", new Vector3(-9f, 0.012f, z), new Vector3(0.08f, 0.012f, 1.4f), "M_Bazaar_RoadLine", false);
             }
 
+            for (int i = 0; i < 21; i++)
+            {
+                float x = -55f + i * 5f;
+                GroundBox(root, $"CenterLine_Flamboyant_{i}", new Vector3(x, 0.012f, 38f), new Vector3(1.4f, 0.012f, 0.08f), "M_Bazaar_RoadLine", false);
+            }
+
             // Invisible play-area boundary.
-            AddBox(root, "Collider_Boundary_West", new Vector3(-18.4f, 1.5f, -2f), new Vector3(0.4f, 3f, 88f));
-            AddBox(root, "Collider_Boundary_East", new Vector3(44.4f, 1.5f, -2f), new Vector3(0.4f, 3f, 88f));
-            AddBox(root, "Collider_Boundary_South", new Vector3(13f, 1.5f, -46.4f), new Vector3(63f, 3f, 0.4f));
-            AddBox(root, "Collider_Boundary_North", new Vector3(13f, 1.5f, 42.4f), new Vector3(63f, 3f, 0.4f));
+            AddBox(root, "Collider_Boundary_West", new Vector3(-58f, 1.5f, 0f), new Vector3(0.4f, 3f, 120f));
+            AddBox(root, "Collider_Boundary_East", new Vector3(58f, 1.5f, 0f), new Vector3(0.4f, 3f, 120f));
+            AddBox(root, "Collider_Boundary_South", new Vector3(0f, 1.5f, -58f), new Vector3(120f, 3f, 0.4f));
+            AddBox(root, "Collider_Boundary_North", new Vector3(0f, 1.5f, 58f), new Vector3(120f, 3f, 0.4f));
         }
 
         private static void GroundBox(Transform parent, string name, Vector3 position, Vector3 size, string materialKey, bool collider)
@@ -474,6 +525,107 @@ namespace NutriPick.Editor
             }
         }
 
+        private static FoodStand[] CreateFoodStalls(Transform parent, LevelDefinition level, NutritionRules rules)
+        {
+            var byId = new Dictionary<string, FoodData>();
+            foreach (var food in level.foodPool)
+            {
+                if (food != null)
+                    byId[food.id] = food;
+            }
+
+            var placements = new List<StallPlacement>();
+            AddStallRow(placements, -14.5f, 90f, new[] { 30f, 24f, 18f, 12f, 6f, -6f, -12f, -18f, -24f, -30f });
+            AddStallRow(placements, -3.5f, -90f, new[] { 30f, 24f, 18f, 12f, 6f, -6f, -12f, -18f, -24f, -30f });
+            AddStallCrossRow(placements, 34.5f, 0f, new[] { -40f, -30f, 8f });
+            AddStallCrossRow(placements, 41.5f, 180f, new[] { -40f, -30f, 8f });
+            AddStallCrossRow(placements, -35.5f, 180f, new[] { 8f, 16f, 24f, 32f });
+
+            var stands = new List<FoodStand>();
+            for (int i = 0; i < placements.Count; i++)
+            {
+                var menu = StallMenus[i % StallMenus.Length];
+                if (!byId.TryGetValue(menu.first, out var first) || !byId.TryGetValue(menu.second, out var second))
+                {
+                    Debug.LogError($"[Scene3Bazaar] Missing stall food {menu.first}/{menu.second}.");
+                    continue;
+                }
+
+                var kind = FoodClassifier.Resolve(first, rules) == FoodHealthLabel.Healthy
+                    && FoodClassifier.Resolve(second, rules) == FoodHealthLabel.Healthy
+                    ? FoodStandKind.Healthy
+                    : FoodStandKind.Junk;
+                var displayName = first.displayName + " & " + second.displayName;
+                var stand = CreateStand(parent, $"BazaarStand_{i + 1:00}", displayName, kind,
+                    new[] { first, second }, placements[i].position, placements[i].yaw);
+                if (stand != null)
+                    stands.Add(stand);
+            }
+
+            return stands.ToArray();
+        }
+
+        private static void AddStallRow(List<StallPlacement> placements, float x, float yaw, float[] zValues)
+        {
+            foreach (var z in zValues)
+                placements.Add(new StallPlacement(new Vector3(x, 0f, z), yaw));
+        }
+
+        private static void AddStallCrossRow(List<StallPlacement> placements, float z, float yaw, float[] xValues)
+        {
+            foreach (var x in xValues)
+                placements.Add(new StallPlacement(new Vector3(x, 0f, z), yaw));
+        }
+
+        private static void CreateCoffeeShops(Transform root)
+        {
+            var shops = new[]
+            {
+                new { name = "CoffeeShop_01", position = new Vector3(-42f, 0f, 45f), yaw = 180f },
+                new { name = "CoffeeShop_02", position = new Vector3(8f, 0f, 45f), yaw = 180f },
+                new { name = "CoffeeShop_03", position = new Vector3(46f, 0f, 20f), yaw = 90f },
+                new { name = "CoffeeShop_04", position = new Vector3(46f, 0f, -30f), yaw = 90f }
+            };
+
+            foreach (var shop in shops)
+            {
+                var cafe = InstantiateModel(CafeFbx, root, shop.name, shop.position, Quaternion.Euler(0f, shop.yaw, 0f));
+                if (cafe == null)
+                    continue;
+
+                AddCafeColliders(cafe);
+                CreateWorldText(cafe.transform, "Sign_Coffee", "COFFEE", new Vector3(0f, 3.05f, 0.13f),
+                    Quaternion.Euler(0f, 180f, 0f), 0.110f, 36f,
+                    new Color(0.35f, 0.06f, 0.04f), TextAlignmentOptions.Center);
+            }
+        }
+
+        private static void CreateSmkBuilding(Transform root)
+        {
+            var smk = new GameObject("SMK_Building");
+            smk.transform.SetParent(root, false);
+            smk.transform.localPosition = new Vector3(30f, 0f, -58f);
+
+            var body = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            body.name = "Body";
+            body.transform.SetParent(smk.transform, false);
+            body.transform.localPosition = new Vector3(0f, 3f, 0f);
+            body.transform.localScale = new Vector3(30f, 6f, 10f);
+            body.GetComponent<Renderer>().sharedMaterial = Materials["M_Bazaar_WallCream"];
+
+            var roof = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            roof.name = "Roof";
+            roof.transform.SetParent(smk.transform, false);
+            roof.transform.localPosition = new Vector3(0f, 6.2f, 0f);
+            roof.transform.localScale = new Vector3(31f, 0.4f, 11f);
+            roof.GetComponent<Renderer>().sharedMaterial = Materials["M_Bazaar_RoofDark"];
+            Object.DestroyImmediate(roof.GetComponent<BoxCollider>());
+
+            CreateWorldText(root, "Sign_SMK", "SMK NEGERI 1 MANADO",
+                new Vector3(30f, 6.7f, -52.7f), Quaternion.identity, 0.085f, 36f,
+                new Color(0.85f, 0.66f, 0.22f), TextAlignmentOptions.Center);
+        }
+
         private static FoodStand CreateStand(Transform parent, string standName, string displayName, FoodStandKind kind, FoodData[] foods, Vector3 position, float yaw)
         {
             var station = new GameObject(standName);
@@ -521,7 +673,7 @@ namespace NutriPick.Editor
                     continue;
                 }
 
-                var portionCount = PortionCount(food.id);
+                const int portionCount = 2;
                 for (int portion = 0; portion < portionCount; portion++)
                 {
                     var instance = (GameObject)PrefabUtility.InstantiatePrefab(food.prefab, foodRoot.transform);
@@ -622,7 +774,7 @@ namespace NutriPick.Editor
             Color textColor = kind == FoodStandKind.Healthy
                 ? new Color(0.14f, 0.10f, 0.07f)
                 : new Color(0.95f, 0.90f, 0.75f);
-            string label = kind == FoodStandKind.Healthy ? "SAYUR SEGAR\nHARI INI" : "TEH MANIS\nPROMO!";
+            string label = kind == FoodStandKind.Healthy ? "SAYUR SEGAR\nHARI INI" : "JAJANAN\nPROMO!";
             var text = CreateWorldText(boardRoot.transform, "Text", label,
                 new Vector3(0f, 1.25f, 0.04f), Quaternion.Euler(0f, 180f, 0f), 0.030f, 26f,
                 textColor, TextAlignmentOptions.Center);
@@ -867,6 +1019,9 @@ namespace NutriPick.Editor
             AddPointLight(fillRoot.transform, "Fill_Stage", new Vector3(StageX, 2.6f, StageZ), 7f, 0.55f);
             AddPointLight(fillRoot.transform, "Fill_CafeNorth", new Vector3(-13f, 2.6f, 36f), 6f, 0.4f);
             AddPointLight(fillRoot.transform, "Fill_CafeSouth", new Vector3(-13f, 2.6f, -35f), 6f, 0.4f);
+            AddPointLight(fillRoot.transform, "Fill_FlamboyantCross", new Vector3(StageX, 2.6f, 38f), 12f, 0.55f);
+            AddPointLight(fillRoot.transform, "Fill_BazaarEast", new Vector3(18f, 2.6f, 38f), 10f, 0.4f);
+            AddPointLight(fillRoot.transform, "Fill_CoffeeShops", new Vector3(-30f, 2.6f, 42f), 10f, 0.35f);
 
             RenderSettings.ambientMode = AmbientMode.Flat;
             RenderSettings.ambientLight = new Color(0.52f, 0.47f, 0.42f);

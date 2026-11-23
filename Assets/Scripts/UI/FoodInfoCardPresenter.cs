@@ -33,7 +33,11 @@ namespace NutriPick.UI
             if (compactName != null) compactName.text = food.displayName;
             if (compactBadge != null) compactBadge.text = Label(food);
             if (compactBadgeBackground != null) compactBadgeBackground.color = BadgeColor(food);
-            if (compactCalories != null) compactCalories.text = NutritionFormat.Kcal(food.calories);
+            if (compactCalories != null)
+            {
+                compactCalories.text = string.Empty;
+                compactCalories.gameObject.SetActive(false);
+            }
         }
 
         public void ShowFull(FoodData food)
@@ -43,17 +47,17 @@ namespace NutriPick.UI
             if (compactRoot != null) compactRoot.SetActive(false);
             if (fullRoot != null) fullRoot.SetActive(true);
             if (fullName != null) fullName.text = food.displayName;
-            if (fullPortion != null) fullPortion.text = food.portionLabel;
+            if (fullPortion != null)
+            {
+                fullPortion.text = string.Empty;
+                fullPortion.gameObject.SetActive(false);
+            }
             if (fullBadge != null) fullBadge.text = Label(food);
             if (fullBadgeBackground != null) fullBadgeBackground.color = BadgeColor(food);
             if (fullStats != null)
             {
-                fullStats.text =
-                    $"Kalori: {NutritionFormat.Kcal(food.calories)}\n" +
-                    $"Protein: {NutritionFormat.Grams(food.protein)}\n" +
-                    $"Serat: {NutritionFormat.Grams(food.fiber)}\n" +
-                    $"Gula tambahan: {NutritionFormat.Grams(food.addedSugar)}\n" +
-                    $"Natrium: {NutritionFormat.Mg(food.sodium)}";
+                fullStats.text = string.Empty;
+                fullStats.gameObject.SetActive(false);
             }
             if (fullDescription != null) fullDescription.text = food.description;
         }

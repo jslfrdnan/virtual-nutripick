@@ -142,25 +142,25 @@ namespace NutriPick.Editor
                     if (eventSystems.Length != 1) { errors++; Debug.LogError($"[NutriPick] {path}: expected 1 EventSystem, found {eventSystems.Length}"); }
 
                     var foods = Object.FindObjectsByType<FoodItem>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-                    if (foods.Length != 15) { errors++; Debug.LogError($"[NutriPick] {path}: expected 15 food items, found {foods.Length}"); }
+                    if (foods.Length != 120) { errors++; Debug.LogError($"[NutriPick] {path}: expected 120 food items, found {foods.Length}"); }
 
-                    if (flow.stands == null || flow.stands.Length != 2) { errors++; Debug.LogError($"[NutriPick] {path}: expected 2 bazaar stands, found {flow.stands?.Length ?? 0}"); }
-                    if (flow.stands != null && flow.stands.Any(stand => stand == null || stand.foods == null || stand.foods.Length == 0)) { errors++; Debug.LogError($"[NutriPick] {path}: every bazaar stand must hold at least one food"); }
-                    if (flow.stands != null && !flow.stands.Any(stand => stand != null && stand.displayName == "Healthy Food")) { errors++; Debug.LogError($"[NutriPick] {path}: missing Healthy Food stand"); }
-                    if (flow.stands != null && !flow.stands.Any(stand => stand != null && stand.displayName == "Junk Food")) { errors++; Debug.LogError($"[NutriPick] {path}: missing Junk Food stand"); }
+                    if (flow.stands == null || flow.stands.Length != 30) { errors++; Debug.LogError($"[NutriPick] {path}: expected 30 bazaar stands, found {flow.stands?.Length ?? 0}"); }
+                    if (flow.stands != null && flow.stands.Any(stand => stand == null || stand.foods == null || stand.foods.Length != 2)) { errors++; Debug.LogError($"[NutriPick] {path}: every bazaar stand must hold exactly two food types"); }
 
                     var decorStalls = Object.FindObjectsByType<DecorStall>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-                    if (decorStalls.Length != 10) { errors++; Debug.LogError($"[NutriPick] {path}: expected 10 decorative stalls, found {decorStalls.Length}"); }
-                    if (decorStalls.Any(stall => stall.GetComponentInChildren<FoodItem>(true) != null)) { errors++; Debug.LogError($"[NutriPick] {path}: a decorative stall carries food"); }
+                    if (decorStalls.Length != 0) { errors++; Debug.LogError($"[NutriPick] {path}: expected no closed decorative stalls, found {decorStalls.Length}"); }
 
                     if (GameObject.Find("Scene3Bazaar") == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing Scene3Bazaar environment"); }
                     if (GameObject.Find("SchoolCampus") == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing SchoolCampus backdrop"); }
                     if (GameObject.Find("Cafe_Kopi") == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing Cafe_Kopi"); }
                     if (GameObject.Find("Cafe_Bakar") == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing Cafe_Bakar"); }
                     if (GameObject.Find("PanggungBazaar") == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing PanggungBazaar"); }
+                    if (GameObject.Find("Road_Flamboyant_Cross") == null || GameObject.Find("Intersection_Plaza") == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing the new Flamboyant intersection"); }
+                    if (GameObject.Find("CoffeeShop_01") == null || GameObject.Find("CoffeeShop_04") == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing coffee shop backdrop"); }
+                    if (GameObject.Find("SMK_Building") == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing SMK backdrop"); }
 
                     if (flow.serveStation != null && flow.serveStation.transform.position.x > 2f) { errors++; Debug.LogError($"[NutriPick] {path}: serve station is inside the school campus"); }
-                    if (flow.player != null && flow.player.transform.position.x > -6f) { errors++; Debug.LogError($"[NutriPick] {path}: player does not spawn on Jl. Flamboyant"); }
+                    if (flow.player != null && (flow.player.transform.position.x > -6f || flow.player.transform.position.z < 4.5f)) { errors++; Debug.LogError($"[NutriPick] {path}: player does not spawn in front of the serving plate"); }
 
                     errors += ValidateNpcCast(path, 9);
                 }

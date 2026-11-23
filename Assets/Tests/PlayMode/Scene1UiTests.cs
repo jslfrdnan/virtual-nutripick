@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -15,7 +16,11 @@ namespace NutriPick.Tests
         public void SetUp()
         {
             if (GameSession.Instance != null)
+            {
                 GameSession.Instance.ResetSession();
+                GameSession.Instance.MarkIntroSeen();
+                GameSession.Instance.sessionActive = true;
+            }
         }
 
         [UnityTest]
@@ -33,8 +38,8 @@ namespace NutriPick.Tests
             Assert.IsNotNull(first, "First food card missing.");
             Assert.AreEqual("rendang", first.FoodId);
             Assert.AreEqual("Rendang", first.nameText.text);
-            Assert.AreEqual("Hewani", first.proteinTypeText.text);
-            StringAssert.Contains("250", first.caloriesText.text);
+            Assert.AreEqual("PROTEIN", first.categoryText.text);
+            Assert.IsNull(first.transform.Find("Calories"), "Nutrition rows must be removed from the card.");
         }
 
         [UnityTest]
@@ -59,8 +64,11 @@ namespace NutriPick.Tests
             Assert.IsTrue(tempeCard.focusOutline.activeSelf, "Focused card outline should be active.");
 
             Assert.AreEqual("BELUM DINILAI", status.statusLabel.text);
-            for (int i = 0; i < 3; i++)
-                Assert.IsTrue(plate.slots[i].TryPlace(foods[i]), "Could not place food " + i);
+            var picks = new[] { "burger", "rendang", "brokoli", "pisang" }
+                .Select(id => foods.First(food => food.data != null && food.data.id == id))
+                .ToArray();
+            for (int i = 0; i < picks.Length; i++)
+                Assert.IsTrue(plate.slots[i].TryPlace(picks[i]), "Could not place " + picks[i].data.id);
 
             yield return null;
             Assert.AreNotEqual("BELUM DINILAI", status.statusLabel.text);

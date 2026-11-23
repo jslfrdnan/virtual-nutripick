@@ -1,10 +1,10 @@
 # NutriPick VR
 
-NutriPick VR is an educational first-person nutrition game built in Unity 6. The player uses a **Rexus gamepad** to move, aim a reticle, pick up food, plate it, and serve a meal. Scene 1 is a **home kitchen and dining room**: eight individual plates and bowls hold eight foods - one food type per plate - and the player plates a meal on the dining table. Scene 2 is **Warteg Tegal Sari**, an open-front roadside warung with a seven-dish display (three portions per dish), benches, a cashier table, five set-dressing NPCs, and a new row of shophouses around the street. Scene 3 is the **Flamboyant bazaar district**: two open food stands and ten closed stalls line Jl. Flamboyant, two cafes fill the street, SMA Negeri 1 Manado stands behind a closed gate, nine NPCs populate the street, and the player serves at the Panggung Bazaar stage. No level requires a drink. A Figma-style UI Canvas shows the food-card grid, Status Makanan bar, and Final Result. A live health balance and food information cards teach balanced choices.
+NutriPick VR is an educational first-person nutrition game built in Unity 6. The player uses a **Rexus gamepad** to move, aim a reticle, pick up food, plate it, and serve a meal. Scene 1 is a **home kitchen and dining room**: eight individual plates and bowls hold eight foods - one food type per plate - and the player plates a meal on the dining table. Scene 2 is **Warteg Tegal Sari**, an open-front roadside warung with a seven-dish display (three portions per dish), benches, a cashier table, five set-dressing NPCs, and a new row of shophouses around the street. Scene 3 is the **Flamboyant bazaar district**: 30 open food stalls with 120 portions, a new Flamboyant cross intersection, four coffee shops, two cafes, SMA Negeri 1 Manado and SMK Negeri 1 Manado backdrops, nine NPCs, and the Panggung Bazaar serving stage. No level requires a drink. A Figma-style UI Canvas shows the food-card grid, Status Makanan checklist, and Final Result. The scene starts with a controller/game-rules page on Scene 1 and a category checklist while plating.
 
 1. **Rumah** — breakfast at home (`MainVR`)
 2. **Warteg** — lunch at Warteg Tegal Sari, seven dishes and five NPCs (`Level02_Warteg`)
-3. **Bazaar** - dinner at the Flamboyant bazaar, with two open food stands, ten decorative stalls, two cafes, nine NPCs, and a serving stage (`Level03_Bazaar`)
+3. **Bazaar** - dinner at the Flamboyant bazaar, with 30 open food stalls, 120 portions, a new intersection, four coffee shops, nine NPCs, and a serving stage (`Level03_Bazaar`)
 
 ## Requirements
 
@@ -23,7 +23,8 @@ NutriPick VR is an educational first-person nutrition game built in Unity 6. The
 | X / West / Tab | Inspect: full food card |
 | Start / Space | Serve |
 | Select / Escape | Pause/resume |
-| D-pad / left stick | Navigate report buttons; the focused button gets a gold outline |
+| RT (toggle) | Sprint on/off (2x speed) |
+| D-pad / up-down | Navigate report and pause buttons; the focused button gets a gold outline |
 
 ## Rexus Gamepad
 
@@ -39,9 +40,9 @@ The player uses the new Input System. An XInput, PS4, or Switch Pro-style Rexus 
 1. Open the project with Unity 6000.6.0f1.
 2. Open `Assets/Scenes/MainVR.unity`.
 3. Press **Play**.
-4. Scene 1 starts directly in gameplay. Pick up three foods from the eight food plates on the dining table, place them on the serving plate, and press **Start** to serve. The eight-card food grid, Status Makanan bar, and Final Result stay visible.
-5. Scene 2 is `Assets/Scenes/Level02_Warteg.unity`. Pick any three of the 21 food portions (three per dish) from the display case, plate them at the cashier table, and press **Start** to serve. Five NPCs - a cook, a server, and three diners - are set dressing only.
-6. Scene 3 is `Assets/Scenes/Level03_Bazaar.unity`. Pick foods from the two open stands, plate at least four items, and serve at the Panggung Bazaar counter. No drink is required in any level.
+4. Scene 1 opens with a **CARA BERMAIN** page listing the controller inputs and rules. Press **MULAI** with A/Enter. Then pick four foods: one carbohydrate, one protein, one vegetable, and one extra. Place them on the serving plate and press **Start**. The eight-card food grid, category checklist, Status Makanan bar, and Final Result stay visible.
+5. Scene 2 is `Assets/Scenes/Level02_Warteg.unity`. Pick four foods from the 21 portions (three per dish), covering carbohydrate, protein, vegetable, and one extra, then plate them at the cashier table and press **Start** to serve. Five NPCs - a cook, a server, and three diners - are set dressing only.
+6. Scene 3 is `Assets/Scenes/Level03_Bazaar.unity`. The player spawns in front of the serving plate at the Panggung Bazaar stage. Collect the four categories from any of the 30 open stalls and serve. No drink is required in any level. Serving a plate with any fried food shows a healthy-choice warning and only offers **ULANGI LEVEL**.
 
 Build Settings contains `MainVR`, `Level02_Warteg`, and `Level03_Bazaar` in campaign order. Scene 1 uses `Assets/Models/Environment/Home/` (kitchen, island, dining, decor), `Assets/Models/Food/Plating/` (platters, plates, bowls), and `Assets/Prefabs/Interaction/ServingPlate.prefab` with `Assets/Models/Props/ceramic_plate.fbx`. Scene 2 uses the new `Assets/Models/Environment/Warteg/` kit. Scene 3 uses `Assets/Models/Environment/Bazaar/` for the school, stalls, cafes, stage, and street props. NPCs live in `Assets/Prefabs/NPC/`.
 
@@ -58,7 +59,7 @@ The project includes an editor builder that creates the ScriptableObjects, food 
 - Menu: **NutriPick → Build Scene 1 Home** (kitchen + dining + platters)
 - Menu: **NutriPick → Build NPC Kit** (three rigs, five clips, seven prefabs)
 - Menu: **NutriPick → Build Scene 2 Warteg** (open-front warung, seven dishes with three portions each, five NPCs, shophouse world)
-- Menu: **NutriPick → Build Scene 3 Bazaar** (Flamboyant bazaar, stalls, cafes, school backdrop, stage, nine NPCs)
+- Menu: **NutriPick → Build Scene 3 Bazaar** (Flamboyant bazaar, 30 food stalls, intersection, four coffee shops, school/SMK backdrop, stage, nine NPCs)
 - Menu: **NutriPick → Validate All**
 - Menu: **NutriPick → Validate Scenes**
 - Menu: **NutriPick → Capture Scene Previews**
@@ -69,7 +70,7 @@ The Windows build is written to `Builds/Windows/NutriPick.exe`.
 ## Tests
 
 - **EditMode**: 31 tests covering classification, meal evaluation, session state, level validation, campaign chain, protein types, Final Result points, food-card formatting, food texture assignment, food asset quality, icon presence, and polygon budget.
-- **PlayMode**: 31 tests covering Scene 1 food plates/table layout/direct start/card grid/Status Makanan/Final Result/focus highlight/replication, MainVR plate-and-serve, Scene 2 Warteg display/21 portions/shophouse world/NPC cast, Scene 3 two-stand layout/decorative stalls/15 foods/no drinks/NPC cast/stage service, serving plate seating, held-food follow, food portion separation, camera height, Level 2/3 smoke tests, and gamepad/generic-joystick/keyboard input. The current run is 31 passed, 0 skipped, 0 failed.
+- **PlayMode**: 37 tests covering Scene 1 food plates/table layout/start guide/four-category rule/card grid/Status Makanan/Final Result/focus highlight/replication, MainVR plate-and-serve, fried-warning retry, Scene 2 Warteg display/21 portions/shophouse world/NPC cast, Scene 3 30-stall layout/120 foods/intersection/coffee shops/no drinks/NPC cast/spawn at the plate, serving plate seating, held-food follow, food portion separation, camera height, pause navigation/highlight, sprint toggle, Level 2/3 smoke tests, and gamepad/generic-joystick/keyboard input. The current run is 37 passed, 0 skipped, 0 failed.
 
 Run them from **Window → General → Test Runner**, or headlessly:
 
@@ -84,7 +85,7 @@ Use `-testPlatform PlayMode` for the PlayMode suite.
 
 ## Scene 3 Assets
 
-The Flamboyant bazaar is generated by `Blender/Scene3_Bazaar/scripts/build_scene3_assets.py` and exported to `Assets/Models/Environment/Bazaar/`. The six kits are `SchoolCampus`, `BazaarStand`, `BazaarStandClosed`, `CafeKiosk`, `BazaarStage`, and `StreetProps`. Scene 3 reuses the existing food prefabs, `ServingPlate`, `ServeStation`, and `FigmaHUD`; no placeholder bazaar modules remain.
+The Flamboyant bazaar is generated by `Blender/Scene3_Bazaar/scripts/build_scene3_assets.py` and exported to `Assets/Models/Environment/Bazaar/`. The six kits are `SchoolCampus`, `BazaarStand`, `BazaarStandClosed`, `CafeKiosk`, `BazaarStage`, and `StreetProps`. Scene 3 reuses the existing food prefabs, `ServingPlate`, `ServeStation`, and `FigmaHUD`; the final layout contains 30 open food stalls, 120 portions, a cross intersection, four coffee shops, and a visible serving table at the stage.
 
 ## Scene 2 Warteg Assets
 

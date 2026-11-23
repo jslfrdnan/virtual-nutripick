@@ -9,11 +9,7 @@ namespace NutriPick.UI
         public Image iconImage;
         public Sprite placeholderSprite;
         public TMP_Text nameText;
-        public TMP_Text proteinTypeText;
-        public TMP_Text caloriesText;
-        public TMP_Text proteinText;
-        public TMP_Text carbsText;
-        public TMP_Text fatText;
+        public TMP_Text categoryText;
         public Image cardBackground;
         public Image healthAccent;
         public GameObject focusOutline;
@@ -39,11 +35,7 @@ namespace NutriPick.UI
                 iconImage.enabled = sprite != null;
             }
             if (nameText != null) nameText.text = model.displayName;
-            if (proteinTypeText != null) proteinTypeText.text = model.proteinTypeLabel;
-            if (caloriesText != null) caloriesText.text = model.caloriesText;
-            if (proteinText != null) proteinText.text = "P " + model.proteinText;
-            if (carbsText != null) carbsText.text = "K " + model.carbsText;
-            if (fatText != null) fatText.text = "L " + model.fatText;
+            if (categoryText != null) categoryText.text = model.categoryLabel;
             if (healthAccent != null)
                 healthAccent.color = model.isHealthy
                     ? new Color(0.18f, 0.49f, 0.20f)

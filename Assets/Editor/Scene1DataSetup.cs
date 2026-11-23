@@ -44,7 +44,7 @@ namespace NutriPick.Editor
             if (level != null)
             {
                 level.sceneName = "MainVR";
-                level.minItems = 3;
+                level.minItems = 4;
                 level.requiresDrink = false;
                 EditorUtility.SetDirty(level);
             }

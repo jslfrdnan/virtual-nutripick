@@ -1,6 +1,5 @@
 using UnityEngine;
 using NutriPick.Nutrition;
-using NutriPick.Utilities;
 
 namespace NutriPick.UI
 {
@@ -10,11 +9,7 @@ namespace NutriPick.UI
         public string foodId;
         public string displayName;
         public Sprite icon;
-        public string proteinTypeLabel;
-        public string caloriesText;
-        public string proteinText;
-        public string carbsText;
-        public string fatText;
+        public string categoryLabel;
         public bool isHealthy;
 
         public static FoodCardModel From(FoodData food, NutritionRules rules)
@@ -24,11 +19,7 @@ namespace NutriPick.UI
                 {
                     foodId = string.Empty,
                     displayName = "—",
-                    proteinTypeLabel = "—",
-                    caloriesText = "—",
-                    proteinText = "—",
-                    carbsText = "—",
-                    fatText = "—"
+                    categoryLabel = "—"
                 };
 
             return new FoodCardModel
@@ -37,15 +28,30 @@ namespace NutriPick.UI
                 foodId = food.id,
                 displayName = string.IsNullOrWhiteSpace(food.displayName) ? food.id : food.displayName,
                 icon = food.icon,
-                proteinTypeLabel = food.hasProteinType
-                    ? (food.proteinType == ProteinType.Hewani ? "Hewani" : "Nabati")
-                    : "—",
-                caloriesText = NutritionFormat.Kcal(food.calories),
-                proteinText = NutritionFormat.Grams(food.protein),
-                carbsText = NutritionFormat.Grams(food.carbs),
-                fatText = NutritionFormat.Grams(food.fat),
+                categoryLabel = CategoryLabel(food.composition),
                 isHealthy = FoodClassifier.Resolve(food, rules) == FoodHealthLabel.Healthy
             };
+        }
+
+        public static string CategoryLabel(FoodCompositionCategory composition)
+        {
+            switch (composition)
+            {
+                case FoodCompositionCategory.Carbohydrate:
+                    return "KARBOHIDRAT";
+                case FoodCompositionCategory.Protein:
+                    return "PROTEIN";
+                case FoodCompositionCategory.Vegetable:
+                    return "SAYUR";
+                case FoodCompositionCategory.Fruit:
+                    return "BUAH";
+                case FoodCompositionCategory.Snack:
+                    return "CAMILAN";
+                case FoodCompositionCategory.Drink:
+                    return "MINUMAN";
+                default:
+                    return "CAMPURAN";
+            }
         }
     }
 }

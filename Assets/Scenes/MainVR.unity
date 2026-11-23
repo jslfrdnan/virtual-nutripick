@@ -411,6 +411,7 @@ MonoBehaviour:
   homeStand: {fileID: 919353381}
   body: {fileID: 78196876}
   itemCollider: {fileID: 78196875}
+  holdOffset: {x: 0, y: 0, z: 0}
 --- !u!65 &78196875
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1207,6 +1208,7 @@ MonoBehaviour:
   homeStand: {fileID: 137270792}
   body: {fileID: 428119350}
   itemCollider: {fileID: 428119349}
+  holdOffset: {x: 0, y: 0, z: 0}
 --- !u!65 &428119349
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1433,6 +1435,7 @@ MonoBehaviour:
   homeStand: {fileID: 1641631163}
   body: {fileID: 529134748}
   itemCollider: {fileID: 529134747}
+  holdOffset: {x: 0, y: 0, z: 0}
 --- !u!65 &529134747
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2533,6 +2536,7 @@ MonoBehaviour:
   homeStand: {fileID: 919353381}
   body: {fileID: 862461461}
   itemCollider: {fileID: 862461460}
+  holdOffset: {x: 0, y: 0, z: 0}
 --- !u!65 &862461460
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4906,6 +4910,8 @@ MonoBehaviour:
   mealStatus: {fileID: 1140687707}
   report: {fileID: 1140687714}
   finalResult: {fileID: 1140687706}
+  startGuide: {fileID: 0}
+  friedWarning: {fileID: 0}
   pausePanel: {fileID: 1140687712}
   pauseMessage: {fileID: 1140687711}
   pauseResumeButton: {fileID: 1140687710}
@@ -5199,6 +5205,7 @@ MonoBehaviour:
   homeStand: {fileID: 1641631163}
   body: {fileID: 1530244611}
   itemCollider: {fileID: 1530244610}
+  holdOffset: {x: 0, y: 0, z: 0}
 --- !u!65 &1530244610
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5769,6 +5776,7 @@ MonoBehaviour:
   homeStand: {fileID: 1595134203}
   body: {fileID: 1662426635}
   itemCollider: {fileID: 1662426634}
+  holdOffset: {x: 0, y: 0, z: 0}
 --- !u!65 &1662426634
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5916,6 +5924,7 @@ MonoBehaviour:
   homeStand: {fileID: 849693877}
   body: {fileID: 1709307281}
   itemCollider: {fileID: 1709307280}
+  holdOffset: {x: 0, y: 0, z: 0}
 --- !u!65 &1709307280
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5985,6 +5994,7 @@ MonoBehaviour:
   homeStand: {fileID: 1595134203}
   body: {fileID: 1773645471}
   itemCollider: {fileID: 1773645470}
+  holdOffset: {x: 0, y: 0, z: 0}
 --- !u!65 &1773645470
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6430,6 +6440,7 @@ MonoBehaviour:
   homeStand: {fileID: 919353381}
   body: {fileID: 1874816536}
   itemCollider: {fileID: 1874816535}
+  holdOffset: {x: 0, y: 0, z: 0}
 --- !u!65 &1874816535
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6583,6 +6594,7 @@ MonoBehaviour:
   cameraPivot: {fileID: 697329797}
   input: {fileID: 1924632157}
   moveSpeed: 2
+  sprintMultiplier: 2
   lookSpeed: 120
   gravity: -9.81
 --- !u!143 &1924632161
@@ -7113,6 +7125,7 @@ MonoBehaviour:
   homeStand: {fileID: 1595134203}
   body: {fileID: 1997484499}
   itemCollider: {fileID: 1997484498}
+  holdOffset: {x: 0, y: 0, z: 0}
 --- !u!65 &1997484498
 BoxCollider:
   m_ObjectHideFlags: 0

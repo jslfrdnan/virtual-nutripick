@@ -8,7 +8,7 @@ namespace NutriPick.Interaction
     public class PlateController : MonoBehaviour
     {
         public PlateSlot[] slots;
-        public int minItems = 3;
+        public int minItems = 4;
         public bool requiresDrink;
         public bool IsLocked { get; private set; }
 
@@ -74,36 +74,18 @@ namespace NutriPick.Interaction
                 return false;
             }
 
-            int count = Count;
-            if (count < minItems)
+            var requirement = MealRequirement.Evaluate(Foods);
+            if (!requirement.IsComplete)
             {
-                int remaining = minItems - count;
-                reason = $"Tambahkan {remaining} makanan lagi";
+                reason = requirement.MissingReason;
                 return false;
-            }
-
-            if (requiresDrink)
-            {
-                bool hasDrink = false;
-                foreach (var food in Foods)
-                {
-                    if (food.isDrink)
-                    {
-                        hasDrink = true;
-                        break;
-                    }
-                }
-
-                if (!hasDrink)
-                {
-                    reason = "Pilih satu minuman";
-                    return false;
-                }
             }
 
             reason = string.Empty;
             return true;
         }
+
+        public MealRequirementState Requirement => MealRequirement.Evaluate(Foods);
 
         public void Lock()
         {

@@ -16,7 +16,11 @@ namespace NutriPick.Tests
         public void SetUp()
         {
             if (GameSession.Instance != null)
+                {
                 GameSession.Instance.ResetSession();
+                GameSession.Instance.MarkIntroSeen();
+                GameSession.Instance.sessionActive = true;
+            }
         }
 
         [UnityTest]
@@ -40,7 +44,7 @@ namespace NutriPick.Tests
         }
 
         [UnityTest]
-        public IEnumerator ServeThreeFoodsShowsReport()
+        public IEnumerator ServeFourFoodsShowsReport()
         {
             SceneManager.LoadScene("MainVR");
             yield return null;
@@ -52,12 +56,15 @@ namespace NutriPick.Tests
             Assert.IsNotNull(plate, "PlateController missing.");
             Assert.IsNotNull(flow, "LevelFlowController missing.");
             Assert.IsNotNull(flow.report, "HealthReportPresenter missing.");
-            Assert.GreaterOrEqual(foods.Length, 3, "Not enough food for the test.");
+            Assert.GreaterOrEqual(foods.Length, 4, "Not enough food for the test.");
 
-            for (int i = 0; i < 3; i++)
-                Assert.IsTrue(plate.slots[i].TryPlace(foods[i]), "Could not place food " + i);
+            var picks = new[] { "burger", "rendang", "brokoli", "pisang" }
+                .Select(id => foods.First(food => food.data != null && food.data.id == id))
+                .ToArray();
+            for (int i = 0; i < picks.Length; i++)
+                Assert.IsTrue(plate.slots[i].TryPlace(picks[i]), "Could not place " + picks[i].data.id);
 
-            Assert.AreEqual(3, plate.Count);
+            Assert.AreEqual(4, plate.Count);
             flow.TryServe();
             yield return new WaitForSeconds(1.2f);
 

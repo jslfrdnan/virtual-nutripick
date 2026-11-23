@@ -141,6 +141,7 @@ MonoBehaviour:
   homeStand: {fileID: 0}
   body: {fileID: 3945338768899806718}
   itemCollider: {fileID: 1304125375351729922}
+  holdOffset: {x: 0, y: 0, z: 0}
 --- !u!54 &3945338768899806718
 Rigidbody:
   m_ObjectHideFlags: 0

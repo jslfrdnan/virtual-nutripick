@@ -30,7 +30,7 @@ namespace NutriPick.UI
                 statusLabel.color = neutralColor;
             }
             if (detailLabel != null) detailLabel.text = "Pilih makanan untuk mulai";
-            if (countsLabel != null) countsLabel.text = "Sehat 0 · Kurang sehat 0";
+            SetRequirements(MealRequirementState.Empty);
         }
 
         public void SetPreview(MealResult result)
@@ -65,8 +65,23 @@ namespace NutriPick.UI
                 statusLabel.color = color;
             }
             if (detailLabel != null) detailLabel.text = result.bandLabel;
-            if (countsLabel != null)
-                countsLabel.text = $"Sehat {result.healthyCount} · Kurang sehat {result.lessHealthyCount}";
+        }
+
+        public void SetRequirements(MealRequirementState requirement)
+        {
+            if (countsLabel == null)
+                return;
+
+            countsLabel.text =
+                $"KARBO {Mark(requirement.carbohydrate)}  " +
+                $"PROTEIN {Mark(requirement.protein)}  " +
+                $"SAYUR {Mark(requirement.vegetable)}  " +
+                $"TAMBAHAN {Mark(requirement.extra)}";
+        }
+
+        private static string Mark(bool value)
+        {
+            return value ? "[x]" : "[ ]";
         }
 
         private void SetMarker(float value)

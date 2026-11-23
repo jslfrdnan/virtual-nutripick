@@ -23,6 +23,14 @@ namespace NutriPick.Flow
         public bool sessionActive;
         public int currentLevelIndex;
         public LevelResult[] results = new LevelResult[3];
+        public bool introSeen;
+
+        public bool HasSeenIntro => introSeen;
+
+        public void MarkIntroSeen()
+        {
+            introSeen = true;
+        }
 
         private void Awake()
         {
@@ -98,6 +106,7 @@ namespace NutriPick.Flow
             sessionActive = false;
             currentLevelIndex = 0;
             results = new LevelResult[3];
+            introSeen = false;
         }
 
         public float AverageScore()

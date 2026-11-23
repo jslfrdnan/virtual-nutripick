@@ -24,6 +24,7 @@ namespace NutriPick.Player
         public bool InspectPressed { get; private set; }
         public bool ServePressed { get; private set; }
         public bool PausePressed { get; private set; }
+        public bool SprintTogglePressed { get; private set; }
         public bool ControllerConnected => Gamepad.current != null || ResolveJoystick() != null;
         public bool GamepadConnected => ControllerConnected;
         public bool HadGamepad { get; private set; }
@@ -50,6 +51,7 @@ namespace NutriPick.Player
             bool inspect = false;
             bool serve = false;
             bool pause = false;
+            bool sprint = false;
 
             if (gamepad != null)
             {
@@ -60,6 +62,7 @@ namespace NutriPick.Player
                 inspect = gamepad.buttonWest.wasPressedThisFrame;
                 serve = gamepad.startButton.wasPressedThisFrame;
                 pause = gamepad.selectButton.wasPressedThisFrame;
+                sprint = gamepad.rightTrigger.wasPressedThisFrame;
             }
             else if (joystick != null && joystickProfile != null)
             {
@@ -70,6 +73,7 @@ namespace NutriPick.Player
                 inspect = joystickProfile.WasInspectPressed(joystick);
                 serve = joystickProfile.WasServePressed(joystick);
                 pause = joystickProfile.WasPausePressed(joystick);
+                sprint = joystickProfile.WasSprintPressed(joystick);
             }
 
             padMove = ApplyDeadzone(padMove, moveDeadzone);
@@ -114,6 +118,10 @@ namespace NutriPick.Player
             PausePressed =
                 pause ||
                 (keyboard != null && keyboard.escapeKey.wasPressedThisFrame);
+
+            SprintTogglePressed =
+                sprint ||
+                (keyboard != null && keyboard.leftShiftKey.wasPressedThisFrame);
         }
 
         private Joystick ResolveJoystick()

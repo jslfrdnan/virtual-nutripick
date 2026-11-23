@@ -45,19 +45,15 @@ namespace NutriPick.Tests
             var model = FoodCardModel.From(food, rules);
             Assert.AreEqual("rendang", model.foodId);
             Assert.AreEqual("Rendang", model.displayName);
-            Assert.AreEqual("Hewani", model.proteinTypeLabel);
-            Assert.AreEqual("250 kkal", model.caloriesText);
-            Assert.AreEqual("15 g", model.proteinText);
-            Assert.AreEqual("5 g", model.carbsText);
-            Assert.AreEqual("19 g", model.fatText);
+            Assert.AreEqual("PROTEIN", model.categoryLabel);
         }
 
         [Test]
-        public void UsesPlaceholderForMissingProteinType()
+        public void MapsCarbohydrateCategory()
         {
-            food.hasProteinType = false;
+            food.composition = FoodCompositionCategory.Carbohydrate;
             var model = FoodCardModel.From(food, rules);
-            Assert.AreEqual("—", model.proteinTypeLabel);
+            Assert.AreEqual("KARBOHIDRAT", model.categoryLabel);
         }
     }
 }

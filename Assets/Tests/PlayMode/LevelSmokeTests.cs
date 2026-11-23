@@ -17,7 +17,11 @@ namespace NutriPick.Tests
         public void SetUp()
         {
             if (GameSession.Instance != null)
+                {
                 GameSession.Instance.ResetSession();
+                GameSession.Instance.MarkIntroSeen();
+                GameSession.Instance.sessionActive = true;
+            }
         }
 
         [UnityTest]
@@ -65,12 +69,15 @@ namespace NutriPick.Tests
             flow.StartLevel();
             yield return null;
 
-            Assert.GreaterOrEqual(foods.Length, 3, "Not enough interactive food.");
-            for (int i = 0; i < 3; i++)
-                Assert.IsTrue(plate.slots[i].TryPlace(foods[i]), "Could not place food " + i);
+            Assert.GreaterOrEqual(foods.Length, 4, "Not enough interactive food.");
+            var picks = new[] { "burger", "rendang", "brokoli", "pisang" }
+                .Select(id => foods.First(food => food.data != null && food.data.id == id))
+                .ToArray();
+            for (int i = 0; i < picks.Length; i++)
+                Assert.IsTrue(plate.slots[i].TryPlace(picks[i]), "Could not place " + picks[i].data.id);
 
             yield return null;
-            Assert.AreEqual(3, plate.Count, "Plate should contain 3 items.");
+            Assert.AreEqual(4, plate.Count, "Plate should contain 4 items.");
             flow.TryServe();
             yield return new WaitForSeconds(1.4f);
 
@@ -110,7 +117,7 @@ namespace NutriPick.Tests
         }
 
         [UnityTest]
-        public IEnumerator Level03HasTwoStandsWithoutDrinkRequirement()
+        public IEnumerator Level03HasThirtyStallsWithoutDrinkRequirement()
         {
             if (!Application.CanStreamedLevelBeLoaded("Level03_Bazaar"))
             {
@@ -123,13 +130,13 @@ namespace NutriPick.Tests
             yield return null;
 
             var stands = Object.FindObjectsByType<FoodStand>(FindObjectsSortMode.None);
-            Assert.AreEqual(2, stands.Length, "Level 3 should have two open stalls.");
+            Assert.AreEqual(30, stands.Length, "Level 3 should have thirty open stalls.");
 
             var foods = Object.FindObjectsByType<FoodItem>(FindObjectsSortMode.None);
-            Assert.AreEqual(15, foods.Length, "Level 3 should spawn 15 interactive foods across the two stands.");
+            Assert.AreEqual(120, foods.Length, "Level 3 should spawn 120 interactive foods across the thirty stalls.");
 
             var decor = Object.FindObjectsByType<DecorStall>(FindObjectsSortMode.None);
-            Assert.AreEqual(10, decor.Length, "Level 3 should have ten closed stalls.");
+            Assert.AreEqual(0, decor.Length, "Level 3 should have no closed stalls.");
 
             var npcs = Object.FindObjectsByType<NutriPick.NPC.NpcMarker>(FindObjectsSortMode.None);
             Assert.AreEqual(9, npcs.Length, "Level 3 should have nine set-dressing NPCs.");

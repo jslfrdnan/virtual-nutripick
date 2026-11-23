@@ -17,7 +17,11 @@ namespace NutriPick.Tests
         public void SetUp()
         {
             if (GameSession.Instance != null)
+                {
                 GameSession.Instance.ResetSession();
+                GameSession.Instance.MarkIntroSeen();
+                GameSession.Instance.sessionActive = true;
+            }
         }
 
         [UnityTest]
@@ -171,15 +175,16 @@ namespace NutriPick.Tests
             yield return null;
 
             var foods = Object.FindObjectsByType<FoodItem>(FindObjectsSortMode.None);
-            Assert.AreEqual(15, foods.Length, "Level 3 should have 15 foods.");
+            Assert.AreEqual(120, foods.Length, "Level 3 should have 120 foods.");
             Assert.IsFalse(foods.Any(food => food.data != null && food.data.isDrink),
                 "Level 3 must not contain drink items.");
 
             var stands = Object.FindObjectsByType<FoodStand>(FindObjectsSortMode.None);
-            var healthy = stands.First(stand => stand.displayName == "Healthy Food");
-            var junk = stands.First(stand => stand.displayName == "Junk Food");
-            Assert.AreEqual(4, healthy.foods.Length, "Healthy Food should hold four foods.");
-            Assert.AreEqual(2, junk.foods.Length, "Junk Food should hold two foods.");
+            Assert.AreEqual(30, stands.Length, "Level 3 should have thirty stalls.");
+            Assert.IsTrue(stands.All(stand => stand.foods != null && stand.foods.Length == 2),
+                "Every stall should hold two food types.");
+            Assert.AreEqual(0, Object.FindObjectsByType<DecorStall>(FindObjectsSortMode.None).Length,
+                "No closed decorative stalls should remain.");
         }
     }
 }

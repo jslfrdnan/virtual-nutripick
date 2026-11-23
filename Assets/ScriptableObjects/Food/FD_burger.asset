@@ -15,7 +15,7 @@ MonoBehaviour:
   id: burger
   displayName: Burger
   description: Praktis dan mengenyangkan, tetapi tinggi natrium, lemak, dan kalori. Padukan dengan sayur.
-  composition: 6
+  composition: 4
   processing: 2
   isFried: 0
   isDrink: 0

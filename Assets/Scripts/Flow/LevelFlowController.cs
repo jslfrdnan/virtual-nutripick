@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using NutriPick.Content;
@@ -32,6 +33,8 @@ namespace NutriPick.Flow
         public MealStatusBarPresenter mealStatus;
         public HealthReportPresenter report;
         public FinalResultPresenter finalResult;
+        public StartGuidePresenter startGuide;
+        public FriedWarningPresenter friedWarning;
         public GameObject pausePanel;
         public TMP_Text pauseMessage;
         public Button pauseResumeButton;
@@ -42,6 +45,9 @@ namespace NutriPick.Flow
         public bool IsLevelStarted => levelStarted;
         public GamepadInput Input => input;
 
+        private Button pauseHelpButton;
+        private TMP_Text sprintIndicator;
+        private bool introFromPause;
         private bool isServing;
         private bool disconnectPaused;
         private bool levelStarted;
@@ -77,6 +83,14 @@ namespace NutriPick.Flow
                 infoCard = FindAnyObjectByType<FoodInfoCardPresenter>();
             if (report == null)
                 report = FindAnyObjectByType<HealthReportPresenter>();
+            if (startGuide == null)
+                startGuide = FindHudPresenter<StartGuidePresenter>();
+            if (friedWarning == null)
+                friedWarning = FindHudPresenter<FriedWarningPresenter>();
+
+            var hud = GameObject.Find("FigmaHUD");
+            if (hud != null && sprintIndicator == null)
+                sprintIndicator = FindDeepChild(hud.transform, "SprintIndicator")?.GetComponent<TMP_Text>();
 
             var session = GameSession.EnsureExists();
             session.BeginLevel(level.levelIndex);
@@ -100,6 +114,20 @@ namespace NutriPick.Flow
                 pauseQuitButton.onClick.AddListener(Quit);
 
             if (pausePanel != null)
+            {
+                var help = FindDeepChild(pausePanel.transform, "HelpButton");
+                if (help != null)
+                {
+                    pauseHelpButton = help.GetComponent<Button>();
+                    if (pauseHelpButton != null)
+                    {
+                        pauseHelpButton.onClick.RemoveListener(ShowGuideFromPause);
+                        pauseHelpButton.onClick.AddListener(ShowGuideFromPause);
+                    }
+                }
+            }
+
+            if (pausePanel != null)
                 pausePanel.SetActive(false);
             if (report != null)
                 report.Hide();
@@ -111,8 +139,19 @@ namespace NutriPick.Flow
                 prompt.Hide();
             if (bar != null)
                 bar.SetNeutral();
+            startGuide?.Hide();
+            friedWarning?.Hide();
+            if (sprintIndicator != null)
+                sprintIndicator.gameObject.SetActive(false);
 
-            StartLevel();
+            if (level.levelIndex == 1 && startGuide != null && !session.HasSeenIntro)
+            {
+                OpenStartGuide(false);
+            }
+            else
+            {
+                StartLevel();
+            }
         }
 
         public void StartLevel()
@@ -130,8 +169,96 @@ namespace NutriPick.Flow
                 foodCards.Bind(level.foodPool, rules);
             if (mealStatus != null)
                 mealStatus.SetNeutral();
+            SetGameplayHudVisible(true);
 
             OnPlateChanged();
+        }
+
+        private void SetGameplayHudVisible(bool visible)
+        {
+            if (foodCards != null)
+                foodCards.gameObject.SetActive(visible);
+            if (mealStatus != null)
+                mealStatus.gameObject.SetActive(visible);
+            if (bar != null)
+                bar.gameObject.SetActive(visible);
+            if (prompt != null)
+                prompt.gameObject.SetActive(visible);
+            if (infoCard != null)
+                infoCard.gameObject.SetActive(visible);
+        }
+
+        private void OpenStartGuide(bool fromPause)
+        {
+            if (startGuide == null)
+            {
+                if (fromPause)
+                    Resume();
+                else
+                    StartLevel();
+                return;
+            }
+
+            introFromPause = fromPause;
+            if (pausePanel != null)
+                pausePanel.SetActive(false);
+            if (player != null)
+                player.SetControlEnabled(false);
+            if (reticle != null)
+                reticle.enabled = false;
+            if (prompt != null)
+                prompt.Hide();
+            SetGameplayHudVisible(false);
+
+            startGuide.Show(OnStartGuideClosed);
+        }
+
+        private void ShowGuideFromPause()
+        {
+            if (!IsPaused || startGuide == null)
+                return;
+
+            OpenStartGuide(true);
+        }
+
+        private void OnStartGuideClosed()
+        {
+            if (introFromPause)
+            {
+                introFromPause = false;
+                if (pausePanel != null)
+                    pausePanel.SetActive(true);
+                ConfigurePauseButtons();
+                SelectPauseResume();
+                return;
+            }
+
+            GameSession.Instance?.MarkIntroSeen();
+            StartLevel();
+        }
+
+        private static T FindHudPresenter<T>() where T : Component
+        {
+            var hud = GameObject.Find("FigmaHUD");
+            if (hud != null)
+            {
+                var found = hud.GetComponentInChildren<T>(true);
+                if (found != null)
+                    return found;
+            }
+
+            return Object.FindFirstObjectByType<T>(FindObjectsInactive.Include);
+        }
+
+        private static Transform FindDeepChild(Transform parent, string name)
+        {
+            foreach (var child in parent.GetComponentsInChildren<Transform>(true))
+            {
+                if (child.name == name)
+                    return child;
+            }
+
+            return null;
         }
 
         public void RebindLevel(LevelDefinition definition)
@@ -154,6 +281,9 @@ namespace NutriPick.Flow
 
         private void Update()
         {
+            if (sprintIndicator != null)
+                sprintIndicator.gameObject.SetActive(levelStarted && !IsPaused && !IsReportOpen && player != null && player.IsSprinting);
+
             if (!levelStarted)
                 return;
             if (input == null)
@@ -221,8 +351,14 @@ namespace NutriPick.Flow
                 foods.Add(carrier.Current.data);
 
             var result = MealEvaluator.Evaluate(foods, rules, level.minItems, level.requiresDrink);
+            var requirement = MealRequirement.Evaluate(foods);
+            if (!requirement.IsComplete)
+                result.isIncomplete = true;
             if (mealStatus != null)
+            {
                 mealStatus.SetPreview(result);
+                mealStatus.SetRequirements(requirement);
+            }
             else if (bar != null)
                 bar.SetPreview(result);
         }
@@ -255,15 +391,44 @@ namespace NutriPick.Flow
             if (infoCard != null)
                 infoCard.Hide();
 
-            var result = MealEvaluator.Evaluate(plate.Foods, rules, level.minItems, level.requiresDrink);
+            var foods = new List<FoodData>(plate.Foods);
+            SfxPlayer.Instance?.PlayServe();
+
+            if (MealRequirement.TryGetFriedFoods(foods, out var friedNames))
+            {
+                StartCoroutine(ShowFriedWarningAfterDelay(friedNames));
+                return;
+            }
+
+            var result = MealEvaluator.Evaluate(foods, rules, level.minItems, level.requiresDrink);
             GameSession.Instance.RecordResult(level.levelIndex, result);
             if (mealStatus != null)
                 mealStatus.SetFinal(result);
             else if (bar != null)
                 bar.SetFinal(result);
 
-            SfxPlayer.Instance?.PlayServe();
             StartCoroutine(ShowReportAfterDelay(result));
+        }
+
+        private IEnumerator ShowFriedWarningAfterDelay(List<string> friedNames)
+        {
+            yield return new WaitForSeconds(0.6f);
+
+            IsReportOpen = true;
+            if (player != null)
+                player.SetControlEnabled(false);
+            if (reticle != null)
+                reticle.enabled = false;
+
+            if (friedWarning != null)
+            {
+                friedWarning.Show(friedNames, Retry);
+            }
+            else
+            {
+                Debug.LogWarning("[NutriPick] Fried warning presenter missing.");
+                Retry();
+            }
         }
 
         private IEnumerator ShowReportAfterDelay(MealResult result)
@@ -322,6 +487,11 @@ namespace NutriPick.Flow
                 reticle.enabled = false;
             if (prompt != null)
                 prompt.Hide();
+            if (sprintIndicator != null)
+                sprintIndicator.gameObject.SetActive(false);
+
+            ConfigurePauseButtons();
+            SelectPauseResume();
         }
 
         private void Resume()
@@ -333,6 +503,51 @@ namespace NutriPick.Flow
                 player.SetControlEnabled(true);
             if (reticle != null)
                 reticle.enabled = true;
+            if (EventSystem.current != null)
+                EventSystem.current.SetSelectedGameObject(null);
+            SetGameplayHudVisible(true);
+        }
+
+        private void ConfigurePauseButtons()
+        {
+            EnsureFocus(pauseResumeButton);
+            EnsureFocus(pauseHelpButton);
+            EnsureFocus(pauseQuitButton);
+
+            ConfigureVerticalNavigation(pauseResumeButton, null, pauseHelpButton);
+            ConfigureVerticalNavigation(pauseHelpButton, pauseResumeButton, pauseQuitButton);
+            ConfigureVerticalNavigation(pauseQuitButton, pauseHelpButton, null);
+        }
+
+        private static void EnsureFocus(Button button)
+        {
+            if (button == null)
+                return;
+            if (button.GetComponent<SelectableFocusHighlight>() == null)
+                button.gameObject.AddComponent<SelectableFocusHighlight>();
+        }
+
+        private static void ConfigureVerticalNavigation(Button target, Button up, Button down)
+        {
+            if (target == null)
+                return;
+
+            var navigation = target.navigation;
+            navigation.mode = Navigation.Mode.Explicit;
+            navigation.selectOnUp = up != null ? up : target;
+            navigation.selectOnDown = down != null ? down : target;
+            navigation.selectOnLeft = null;
+            navigation.selectOnRight = null;
+            target.navigation = navigation;
+        }
+
+        private void SelectPauseResume()
+        {
+            if (EventSystem.current == null || pauseResumeButton == null)
+                return;
+
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(pauseResumeButton.gameObject);
         }
 
         private void Quit()

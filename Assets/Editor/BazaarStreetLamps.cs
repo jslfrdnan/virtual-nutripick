@@ -33,6 +33,18 @@ namespace NutriPick.Editor
             new Vector3(-5.45f, 0f, -24f)
         };
 
+        private static readonly Vector3[] CrossLamps =
+        {
+            new Vector3(-40f, 0f, 42.5f),
+            new Vector3(-20f, 0f, 42.5f),
+            new Vector3(8f, 0f, 42.5f),
+            new Vector3(-40f, 0f, 33.5f),
+            new Vector3(-20f, 0f, 33.5f),
+            new Vector3(8f, 0f, 33.5f)
+        };
+
+        private static readonly float[] CrossYaws = { 180f, 180f, 180f, 0f, 0f, 0f };
+
         [MenuItem("NutriPick/Bazaar/Build Street Lamps")]
         public static void Build()
         {
@@ -63,6 +75,8 @@ namespace NutriPick.Editor
                 CreateLamp(root.transform, position, 0f, metal, glow, index++);
             foreach (var position in EastLamps)
                 CreateLamp(root.transform, position, 180f, metal, glow, index++);
+            for (int i = 0; i < CrossLamps.Length; i++)
+                CreateLamp(root.transform, CrossLamps[i], CrossYaws[i], metal, glow, index++);
 
             GameObjectUtility.SetStaticEditorFlags(root, StaticEditorFlags.BatchingStatic);
 

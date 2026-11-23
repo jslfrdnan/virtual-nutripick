@@ -238,7 +238,7 @@ namespace NutriPick.Editor
             level.levelIndex = 2;
             level.settingDescription = "Makan siang di Warteg Tegal Sari";
             level.foodPool = foods.ToArray();
-            level.minItems = 3;
+            level.minItems = 4;
             level.requiresDrink = false;
             level.minimumStands = 1;
             level.isFinalLevel = false;

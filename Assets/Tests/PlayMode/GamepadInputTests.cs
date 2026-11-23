@@ -50,6 +50,18 @@ namespace NutriPick.Tests
         }
 
         [UnityTest]
+        public IEnumerator RightTriggerTogglesSprintFlag()
+        {
+            var gamepad = InputSystem.AddDevice<Gamepad>();
+            Press(gamepad.rightTrigger);
+            yield return null;
+
+            input.Poll();
+
+            Assert.IsTrue(input.SprintTogglePressed, "RT should raise the sprint toggle.");
+        }
+
+        [UnityTest]
         public IEnumerator GenericJoystickProfileDrivesMoveAndTrigger()
         {
             var joystick = InputSystem.AddDevice<Joystick>();

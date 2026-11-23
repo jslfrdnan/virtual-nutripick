@@ -34,6 +34,7 @@ namespace NutriPick.Player
         public string inspectButtonPath = "button3";
         public string serveButtonPath = "button9";
         public string pauseButtonPath = "button8";
+        public string sprintButtonPath = "button7";
 
         public Joystick Resolve()
         {
@@ -67,6 +68,7 @@ namespace NutriPick.Player
         public bool WasInspectPressed(Joystick joystick) => WasPressed(joystick, inspectButtonPath);
         public bool WasServePressed(Joystick joystick) => WasPressed(joystick, serveButtonPath);
         public bool WasPausePressed(Joystick joystick) => WasPressed(joystick, pauseButtonPath);
+        public bool WasSprintPressed(Joystick joystick) => WasPressed(joystick, sprintButtonPath);
 
         public static T Find<T>(InputControl device, string path) where T : InputControl
         {

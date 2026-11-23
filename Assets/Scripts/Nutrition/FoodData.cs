@@ -72,6 +72,13 @@ namespace NutriPick.Nutrition
                 return false;
             }
 
+            int compositionValue = (int)composition;
+            if ((compositionValue & (compositionValue - 1)) != 0)
+            {
+                error = "composition must be exactly one category";
+                return false;
+            }
+
             if (isDrink != HasCategory(FoodCompositionCategory.Drink))
             {
                 error = "isDrink must match the Drink flag";
