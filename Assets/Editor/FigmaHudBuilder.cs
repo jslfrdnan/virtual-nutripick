@@ -287,6 +287,13 @@ namespace NutriPick.Editor
             presenter.retryButton = CreateButton("RetryButton", root.transform, "ULANGI LEVEL", new Vector2(-160f, -400f), new Vector2(280f, 60f), new Color(0.30f, 0.69f, 0.31f), Color.white, font);
             presenter.nextButton = CreateButton("NextButton", root.transform, "NEXT LEVEL", new Vector2(160f, -400f), new Vector2(280f, 60f), new Color(0.30f, 0.69f, 0.31f), Color.white, font);
 
+            presenter.inputHint = CreateText("InputHint", root.transform, "D-pad / left stick: pilih · A / Enter: konfirmasi", 16f, new Color(0.78f, 0.82f, 0.84f), TextAlignmentOptions.Center, font);
+            PlaceAnchored(presenter.inputHint.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -455f), new Vector2(900f, 24f));
+
+            ConfigureFocusHighlight(presenter.retryButton);
+            ConfigureFocusHighlight(presenter.nextButton);
+            ConfigureButtonNavigation(presenter.retryButton, presenter.nextButton);
+
             root.SetActive(false);
             PrefabUtility.SaveAsPrefabAsset(root, FinalResultPath);
             Object.DestroyImmediate(root);
@@ -396,6 +403,48 @@ namespace NutriPick.Editor
             var text = CreateText("Label", go.transform, label, 24f, textColor, TextAlignmentOptions.Center, font);
             Stretch(text.rectTransform, 8f, 4f, 8f, 4f);
             return button;
+        }
+
+        private static void ConfigureFocusHighlight(Button button)
+        {
+            if (button == null)
+                return;
+
+            if (button.GetComponent<SelectableFocusHighlight>() == null)
+                button.gameObject.AddComponent<SelectableFocusHighlight>();
+
+            var colors = button.colors;
+            colors.normalColor = new Color(0.78f, 0.78f, 0.78f, 1f);
+            colors.highlightedColor = Color.white;
+            colors.selectedColor = Color.white;
+            colors.pressedColor = new Color(0.88f, 0.88f, 0.88f, 1f);
+            colors.colorMultiplier = 1f;
+            button.colors = colors;
+        }
+
+        private static void ConfigureButtonNavigation(Button retry, Button next)
+        {
+            if (retry == null)
+                return;
+
+            var retryNavigation = retry.navigation;
+            retryNavigation.mode = Navigation.Mode.Explicit;
+            retryNavigation.selectOnLeft = null;
+            retryNavigation.selectOnRight = next;
+            retryNavigation.selectOnUp = null;
+            retryNavigation.selectOnDown = null;
+            retry.navigation = retryNavigation;
+
+            if (next == null)
+                return;
+
+            var nextNavigation = next.navigation;
+            nextNavigation.mode = Navigation.Mode.Explicit;
+            nextNavigation.selectOnLeft = retry;
+            nextNavigation.selectOnRight = null;
+            nextNavigation.selectOnUp = null;
+            nextNavigation.selectOnDown = null;
+            next.navigation = nextNavigation;
         }
 
         private static TMP_FontAsset FindFont(GameObject root)

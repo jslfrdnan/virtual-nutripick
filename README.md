@@ -23,7 +23,7 @@ NutriPick VR is an educational first-person nutrition game built in Unity 6. The
 | X / West / Tab | Inspect: full food card |
 | Start / Space | Serve |
 | Select / Escape | Pause/resume |
-| D-pad / left stick | Navigate report buttons |
+| D-pad / left stick | Navigate report buttons; the focused button gets a gold outline |
 
 ## Rexus Gamepad
 
@@ -69,7 +69,7 @@ The Windows build is written to `Builds/Windows/NutriPick.exe`.
 ## Tests
 
 - **EditMode**: 31 tests covering classification, meal evaluation, session state, level validation, campaign chain, protein types, Final Result points, food-card formatting, food texture assignment, food asset quality, icon presence, and polygon budget.
-- **PlayMode**: 24 tests covering Scene 1 food plates/table layout/direct start/card grid/Status Makanan/Final Result/replication, MainVR plate-and-serve, Scene 2 Warteg display/NPC cast, Scene 3 two-stand layout/decorative stalls/NPC cast/stage service, food portion separation, drink hold offset, camera height, Level 2/3 smoke tests, and gamepad/generic-joystick/keyboard input. The current run is 24 passed, 0 skipped, 0 failed.
+- **PlayMode**: 25 tests covering Scene 1 food plates/table layout/direct start/card grid/Status Makanan/Final Result/focus highlight/replication, MainVR plate-and-serve, Scene 2 Warteg display/NPC cast, Scene 3 two-stand layout/decorative stalls/NPC cast/stage service, food portion separation, drink hold offset, camera height, Level 2/3 smoke tests, and gamepad/generic-joystick/keyboard input. The current run is 25 passed, 0 skipped, 0 failed.
 
 Run them from **Window → General → Test Runner**, or headlessly:
 
