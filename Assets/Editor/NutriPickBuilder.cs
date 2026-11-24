@@ -671,26 +671,6 @@ namespace NutriPick.Editor
             var reticle = CreateUIRoot("Reticle", hud.transform, Center, Center, Center, Vector2.zero, new Vector2(8f, 8f));
             AddPanel(reticle, Color.white, false);
 
-            var barGo = CreateUIRoot("NutritionBar", hud.transform, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 120f), new Vector2(720f, 80f));
-            AddPanel(barGo, dark, false);
-            AddText(barGo.transform, "Label", "Keseimbangan Gizi", 22, Color.white, TextAlignmentOptions.Left, new Vector2(-300f, 25f), new Vector2(300f, 30f));
-            var track = CreateUIRoot("Track", barGo.transform, Center, Center, Center, new Vector2(0f, -8f), new Vector2(680f, 28f));
-            AddPanel(track, new Color(0.22f, 0.27f, 0.31f), false);
-            var fillGo = CreateUIRoot("Fill", barGo.transform, Center, Center, Center, new Vector2(0f, -8f), new Vector2(680f, 28f));
-            var fill = AddPanel(fillGo, green, false);
-            fill.type = Image.Type.Filled;
-            fill.fillMethod = Image.FillMethod.Horizontal;
-            fill.fillOrigin = 0;
-            fill.fillAmount = 0.5f;
-            var valueText = AddText(barGo.transform, "Value", "50", 36, Color.white, TextAlignmentOptions.Right, new Vector2(300f, 18f), new Vector2(80f, 40f));
-            var bandText = AddText(barGo.transform, "Band", "Belum dinilai", 22, Color.white, TextAlignmentOptions.Right, new Vector2(300f, -18f), new Vector2(180f, 30f));
-            var countsText = AddText(barGo.transform, "Counts", "Sehat 0 · Kurang sehat 0", 22, Color.white, TextAlignmentOptions.Left, new Vector2(-300f, -28f), new Vector2(360f, 24f));
-            var bar = barGo.AddComponent<NutritionBar>();
-            bar.fill = fill;
-            bar.valueText = valueText;
-            bar.labelText = bandText;
-            bar.countsText = countsText;
-
             var promptGo = CreateUIRoot("Prompt", hud.transform, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 56f), new Vector2(640f, 44f));
             AddPanel(promptGo, new Color(0.08f, 0.08f, 0.08f, 0.85f), false);
             var promptText = AddText(promptGo.transform, "PromptText", string.Empty, 24, Color.white, TextAlignmentOptions.Center, Vector2.zero, new Vector2(620f, 44f));
@@ -961,7 +941,6 @@ namespace NutriPick.Editor
             flow.player = player.GetComponent<FirstPersonController>();
             flow.input = player.GetComponent<GamepadInput>();
             flow.reticle = player.GetComponent<ReticleInteractor>();
-            flow.bar = hud.GetComponentInChildren<NutritionBar>(true);
             flow.prompt = hud.GetComponentInChildren<InteractionPrompt>(true);
             flow.infoCard = hud.GetComponentInChildren<FoodInfoCardPresenter>(true);
             flow.report = hud.GetComponentInChildren<HealthReportPresenter>(true);

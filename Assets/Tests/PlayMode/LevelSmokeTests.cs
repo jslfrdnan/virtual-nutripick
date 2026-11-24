@@ -44,7 +44,6 @@ namespace NutriPick.Tests
 
             var flow = Object.FindFirstObjectByType<LevelFlowController>();
             Assert.IsNotNull(flow, "LevelFlowController missing.");
-            Assert.IsNotNull(flow.bar, "NutritionBar missing.");
             Assert.IsNotNull(flow.infoCard, "Info card missing.");
             Assert.IsNotNull(flow.report, "Report missing.");
             Assert.IsNotNull(flow.player, "Player missing.");

@@ -72,7 +72,10 @@ namespace NutriPick.Tests
 
             yield return null;
             Assert.AreNotEqual("BELUM DINILAI", status.statusLabel.text);
-            Assert.Greater(status.fill.fillAmount, 0f);
+            StringAssert.Contains("KARBO [x]", status.countsLabel.text);
+            StringAssert.Contains("PROTEIN [x]", status.countsLabel.text);
+            StringAssert.Contains("SAYUR [x]", status.countsLabel.text);
+            StringAssert.Contains("TAMBAHAN [x]", status.countsLabel.text);
         }
 
         private static FoodCardView FindCard(FoodCardGridPresenter grid, string foodId)

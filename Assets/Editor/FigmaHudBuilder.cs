@@ -53,7 +53,7 @@ namespace NutriPick.Editor
             var status = (GameObject)PrefabUtility.InstantiatePrefab(statusPrefab, root.transform);
             status.name = "StatusMakanan";
             var statusRect = status.GetComponent<RectTransform>();
-            PlaceAnchored(statusRect, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 24f), new Vector2(720f, 80f));
+            PlaceAnchored(statusRect, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 24f), new Vector2(720f, 44f));
             statusRect.pivot = new Vector2(0.5f, 0f);
             statusRect.anchoredPosition = new Vector2(0f, 24f);
 
@@ -66,7 +66,7 @@ namespace NutriPick.Editor
             BuildSprintIndicator(root.transform, font);
             ConfigurePauseMenu(root.transform);
 
-            SetActive(root.transform, "NutritionBar", false);
+            DestroyChild(root.transform, "NutritionBar");
             SetActive(root.transform, "InfoCard", false);
 
             var prompt = FindDeepChild(root.transform, "Prompt") as RectTransform;
@@ -166,54 +166,23 @@ namespace NutriPick.Editor
         {
             var root = new GameObject("StatusMakanan", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(MealStatusBarPresenter));
             var rect = root.GetComponent<RectTransform>();
-            rect.sizeDelta = new Vector2(720f, 80f);
+            rect.sizeDelta = new Vector2(720f, 44f);
             var background = root.GetComponent<Image>();
             background.color = new Color(0.06f, 0.08f, 0.09f, 0.85f);
             background.raycastTarget = false;
 
             var presenter = root.GetComponent<MealStatusBarPresenter>();
-            presenter.statusLabel = CreateText("StatusLabel", root.transform, "BELUM DINILAI", 20f, Color.white, TextAlignmentOptions.Left, font);
-            PlaceTopLeft(presenter.statusLabel.rectTransform, new Vector2(16f, -8f), new Vector2(420f, 28f));
+            presenter.statusLabel = CreateText("StatusLabel", root.transform, "BELUM DINILAI", 18f, Color.white, TextAlignmentOptions.Left, font);
+            PlaceTopLeft(presenter.statusLabel.rectTransform, new Vector2(16f, -9f), new Vector2(280f, 26f));
 
-            presenter.detailLabel = CreateText("DetailLabel", root.transform, "Pilih makanan untuk mulai", 12f, new Color(0.72f, 0.76f, 0.78f), TextAlignmentOptions.Left, font);
-            PlaceTopLeft(presenter.detailLabel.rectTransform, new Vector2(16f, -42f), new Vector2(420f, 18f));
-
-            presenter.countsLabel = CreateText("CountsLabel", root.transform, "KARBO [ ]  PROTEIN [ ]  SAYUR [ ]  TAMBAHAN [ ]", 11f, new Color(0.72f, 0.76f, 0.78f), TextAlignmentOptions.Right, font);
+            presenter.countsLabel = CreateText("CountsLabel", root.transform, "KARBO [ ]  PROTEIN [ ]  SAYUR [ ]  TAMBAHAN [ ]", 12f, new Color(0.72f, 0.76f, 0.78f), TextAlignmentOptions.Right, font);
             var countsRect = presenter.countsLabel.rectTransform;
             countsRect.anchorMin = new Vector2(1f, 1f);
             countsRect.anchorMax = new Vector2(1f, 1f);
             countsRect.pivot = new Vector2(1f, 1f);
-            countsRect.anchoredPosition = new Vector2(-16f, -42f);
-            countsRect.sizeDelta = new Vector2(360f, 18f);
+            countsRect.anchoredPosition = new Vector2(-16f, -13f);
+            countsRect.sizeDelta = new Vector2(400f, 18f);
 
-            var track = CreateImage("Track", root.transform, new Color(0.16f, 0.18f, 0.20f, 1f));
-            var trackRect = track.rectTransform;
-            trackRect.anchorMin = new Vector2(0.5f, 0f);
-            trackRect.anchorMax = new Vector2(0.5f, 0f);
-            trackRect.pivot = new Vector2(0.5f, 0f);
-            trackRect.anchoredPosition = new Vector2(0f, 8f);
-            trackRect.sizeDelta = new Vector2(680f, 10f);
-            track.raycastTarget = false;
-
-            var fill = CreateImage("Fill", track.transform, new Color(0.18f, 0.49f, 0.20f));
-            Stretch(fill.rectTransform);
-            fill.type = Image.Type.Filled;
-            fill.fillMethod = Image.FillMethod.Horizontal;
-            fill.fillOrigin = (int)Image.OriginHorizontal.Left;
-            fill.fillAmount = 0.5f;
-            fill.raycastTarget = false;
-
-            var marker = CreateImage("Marker", track.transform, Color.white);
-            var markerRect = marker.rectTransform;
-            markerRect.anchorMin = new Vector2(0.5f, 0.5f);
-            markerRect.anchorMax = new Vector2(0.5f, 0.5f);
-            markerRect.pivot = new Vector2(0.5f, 0.5f);
-            markerRect.anchoredPosition = Vector2.zero;
-            markerRect.sizeDelta = new Vector2(6f, 20f);
-            marker.raycastTarget = false;
-
-            presenter.fill = fill;
-            presenter.marker = markerRect;
             PrefabUtility.SaveAsPrefabAsset(root, StatusMakananPath);
             Object.DestroyImmediate(root);
             return AssetDatabase.LoadAssetAtPath<GameObject>(StatusMakananPath);

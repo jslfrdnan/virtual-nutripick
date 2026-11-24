@@ -135,7 +135,6 @@ namespace NutriPick.Editor
             flow.serveStation = serveStation;
             flow.foodCards = newHud.GetComponentInChildren<FoodCardGridPresenter>(true);
             flow.mealStatus = newHud.GetComponentInChildren<MealStatusBarPresenter>(true);
-            flow.bar = newHud.GetComponentInChildren<NutritionBar>(true);
             flow.prompt = newHud.GetComponentInChildren<InteractionPrompt>(true);
             flow.infoCard = newHud.GetComponentInChildren<FoodInfoCardPresenter>(true);
             flow.report = newHud.GetComponentInChildren<HealthReportPresenter>(true);

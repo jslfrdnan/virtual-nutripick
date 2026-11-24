@@ -40,7 +40,7 @@ The player uses the new Input System. An XInput, PS4, or Switch Pro-style Rexus 
 1. Open the project with Unity 6000.6.0f1.
 2. Open `Assets/Scenes/MainVR.unity`.
 3. Press **Play**.
-4. Scene 1 opens with a **CARA BERMAIN** page listing the controller inputs and rules. Press **MULAI** with A/Enter. Then pick four foods: one carbohydrate, one protein, one vegetable, and one extra. Place them on the serving plate and press **Start**. The eight-card food grid, category checklist, Status Makanan bar, and Final Result stay visible.
+4. Scene 1 opens with a **CARA BERMAIN** page listing the controller inputs and rules. Press **MULAI** with A/Enter. Then pick four foods: one carbohydrate, one protein, one vegetable, and one extra. Place them on the serving plate and press **Start**. The eight-card food grid, category checklist, and Final Result stay visible.
 5. Scene 2 is `Assets/Scenes/Level02_Warteg.unity`. Pick four foods from the 21 portions (three per dish), covering carbohydrate, protein, vegetable, and one extra, then plate them at the cashier table and press **Start** to serve. Five NPCs - a cook, a server, and three diners - are set dressing only.
 6. Scene 3 is `Assets/Scenes/Level03_Bazaar.unity`. The player spawns in front of the serving plate at the Panggung Bazaar stage. Collect the four categories from any of the 30 open stalls and serve. No drink is required in any level. Serving a plate with any fried food shows a healthy-choice warning and only offers **ULANGI LEVEL**.
 

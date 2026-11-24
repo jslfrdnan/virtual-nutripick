@@ -1,16 +1,12 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using NutriPick.Nutrition;
 
 namespace NutriPick.UI
 {
     public class MealStatusBarPresenter : MonoBehaviour
     {
-        public Image fill;
-        public RectTransform marker;
         public TMP_Text statusLabel;
-        public TMP_Text detailLabel;
         public TMP_Text countsLabel;
         public Color neutralColor = new Color(0.62f, 0.62f, 0.62f);
         public Color balancedColor = new Color(0.18f, 0.49f, 0.20f);
@@ -18,18 +14,11 @@ namespace NutriPick.UI
 
         public void SetNeutral()
         {
-            if (fill != null)
-            {
-                fill.fillAmount = 0.5f;
-                fill.color = neutralColor;
-            }
-            SetMarker(0.5f);
             if (statusLabel != null)
             {
                 statusLabel.text = "BELUM DINILAI";
                 statusLabel.color = neutralColor;
             }
-            if (detailLabel != null) detailLabel.text = "Pilih makanan untuk mulai";
             SetRequirements(MealRequirementState.Empty);
         }
 
@@ -51,20 +40,12 @@ namespace NutriPick.UI
                 return;
             }
 
-            float value = Mathf.Clamp01(result.score / 100f);
             var color = ColorFor(result.band);
-            if (fill != null)
-            {
-                fill.fillAmount = value;
-                fill.color = color;
-            }
-            SetMarker(value);
             if (statusLabel != null)
             {
                 statusLabel.text = LabelFor(result.band);
                 statusLabel.color = color;
             }
-            if (detailLabel != null) detailLabel.text = result.bandLabel;
         }
 
         public void SetRequirements(MealRequirementState requirement)
@@ -82,15 +63,6 @@ namespace NutriPick.UI
         private static string Mark(bool value)
         {
             return value ? "[x]" : "[ ]";
-        }
-
-        private void SetMarker(float value)
-        {
-            if (marker == null)
-                return;
-            marker.anchorMin = new Vector2(value, 0.5f);
-            marker.anchorMax = new Vector2(value, 0.5f);
-            marker.anchoredPosition = Vector2.zero;
         }
 
         private static string LabelFor(ScoreBand band)

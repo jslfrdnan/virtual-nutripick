@@ -49,7 +49,6 @@ namespace NutriPick.Editor
                 if (flow.serveStation == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing ServeStation"); }
                 if (flow.player == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing FirstPersonController"); }
                 if (flow.reticle == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing ReticleInteractor"); }
-                if (flow.bar == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing NutritionBar"); }
                 if (flow.prompt == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing InteractionPrompt"); }
                 if (flow.infoCard == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing FoodInfoCardPresenter"); }
                 if (flow.report == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing HealthReportPresenter"); }

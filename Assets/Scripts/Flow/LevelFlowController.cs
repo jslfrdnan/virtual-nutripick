@@ -26,7 +26,6 @@ namespace NutriPick.Flow
         public ReticleInteractor reticle;
         public HeldFoodCarrier carrier;
         public GamepadInput input;
-        public NutritionBar bar;
         public InteractionPrompt prompt;
         public FoodInfoCardPresenter infoCard;
         public FoodCardGridPresenter foodCards;
@@ -75,8 +74,6 @@ namespace NutriPick.Flow
                 plate = FindAnyObjectByType<PlateController>();
             if (serveStation == null)
                 serveStation = FindAnyObjectByType<ServeStation>();
-            if (bar == null)
-                bar = FindAnyObjectByType<NutritionBar>();
             if (prompt == null)
                 prompt = FindAnyObjectByType<InteractionPrompt>();
             if (infoCard == null)
@@ -137,8 +134,6 @@ namespace NutriPick.Flow
                 infoCard.Hide();
             if (prompt != null)
                 prompt.Hide();
-            if (bar != null)
-                bar.SetNeutral();
             startGuide?.Hide();
             friedWarning?.Hide();
             if (sprintIndicator != null)
@@ -180,8 +175,6 @@ namespace NutriPick.Flow
                 foodCards.gameObject.SetActive(visible);
             if (mealStatus != null)
                 mealStatus.gameObject.SetActive(visible);
-            if (bar != null)
-                bar.gameObject.SetActive(visible);
             if (prompt != null)
                 prompt.gameObject.SetActive(visible);
             if (infoCard != null)
@@ -359,8 +352,6 @@ namespace NutriPick.Flow
                 mealStatus.SetPreview(result);
                 mealStatus.SetRequirements(requirement);
             }
-            else if (bar != null)
-                bar.SetPreview(result);
         }
 
         public void TryServe()
@@ -404,8 +395,6 @@ namespace NutriPick.Flow
             GameSession.Instance.RecordResult(level.levelIndex, result);
             if (mealStatus != null)
                 mealStatus.SetFinal(result);
-            else if (bar != null)
-                bar.SetFinal(result);
 
             StartCoroutine(ShowReportAfterDelay(result));
         }

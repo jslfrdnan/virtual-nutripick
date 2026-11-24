@@ -572,17 +572,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 282087341cafb344490548e0e1a432ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.UI.InteractionPrompt
---- !u!114 &42663032 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4818183024183046831, guid: 56137a837b1f6c241a7ee739e979e572, type: 3}
-  m_PrefabInstance: {fileID: 42663021}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 016f2dc000995414e868e1c3499322e0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.UI.NutritionBar
 --- !u!1 &44191092
 GameObject:
   m_ObjectHideFlags: 0
@@ -12209,7 +12198,6 @@ MonoBehaviour:
   reticle: {fileID: 919434451}
   carrier: {fileID: 0}
   input: {fileID: 919434450}
-  bar: {fileID: 42663032}
   prompt: {fileID: 42663031}
   infoCard: {fileID: 42663030}
   foodCards: {fileID: 42663029}
