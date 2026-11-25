@@ -1,10 +1,11 @@
 using System;
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using NutriPick.Content;
-using NutriPick.Nutrition;
+using NutriPick.Quests;
 
 namespace NutriPick.UI
 {
@@ -12,62 +13,41 @@ namespace NutriPick.UI
     {
         public GameObject root;
         public TMP_Text titleText;
-        public TMP_Text balancedTitleText;
-        public TMP_Text lessBalancedTitleText;
-        public TMP_Text[] balancedPointTexts = new TMP_Text[3];
-        public TMP_Text[] lessBalancedPointTexts = new TMP_Text[3];
-        public TMP_Text balancedBadgeText;
-        public TMP_Text lessBalancedBadgeText;
-        public Image balancedPanelBackground;
-        public Image lessBalancedPanelBackground;
-        public Image balancedBadgeBackground;
-        public Image lessBalancedBadgeBackground;
+        public TMP_Text subtitleText;
+        public TMP_Text taskText;
+        public TMP_Text nutritionText;
+        public TMP_Text warningText;
         public TMP_Text closingText;
         public TMP_Text disclaimerText;
         public TMP_Text inputHint;
         public Button retryButton;
         public Button nextButton;
 
-        public void Show(MealResult result, LevelDefinition level, Action onRetry, Action onNext)
+        public void Show(QuestEvaluation evaluation, LevelDefinition level, Action onRetry, Action onNext)
         {
             if (root != null)
                 root.SetActive(true);
+
+            bool finalLevel = level != null && level.isFinalLevel;
             if (titleText != null)
-                titleText.text = "FINAL RESULT";
-            if (balancedTitleText != null)
-                balancedTitleText.text = "Pilihan yang mendukung tubuh seimbang";
-            if (lessBalancedTitleText != null)
-                lessBalancedTitleText.text = "Pilihan kurang seimbang";
+                titleText.text = finalLevel ? "HASIL AKHIR" : "HASIL LEVEL";
+            if (subtitleText != null)
+                subtitleText.text = Subtitle(evaluation, level);
 
-            FillPoints(balancedPointTexts, result != null ? result.positivePoints : null, new[]
+            if (taskText != null)
+                taskText.text = BuildTasks(evaluation);
+            if (nutritionText != null)
+                nutritionText.text = BuildNutrition(evaluation);
+            if (warningText != null)
             {
-                "Kamu sudah menyusun piring sendiri.",
-                "Kamu bisa mengulang level untuk mencoba kombinasi lain.",
-                "Setiap pilihan adalah langkah belajar."
-            });
-            FillPoints(lessBalancedPointTexts, result != null ? result.improvementPoints : null, new[]
-            {
-                "Coba variasi makanan lain.",
-                "Perhatikan porsi berikutnya.",
-                "Tambahkan sayur atau buah jika memungkinkan."
-            });
-
-            if (balancedBadgeText != null) balancedBadgeText.text = "LEBIH SEHAT";
-            if (lessBalancedBadgeText != null) lessBalancedBadgeText.text = "PERLU DIUBAH";
-            if (balancedBadgeBackground != null)
-                balancedBadgeBackground.color = new Color(0.30f, 0.69f, 0.31f);
-            if (lessBalancedBadgeBackground != null)
-                lessBalancedBadgeBackground.color = new Color(0.95f, 0.42f, 0.36f);
-
-            bool balanced = result != null && result.isBalanced;
-            if (balancedPanelBackground != null)
-                balancedPanelBackground.color = balanced
-                    ? new Color(0.88f, 0.96f, 0.88f, 1f)
-                    : new Color(0.88f, 0.96f, 0.88f, 0.45f);
-            if (lessBalancedPanelBackground != null)
-                lessBalancedPanelBackground.color = balanced
-                    ? new Color(0.99f, 0.90f, 0.88f, 0.45f)
-                    : new Color(0.99f, 0.90f, 0.88f, 1f);
+                bool hasWarning = evaluation != null && evaluation.warnings != null && evaluation.warnings.Length > 0;
+                warningText.text = hasWarning
+                    ? string.Join("\n", evaluation.warnings)
+                    : "Tidak ada batas makan yang terlampaui.";
+                warningText.color = hasWarning
+                    ? new Color(0.95f, 0.42f, 0.36f)
+                    : new Color(0.30f, 0.69f, 0.31f);
+            }
 
             if (closingText != null)
                 closingText.text = "PILIHAN KECIL, DAMPAK BESAR!";
@@ -89,7 +69,7 @@ namespace NutriPick.UI
             EnsureFocusHighlight(retryButton);
             EnsureFocusHighlight(nextButton);
             ConfigureNavigation();
-            SetButtonLabel(nextButton, level != null && level.isFinalLevel ? "MAIN LAGI" : "NEXT LEVEL");
+            SetButtonLabel(nextButton, finalLevel ? "LIHAT RINGKASAN" : "NEXT LEVEL");
             EnsureInputHint();
             SelectInitialButton();
         }
@@ -108,6 +88,57 @@ namespace NutriPick.UI
 
             if (root != null)
                 root.SetActive(false);
+        }
+
+        private static string Subtitle(QuestEvaluation evaluation, LevelDefinition level)
+        {
+            string questName = evaluation != null && evaluation.quest != null
+                ? evaluation.quest.displayName
+                : "Quest";
+            string levelName = level != null ? level.displayName : "Level";
+            return questName + " · " + levelName;
+        }
+
+        private static string BuildTasks(QuestEvaluation evaluation)
+        {
+            if (evaluation == null || evaluation.tasks.Count == 0)
+                return "Tidak ada task.";
+
+            var builder = new StringBuilder();
+            builder.Append("TASK");
+            foreach (var task in evaluation.tasks)
+            {
+                builder.Append('\n');
+                builder.Append(task.ProgressLabel());
+            }
+
+            return builder.ToString();
+        }
+
+        private static string BuildNutrition(QuestEvaluation evaluation)
+        {
+            if (evaluation == null || evaluation.totals == null)
+                return "—";
+
+            var totals = evaluation.totals;
+            var builder = new StringBuilder();
+            builder.Append("GIZI PIRING");
+            Append(builder, NutrientType.Calories, totals.Get(NutrientType.Calories));
+            Append(builder, NutrientType.Protein, totals.Get(NutrientType.Protein));
+            Append(builder, NutrientType.Carbohydrate, totals.Get(NutrientType.Carbohydrate));
+            Append(builder, NutrientType.Fat, totals.Get(NutrientType.Fat));
+            Append(builder, NutrientType.Fiber, totals.Get(NutrientType.Fiber));
+            Append(builder, NutrientType.Sodium, totals.Get(NutrientType.Sodium));
+            Append(builder, NutrientType.AddedSugar, totals.Get(NutrientType.AddedSugar));
+            return builder.ToString();
+        }
+
+        private static void Append(StringBuilder builder, NutrientType nutrient, float value)
+        {
+            builder.Append('\n');
+            builder.Append(QuestEvaluator.NutrientLabel(nutrient));
+            builder.Append(": ");
+            builder.Append(QuestEvaluator.FormatValue(nutrient, value));
         }
 
         private void SelectInitialButton()
@@ -208,23 +239,6 @@ namespace NutriPick.UI
             var text = label.GetComponent<TMP_Text>();
             if (text != null)
                 text.text = value;
-        }
-
-        private static void FillPoints(TMP_Text[] targets, string[] source, string[] fallback)
-        {
-            if (targets == null)
-                return;
-
-            for (int i = 0; i < targets.Length; i++)
-            {
-                if (targets[i] == null)
-                    continue;
-
-                string value = source != null && i < source.Length && !string.IsNullOrWhiteSpace(source[i])
-                    ? source[i]
-                    : (i < fallback.Length ? fallback[i] : "—");
-                targets[i].text = value;
-            }
         }
     }
 }

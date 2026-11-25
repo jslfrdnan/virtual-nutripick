@@ -25,6 +25,14 @@ namespace NutriPick.Nutrition
         public float fiber;
         public float addedSugar;
         public float sodium;
+
+        [Header("Micronutrients (per portion)")]
+        public float vitaminA;
+        public float vitaminC;
+        public float vitaminD;
+        public float calcium;
+        public float iron;
+
         public string portionLabel;
 
         [Header("Protein")]
@@ -88,6 +96,12 @@ namespace NutriPick.Nutrition
             if (calories < 0 || protein < 0 || carbs < 0 || fat < 0 || fiber < 0 || addedSugar < 0 || sodium < 0)
             {
                 error = "nutrition values must be non-negative";
+                return false;
+            }
+
+            if (vitaminA < 0 || vitaminC < 0 || vitaminD < 0 || calcium < 0 || iron < 0)
+            {
+                error = "micronutrient values must be non-negative";
                 return false;
             }
 

@@ -38,7 +38,7 @@ namespace NutriPick.Tests
 
             var foods = Object.FindObjectsByType<FoodItem>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
             Assert.AreEqual(8, foods.Select(food => food.data != null ? food.data.id : null).Distinct().Count(), "The serve table should have 8 food types.");
-            Assert.AreEqual(13, foods.Length, "The serve table should have 13 interactive food items (3 tempe + 2 ayam + 3 brokoli).");
+            Assert.AreEqual(8, foods.Length, "The serve table should have one interactive item on each of the eight food plates.");
             foreach (var food in foods)
             {
                 var p = food.transform.position;

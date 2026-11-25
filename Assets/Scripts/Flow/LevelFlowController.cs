@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -9,6 +10,7 @@ using NutriPick.Content;
 using NutriPick.Interaction;
 using NutriPick.Nutrition;
 using NutriPick.Player;
+using NutriPick.Quests;
 using NutriPick.UI;
 using NutriPick.Utilities;
 
@@ -30,10 +32,12 @@ namespace NutriPick.Flow
         public FoodInfoCardPresenter infoCard;
         public FoodCardGridPresenter foodCards;
         public MealStatusBarPresenter mealStatus;
-        public HealthReportPresenter report;
         public FinalResultPresenter finalResult;
         public StartGuidePresenter startGuide;
-        public FriedWarningPresenter friedWarning;
+        public QuestSelectPresenter questSelect;
+        public CampaignSummaryPresenter campaignSummary;
+        public QuestDefinition quest;
+        public QuestDefinition[] questOptions;
         public GameObject pausePanel;
         public TMP_Text pauseMessage;
         public Button pauseResumeButton;
@@ -43,6 +47,7 @@ namespace NutriPick.Flow
         public bool IsReportOpen { get; private set; }
         public bool IsLevelStarted => levelStarted;
         public GamepadInput Input => input;
+        public QuestDefinition Quest => quest;
 
         private Button pauseHelpButton;
         private TMP_Text sprintIndicator;
@@ -78,12 +83,12 @@ namespace NutriPick.Flow
                 prompt = FindAnyObjectByType<InteractionPrompt>();
             if (infoCard == null)
                 infoCard = FindAnyObjectByType<FoodInfoCardPresenter>();
-            if (report == null)
-                report = FindAnyObjectByType<HealthReportPresenter>();
             if (startGuide == null)
                 startGuide = FindHudPresenter<StartGuidePresenter>();
-            if (friedWarning == null)
-                friedWarning = FindHudPresenter<FriedWarningPresenter>();
+            if (questSelect == null)
+                questSelect = FindHudPresenter<QuestSelectPresenter>();
+            if (campaignSummary == null)
+                campaignSummary = FindHudPresenter<CampaignSummaryPresenter>();
 
             var hud = GameObject.Find("FigmaHUD");
             if (hud != null && sprintIndicator == null)
@@ -91,6 +96,15 @@ namespace NutriPick.Flow
 
             var session = GameSession.EnsureExists();
             session.BeginLevel(level.levelIndex);
+
+            if (session.HasQuest)
+                quest = session.quest;
+            if (quest == null && level.levelIndex != 1)
+                quest = ResolveDefaultQuest();
+            if (quest != null)
+                session.SelectQuest(quest);
+
+            ApplyQuestToPlate();
 
             if (carrier != null)
                 carrier.Changed += RefreshPreview;
@@ -126,22 +140,27 @@ namespace NutriPick.Flow
 
             if (pausePanel != null)
                 pausePanel.SetActive(false);
-            if (report != null)
-                report.Hide();
             if (finalResult != null)
                 finalResult.Hide();
             if (infoCard != null)
                 infoCard.Hide();
             if (prompt != null)
                 prompt.Hide();
+            if (questSelect != null)
+                questSelect.Hide();
+            if (campaignSummary != null)
+                campaignSummary.Hide();
             startGuide?.Hide();
-            friedWarning?.Hide();
             if (sprintIndicator != null)
                 sprintIndicator.gameObject.SetActive(false);
 
             if (level.levelIndex == 1 && startGuide != null && !session.HasSeenIntro)
             {
                 OpenStartGuide(false);
+            }
+            else if (!session.HasQuest && questSelect != null)
+            {
+                OpenQuestSelect();
             }
             else
             {
@@ -154,6 +173,13 @@ namespace NutriPick.Flow
             if (levelStarted || level == null)
                 return;
 
+            if (quest == null)
+                quest = ResolveDefaultQuest();
+            ApplyQuestToPlate();
+
+            if (questSelect != null && questSelect.IsOpen)
+                questSelect.Hide();
+
             levelStarted = true;
             if (player != null)
                 player.SetControlEnabled(true);
@@ -163,10 +189,42 @@ namespace NutriPick.Flow
             if (foodCards != null)
                 foodCards.Bind(level.foodPool, rules);
             if (mealStatus != null)
-                mealStatus.SetNeutral();
+                mealStatus.SetNeutral(quest, level.levelIndex);
             SetGameplayHudVisible(true);
 
             OnPlateChanged();
+        }
+
+        private void ApplyQuestToPlate()
+        {
+            if (plate == null)
+                return;
+
+            plate.quest = quest;
+            plate.questLevelIndex = level != null ? level.levelIndex : 1;
+            plate.minItems = level != null ? level.minItems : 4;
+            plate.requiresDrink = level != null && level.requiresDrink;
+        }
+
+        private QuestDefinition ResolveDefaultQuest()
+        {
+            var session = GameSession.Instance;
+            if (session != null && session.HasQuest)
+                return session.quest;
+
+            if (quest != null)
+                return quest;
+
+            if (questOptions != null)
+            {
+                foreach (var option in questOptions)
+                {
+                    if (option != null)
+                        return option;
+                }
+            }
+
+            return null;
         }
 
         private void SetGameplayHudVisible(bool visible)
@@ -203,7 +261,42 @@ namespace NutriPick.Flow
                 prompt.Hide();
             SetGameplayHudVisible(false);
 
+            startGuide.SetQuestSummary(BuildQuestSummary());
             startGuide.Show(OnStartGuideClosed);
+        }
+
+        private string BuildQuestSummary()
+        {
+            var activeQuest = ResolveQuestForDisplay();
+            if (activeQuest == null || activeQuest.levels == null)
+                return "QUEST\nPilih kelompok saat game dimulai.";
+
+            int index = Mathf.Clamp(level.levelIndex - 1, 0, activeQuest.levels.Length - 1);
+            var tasks = activeQuest.levels[index];
+            var builder = new StringBuilder();
+            builder.Append("QUEST AKTIF\n");
+            builder.Append(activeQuest.displayName).Append(" · usia ").Append(activeQuest.ageRange).Append('\n');
+            builder.Append(tasks != null ? tasks.label.ToUpperInvariant() : "LEVEL").Append('\n');
+            if (tasks != null)
+            {
+                builder.Append(QuestEvaluator.CategoryLabel(tasks.requiredA)).Append(" + ");
+                builder.Append(QuestEvaluator.CategoryLabel(tasks.requiredB)).Append('\n');
+                builder.Append(QuestEvaluator.NutrientLabel(tasks.targetA.nutrient)).Append(" ≥ ");
+                builder.Append(QuestEvaluator.FormatAmount(tasks.targetA.minimum, tasks.targetA.nutrient)).Append('\n');
+                builder.Append(QuestEvaluator.NutrientLabel(tasks.targetB.nutrient)).Append(" ≥ ");
+                builder.Append(QuestEvaluator.FormatAmount(tasks.targetB.minimum, tasks.targetB.nutrient));
+            }
+
+            return builder.ToString();
+        }
+
+        private QuestDefinition ResolveQuestForDisplay()
+        {
+            if (quest != null)
+                return quest;
+            if (GameSession.Instance != null && GameSession.Instance.HasQuest)
+                return GameSession.Instance.quest;
+            return ResolveDefaultQuest();
         }
 
         private void ShowGuideFromPause()
@@ -227,6 +320,39 @@ namespace NutriPick.Flow
             }
 
             GameSession.Instance?.MarkIntroSeen();
+            if (GameSession.Instance != null && !GameSession.Instance.HasQuest && questSelect != null)
+                OpenQuestSelect();
+            else
+                StartLevel();
+        }
+
+        private void OpenQuestSelect()
+        {
+            if (questSelect == null)
+            {
+                StartLevel();
+                return;
+            }
+
+            if (player != null)
+                player.SetControlEnabled(false);
+            if (reticle != null)
+                reticle.enabled = false;
+            if (prompt != null)
+                prompt.Hide();
+            SetGameplayHudVisible(false);
+
+            questSelect.Show(questOptions, OnQuestChosen);
+        }
+
+        private void OnQuestChosen(QuestDefinition chosen)
+        {
+            if (chosen == null)
+                return;
+
+            quest = chosen;
+            GameSession.Instance?.SelectQuest(chosen);
+            ApplyQuestToPlate();
             StartLevel();
         }
 
@@ -260,15 +386,11 @@ namespace NutriPick.Flow
                 return;
 
             level = definition;
-            if (plate != null)
-            {
-                plate.minItems = definition.minItems;
-                plate.requiresDrink = definition.requiresDrink;
-            }
+            ApplyQuestToPlate();
             if (foodCards != null)
                 foodCards.Bind(definition.foodPool, rules);
             if (mealStatus != null)
-                mealStatus.SetNeutral();
+                mealStatus.SetNeutral(quest, definition.levelIndex);
             OnPlateChanged();
         }
 
@@ -309,7 +431,6 @@ namespace NutriPick.Flow
 
             if (input.ServePressed)
                 TryServe();
-
         }
 
         private void OnDestroy()
@@ -329,7 +450,7 @@ namespace NutriPick.Flow
 
         private void RefreshPreview()
         {
-            if (level == null || rules == null)
+            if (level == null)
                 return;
 
             var foods = new List<FoodData>();
@@ -343,15 +464,9 @@ namespace NutriPick.Flow
             if (hasRoom && carrier != null && carrier.Current != null && carrier.Current.data != null)
                 foods.Add(carrier.Current.data);
 
-            var result = MealEvaluator.Evaluate(foods, rules, level.minItems, level.requiresDrink);
-            var requirement = MealRequirement.Evaluate(foods);
-            if (!requirement.IsComplete)
-                result.isIncomplete = true;
+            var evaluation = QuestEvaluator.Evaluate(foods, quest, level.levelIndex);
             if (mealStatus != null)
-            {
-                mealStatus.SetPreview(result);
-                mealStatus.SetRequirements(requirement);
-            }
+                mealStatus.SetEvaluation(evaluation);
         }
 
         public void TryServe()
@@ -385,42 +500,15 @@ namespace NutriPick.Flow
             var foods = new List<FoodData>(plate.Foods);
             SfxPlayer.Instance?.PlayServe();
 
-            if (MealRequirement.TryGetFriedFoods(foods, out var friedNames))
-            {
-                StartCoroutine(ShowFriedWarningAfterDelay(friedNames));
-                return;
-            }
-
-            var result = MealEvaluator.Evaluate(foods, rules, level.minItems, level.requiresDrink);
-            GameSession.Instance.RecordResult(level.levelIndex, result);
+            var evaluation = QuestEvaluator.Evaluate(foods, quest, level.levelIndex);
+            GameSession.Instance.RecordResult(level.levelIndex, evaluation);
             if (mealStatus != null)
-                mealStatus.SetFinal(result);
+                mealStatus.SetEvaluation(evaluation);
 
-            StartCoroutine(ShowReportAfterDelay(result));
+            StartCoroutine(ShowReportAfterDelay(evaluation));
         }
 
-        private IEnumerator ShowFriedWarningAfterDelay(List<string> friedNames)
-        {
-            yield return new WaitForSeconds(0.6f);
-
-            IsReportOpen = true;
-            if (player != null)
-                player.SetControlEnabled(false);
-            if (reticle != null)
-                reticle.enabled = false;
-
-            if (friedWarning != null)
-            {
-                friedWarning.Show(friedNames, Retry);
-            }
-            else
-            {
-                Debug.LogWarning("[NutriPick] Fried warning presenter missing.");
-                Retry();
-            }
-        }
-
-        private IEnumerator ShowReportAfterDelay(MealResult result)
+        private IEnumerator ShowReportAfterDelay(QuestEvaluation evaluation)
         {
             yield return new WaitForSeconds(1.0f);
 
@@ -430,13 +518,7 @@ namespace NutriPick.Flow
             if (reticle != null)
                 reticle.enabled = false;
             if (finalResult != null)
-            {
-                finalResult.Show(result, level, Retry, Next);
-            }
-            else if (report != null)
-            {
-                report.Show(result, level, Retry, Next);
-            }
+                finalResult.Show(evaluation, level, Retry, Next);
             SfxPlayer.Instance?.PlayReport();
         }
 
@@ -447,10 +529,31 @@ namespace NutriPick.Flow
 
         private void Next()
         {
+            if (level.isFinalLevel)
+            {
+                ShowCampaignSummary();
+                return;
+            }
+
             if (!string.IsNullOrWhiteSpace(level.nextSceneName))
                 SceneLoader.Load(level.nextSceneName);
             else
                 Restart();
+        }
+
+        private void ShowCampaignSummary()
+        {
+            var session = GameSession.Instance;
+            if (campaignSummary == null || session == null)
+            {
+                Restart();
+                return;
+            }
+
+            if (finalResult != null)
+                finalResult.Hide();
+            IsReportOpen = true;
+            campaignSummary.Show(quest, session.results, session.TotalNutrition(), Restart);
         }
 
         private void Restart()

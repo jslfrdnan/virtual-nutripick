@@ -27,6 +27,11 @@ MonoBehaviour:
   fiber: 0
   addedSugar: 0
   sodium: 62
+  vitaminA: 80
+  vitaminC: 0
+  vitaminD: 1.1
+  calcium: 25
+  iron: 0.9
   portionLabel: 1 butir (55 g)
   proteinType: 0
   hasProteinType: 1

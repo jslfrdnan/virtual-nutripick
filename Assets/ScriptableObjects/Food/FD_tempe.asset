@@ -27,6 +27,11 @@ MonoBehaviour:
   fiber: 1.5
   addedSugar: 0
   sodium: 120
+  vitaminA: 0
+  vitaminC: 0
+  vitaminD: 0
+  calcium: 111
+  iron: 2.7
   portionLabel: 50 g
   proteinType: 1
   hasProteinType: 1

@@ -1,6 +1,6 @@
 # NutriPick VR
 
-NutriPick VR is an educational first-person nutrition game built in Unity 6. The player uses a **Rexus gamepad** to move, aim a reticle, pick up food, plate it, and serve a meal. Scene 1 is a **home kitchen and dining room**: eight individual plates and bowls hold eight foods - one food type per plate - and the player plates a meal on the dining table. Scene 2 is **Warteg Tegal Sari**, an open-front roadside warung with a seven-dish display (three portions per dish), benches, a cashier table, five set-dressing NPCs, and a new row of shophouses around the street. Scene 3 is the **Flamboyant bazaar district**: 30 open food stalls with 120 portions, a new Flamboyant cross intersection, four coffee shops, two cafes, SMA Negeri 1 Manado and SMK Negeri 1 Manado backdrops, nine NPCs, and the Panggung Bazaar serving stage. No level requires a drink. A Figma-style UI Canvas shows the food-card grid, Status Makanan checklist, and Final Result. The scene starts with a controller/game-rules page on Scene 1 and a category checklist while plating.
+NutriPick VR is an educational first-person nutrition game built in Unity 6. The player uses a **Rexus gamepad** to move, aim a reticle, pick up food, plate it, and serve a meal. At the start the player picks one of three **quests**: **Anak-anak** (7-9), **Dewasa** (19-29), or **Lansia** (60-69). Each quest sets four tasks per level: two food-category requirements and two nutrient minimums. Scene 1 is a **home kitchen and dining room**: eight individual plates hold eight foods and the player plates breakfast on the dining table. Scene 2 is **Warteg Tegal Sari**, an open-front roadside warung with a seven-dish display (three portions per dish), benches, a cashier table, five set-dressing NPCs, and a row of shophouses. Scene 3 is the **Flamboyant bazaar district**: 30 open food stalls with 120 portions, a cross intersection, four coffee shops, two cafes, SMA Negeri 1 Manado and SMK Negeri 1 Manado backdrops, nine NPCs, and the Panggung Bazaar serving stage. All 18 foods carry energy, macro, sodium, sugar, vitamin A/C/D, calcium, and iron values, shown on the full food card. No level requires a drink. A Figma-style UI Canvas shows the food-card grid, the four-task checklist, the level report, and the campaign summary.
 
 1. **Rumah** — breakfast at home (`MainVR`)
 2. **Warteg** — lunch at Warteg Tegal Sari, seven dishes and five NPCs (`Level02_Warteg`)
@@ -40,9 +40,9 @@ The player uses the new Input System. An XInput, PS4, or Switch Pro-style Rexus 
 1. Open the project with Unity 6000.6.0f1.
 2. Open `Assets/Scenes/MainVR.unity`.
 3. Press **Play**.
-4. Scene 1 opens with a **CARA BERMAIN** page listing the controller inputs and rules. Press **MULAI** with A/Enter. Then pick four foods: one carbohydrate, one protein, one vegetable, and one extra. Place them on the serving plate and press **Start**. The eight-card food grid, category checklist, and Final Result stay visible.
-5. Scene 2 is `Assets/Scenes/Level02_Warteg.unity`. Pick four foods from the 21 portions (three per dish), covering carbohydrate, protein, vegetable, and one extra, then plate them at the cashier table and press **Start** to serve. Five NPCs - a cook, a server, and three diners - are set dressing only.
-6. Scene 3 is `Assets/Scenes/Level03_Bazaar.unity`. The player spawns in front of the serving plate at the Panggung Bazaar stage. Collect the four categories from any of the 30 open stalls and serve. No drink is required in any level. Serving a plate with any fried food shows a healthy-choice warning and only offers **ULANGI LEVEL**.
+4. Scene 1 opens with a **CARA BERMAIN** page listing the controller inputs and rules. Press **MULAI** with A/Enter, then choose **ANAK-ANAK**, **DEWASA**, or **LANSIA** on the quest page. Pick four foods that satisfy the level's tasks, place them on the serving plate, and press **Start**. The food-card grid, four-task checklist, level report, and campaign summary stay visible.
+5. Scene 2 is `Assets/Scenes/Level02_Warteg.unity`. Pick four foods from the 21 portions (three per dish) that satisfy the lunch tasks, then plate them at the cashier table and press **Start**. Five NPCs - a cook, a server, and three diners - are set dressing only.
+6. Scene 3 is `Assets/Scenes/Level03_Bazaar.unity`. The player spawns in front of the serving plate at the Panggung Bazaar stage. Collect four foods from any of the 30 open stalls and satisfy the dinner tasks. No drink is required in any level. After the final serve, **LIHAT RINGKASAN** opens the campaign summary with daily nutrition totals, %AKG, and over-limit warnings.
 
 Build Settings contains `MainVR`, `Level02_Warteg`, and `Level03_Bazaar` in campaign order. Scene 1 uses `Assets/Models/Environment/Home/` (kitchen, island, dining, decor), `Assets/Models/Food/Plating/` (platters, plates, bowls), and `Assets/Prefabs/Interaction/ServingPlate.prefab` with `Assets/Models/Props/ceramic_plate.fbx`. Scene 2 uses the new `Assets/Models/Environment/Warteg/` kit. Scene 3 uses `Assets/Models/Environment/Bazaar/` for the school, stalls, cafes, stage, and street props. NPCs live in `Assets/Prefabs/NPC/`.
 
@@ -54,6 +54,8 @@ The project includes an editor builder that creates the ScriptableObjects, food 
 - Menu: **NutriPick → Setup Scene 1 Data** (protein types and LD_MainVR)
 - Menu: **NutriPick → Generate Scene 1 Food Icons**
 - Menu: **NutriPick → Build Serving Plate**
+- Menu: **NutriPick → Build Quest Data** (3 quest definitions and food micronutrients)
+- Menu: **NutriPick → Build Quest Foods** (6 new food prefabs, data, and icons)
 - Menu: **NutriPick → Build Figma HUD**
 - Menu: **NutriPick → Build Scene 1 Figma Setup**
 - Menu: **NutriPick → Build Scene 1 Home** (kitchen + dining + platters)
@@ -69,8 +71,8 @@ The Windows build is written to `Builds/Windows/NutriPick.exe`.
 
 ## Tests
 
-- **EditMode**: 31 tests covering classification, meal evaluation, session state, level validation, campaign chain, protein types, Final Result points, food-card formatting, food texture assignment, food asset quality, icon presence, and polygon budget.
-- **PlayMode**: 37 tests covering Scene 1 food plates/table layout/start guide/four-category rule/card grid/Status Makanan/Final Result/focus highlight/replication, MainVR plate-and-serve, fried-warning retry, Scene 2 Warteg display/21 portions/shophouse world/NPC cast, Scene 3 30-stall layout/120 foods/intersection/coffee shops/no drinks/NPC cast/spawn at the plate, serving plate seating, held-food follow, food portion separation, camera height, pause navigation/highlight, sprint toggle, Level 2/3 smoke tests, and gamepad/generic-joystick/keyboard input. The current run is 37 passed, 0 skipped, 0 failed.
+- **EditMode**: 36 tests covering classification, meal evaluation, session state, level validation, campaign chain, protein types, quest evaluation, AKG warnings, food-card formatting, food texture assignment, food asset quality, icon presence, and polygon budget.
+- **PlayMode**: 40 tests covering quest selection, the four-task serve gate, HUD progress, info-card micronutrients, level report, campaign summary, Scene 1 food plates/start guide/card grid/focus highlight/replication, MainVR plate-and-serve, Scene 2 Warteg display/21 portions/shophouse world/NPC cast, Scene 3 30-stall layout/120 foods/intersection/coffee shops/no drinks/NPC cast/spawn at the plate, serving plate seating, held-food follow, food portion separation, camera height, pause navigation/highlight, sprint toggle, Level 2/3 smoke tests, and gamepad/generic-joystick/keyboard input. The current run is 40 passed, 0 skipped, 0 failed.
 
 Run them from **Window → General → Test Runner**, or headlessly:
 

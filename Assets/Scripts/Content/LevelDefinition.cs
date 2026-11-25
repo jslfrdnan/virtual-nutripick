@@ -54,9 +54,9 @@ namespace NutriPick.Content
                 return false;
             }
 
-            if (foodPool == null || foodPool.Length < 6 || foodPool.Length > 8)
+            if (foodPool == null || foodPool.Length < 6 || foodPool.Length > 18)
             {
-                error = "foodPool must contain 6-8 foods";
+                error = "foodPool must contain 6-18 foods";
                 return false;
             }
 

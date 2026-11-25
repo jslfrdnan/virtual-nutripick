@@ -37,7 +37,11 @@ namespace NutriPick.Editor
 
             DestroyChild(root.transform, "StartScreen");
             DestroyChild(root.transform, "StartGuide");
+            DestroyChild(root.transform, "QuestSelect");
+            DestroyChild(root.transform, "CampaignSummary");
             DestroyChild(root.transform, "FriedWarning");
+            DestroyChild(root.transform, "ReportRoot");
+            DestroyChild(root.transform, "ReportController");
             DestroyChild(root.transform, "SprintIndicator");
             DestroyChild(root.transform, "FoodCardGrid");
             DestroyChild(root.transform, "StatusMakanan");
@@ -53,7 +57,7 @@ namespace NutriPick.Editor
             var status = (GameObject)PrefabUtility.InstantiatePrefab(statusPrefab, root.transform);
             status.name = "StatusMakanan";
             var statusRect = status.GetComponent<RectTransform>();
-            PlaceAnchored(statusRect, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 24f), new Vector2(720f, 44f));
+            PlaceAnchored(statusRect, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 24f), new Vector2(720f, 64f));
             statusRect.pivot = new Vector2(0.5f, 0f);
             statusRect.anchoredPosition = new Vector2(0f, 24f);
 
@@ -62,9 +66,11 @@ namespace NutriPick.Editor
             Stretch(finalResult.GetComponent<RectTransform>());
 
             BuildStartGuidePanel(root.transform, font);
-            BuildFriedWarningPanel(root.transform, font);
+            BuildQuestSelectPanel(root.transform, font);
+            BuildCampaignSummaryPanel(root.transform, font);
             BuildSprintIndicator(root.transform, font);
             ConfigurePauseMenu(root.transform);
+            AdjustInfoCard(root.transform);
 
             DestroyChild(root.transform, "NutritionBar");
             SetActive(root.transform, "InfoCard", false);
@@ -166,22 +172,17 @@ namespace NutriPick.Editor
         {
             var root = new GameObject("StatusMakanan", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(MealStatusBarPresenter));
             var rect = root.GetComponent<RectTransform>();
-            rect.sizeDelta = new Vector2(720f, 44f);
+            rect.sizeDelta = new Vector2(720f, 64f);
             var background = root.GetComponent<Image>();
             background.color = new Color(0.06f, 0.08f, 0.09f, 0.85f);
             background.raycastTarget = false;
 
             var presenter = root.GetComponent<MealStatusBarPresenter>();
-            presenter.statusLabel = CreateText("StatusLabel", root.transform, "BELUM DINILAI", 18f, Color.white, TextAlignmentOptions.Left, font);
-            PlaceTopLeft(presenter.statusLabel.rectTransform, new Vector2(16f, -9f), new Vector2(280f, 26f));
+            presenter.statusLabel = CreateText("StatusLabel", root.transform, "ANAK-ANAK · SARAPAN", 18f, Color.white, TextAlignmentOptions.Left, font);
+            PlaceTopLeft(presenter.statusLabel.rectTransform, new Vector2(16f, -8f), new Vector2(420f, 26f));
 
-            presenter.countsLabel = CreateText("CountsLabel", root.transform, "KARBO [ ]  PROTEIN [ ]  SAYUR [ ]  TAMBAHAN [ ]", 12f, new Color(0.72f, 0.76f, 0.78f), TextAlignmentOptions.Right, font);
-            var countsRect = presenter.countsLabel.rectTransform;
-            countsRect.anchorMin = new Vector2(1f, 1f);
-            countsRect.anchorMax = new Vector2(1f, 1f);
-            countsRect.pivot = new Vector2(1f, 1f);
-            countsRect.anchoredPosition = new Vector2(-16f, -13f);
-            countsRect.sizeDelta = new Vector2(400f, 18f);
+            presenter.countsLabel = CreateText("CountsLabel", root.transform, "PROTEIN [ ]  BUAH [ ]  PROTEIN 0/15 g [ ]  KALSIUM 0/330 mg [ ]", 12f, new Color(0.72f, 0.76f, 0.78f), TextAlignmentOptions.Left, font);
+            PlaceTopLeft(presenter.countsLabel.rectTransform, new Vector2(16f, -38f), new Vector2(688f, 18f));
 
             PrefabUtility.SaveAsPrefabAsset(root, StatusMakananPath);
             Object.DestroyImmediate(root);
@@ -199,61 +200,43 @@ namespace NutriPick.Editor
 
             var presenter = root.GetComponent<FinalResultPresenter>();
             presenter.root = root;
-            presenter.titleText = CreateText("Title", root.transform, "FINAL RESULT", 48f, Color.white, TextAlignmentOptions.Center, font);
+            presenter.titleText = CreateText("Title", root.transform, "HASIL LEVEL", 48f, Color.white, TextAlignmentOptions.Center, font);
             PlaceAnchored(presenter.titleText.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 380f), new Vector2(900f, 70f));
 
-            var balanced = CreateFinalResultPanel(
-                root.transform,
-                "BalancedPanel",
-                "Pilihan yang mendukung tubuh seimbang",
-                new Vector2(-300f, -30f),
-                new Color(0.88f, 0.96f, 0.88f, 1f),
-                new Color(0.18f, 0.49f, 0.20f),
-                new Color(0.30f, 0.69f, 0.31f),
-                font,
-                out var balancedTitle,
-                out var balancedPanel,
-                out var balancedBadge,
-                out var balancedBadgeBg,
-                out var balancedPoints);
+            presenter.subtitleText = CreateText("Subtitle", root.transform, "Quest · Level", 20f, new Color(0.72f, 0.76f, 0.78f), TextAlignmentOptions.Center, font);
+            PlaceAnchored(presenter.subtitleText.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 330f), new Vector2(900f, 30f));
 
-            var lessBalanced = CreateFinalResultPanel(
-                root.transform,
-                "LessBalancedPanel",
-                "Pilihan kurang seimbang",
-                new Vector2(300f, -30f),
-                new Color(0.99f, 0.90f, 0.88f, 1f),
-                new Color(0.78f, 0.16f, 0.16f),
-                new Color(0.95f, 0.42f, 0.36f),
-                font,
-                out var lessBalancedTitle,
-                out var lessBalancedPanel,
-                out var lessBalancedBadge,
-                out var lessBalancedBadgeBg,
-                out var lessBalancedPoints);
+            var taskPanel = CreateImage("TaskPanel", root.transform, new Color(0.10f, 0.12f, 0.13f, 1f));
+            PlaceAnchored(taskPanel.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(-300f, -30f), new Vector2(520f, 500f));
+            taskPanel.raycastTarget = false;
 
-            presenter.balancedTitleText = balancedTitle;
-            presenter.balancedPanelBackground = balancedPanel;
-            presenter.balancedBadgeText = balancedBadge;
-            presenter.balancedBadgeBackground = balancedBadgeBg;
-            presenter.balancedPointTexts = balancedPoints;
-            presenter.lessBalancedTitleText = lessBalancedTitle;
-            presenter.lessBalancedPanelBackground = lessBalancedPanel;
-            presenter.lessBalancedBadgeText = lessBalancedBadge;
-            presenter.lessBalancedBadgeBackground = lessBalancedBadgeBg;
-            presenter.lessBalancedPointTexts = lessBalancedPoints;
+            presenter.taskText = CreateText("TaskText", taskPanel.transform, "TASK", 20f, new Color(0.92f, 0.92f, 0.88f), TextAlignmentOptions.TopLeft, font);
+            Stretch(presenter.taskText.rectTransform, 24f, 20f, 24f, 20f);
+            presenter.taskText.textWrappingMode = TextWrappingModes.Normal;
 
-            presenter.closingText = CreateText("Closing", root.transform, "PILIHAN KECIL, DAMPAK BESAR!", 24f, new Color(0.18f, 0.49f, 0.20f), TextAlignmentOptions.Center, font);
-            PlaceAnchored(presenter.closingText.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -300f), new Vector2(900f, 34f));
+            var nutritionPanel = CreateImage("NutritionPanel", root.transform, new Color(0.10f, 0.12f, 0.13f, 1f));
+            PlaceAnchored(nutritionPanel.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(300f, -30f), new Vector2(520f, 500f));
+            nutritionPanel.raycastTarget = false;
+
+            presenter.nutritionText = CreateText("NutritionText", nutritionPanel.transform, "GIZI PIRING", 18f, new Color(0.92f, 0.92f, 0.88f), TextAlignmentOptions.TopLeft, font);
+            Stretch(presenter.nutritionText.rectTransform, 24f, 20f, 24f, 20f);
+            presenter.nutritionText.textWrappingMode = TextWrappingModes.Normal;
+
+            presenter.warningText = CreateText("Warning", root.transform, string.Empty, 16f, new Color(0.30f, 0.69f, 0.31f), TextAlignmentOptions.Center, font);
+            PlaceAnchored(presenter.warningText.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -318f), new Vector2(1000f, 44f));
+            presenter.warningText.textWrappingMode = TextWrappingModes.Normal;
+
+            presenter.closingText = CreateText("Closing", root.transform, "PILIHAN KECIL, DAMPAK BESAR!", 22f, new Color(0.18f, 0.49f, 0.20f), TextAlignmentOptions.Center, font);
+            PlaceAnchored(presenter.closingText.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -358f), new Vector2(900f, 30f));
 
             presenter.disclaimerText = CreateText("Disclaimer", root.transform, "Game edukasi, bukan nasihat medis. Nilai gizi adalah perkiraan.", 12f, new Color(0.72f, 0.76f, 0.78f), TextAlignmentOptions.Center, font);
-            PlaceAnchored(presenter.disclaimerText.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -340f), new Vector2(900f, 24f));
+            PlaceAnchored(presenter.disclaimerText.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -390f), new Vector2(900f, 24f));
 
-            presenter.retryButton = CreateButton("RetryButton", root.transform, "ULANGI LEVEL", new Vector2(-160f, -400f), new Vector2(280f, 60f), new Color(0.30f, 0.69f, 0.31f), Color.white, font);
-            presenter.nextButton = CreateButton("NextButton", root.transform, "NEXT LEVEL", new Vector2(160f, -400f), new Vector2(280f, 60f), new Color(0.30f, 0.69f, 0.31f), Color.white, font);
+            presenter.retryButton = CreateButton("RetryButton", root.transform, "ULANGI LEVEL", new Vector2(-160f, -440f), new Vector2(280f, 60f), new Color(0.30f, 0.69f, 0.31f), Color.white, font);
+            presenter.nextButton = CreateButton("NextButton", root.transform, "NEXT LEVEL", new Vector2(160f, -440f), new Vector2(280f, 60f), new Color(0.30f, 0.69f, 0.31f), Color.white, font);
 
             presenter.inputHint = CreateText("InputHint", root.transform, "D-pad / left stick: pilih · A / Enter: konfirmasi", 16f, new Color(0.78f, 0.82f, 0.84f), TextAlignmentOptions.Center, font);
-            PlaceAnchored(presenter.inputHint.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -455f), new Vector2(900f, 24f));
+            PlaceAnchored(presenter.inputHint.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -480f), new Vector2(900f, 24f));
 
             ConfigureFocusHighlight(presenter.retryButton);
             ConfigureFocusHighlight(presenter.nextButton);
@@ -263,50 +246,6 @@ namespace NutriPick.Editor
             PrefabUtility.SaveAsPrefabAsset(root, FinalResultPath);
             Object.DestroyImmediate(root);
             return AssetDatabase.LoadAssetAtPath<GameObject>(FinalResultPath);
-        }
-
-        private static GameObject CreateFinalResultPanel(
-            Transform parent,
-            string name,
-            string titleValue,
-            Vector2 position,
-            Color background,
-            Color titleColor,
-            Color badgeColor,
-            TMP_FontAsset font,
-            out TMP_Text title,
-            out Image panelBackground,
-            out TMP_Text badge,
-            out Image badgeBackground,
-            out TMP_Text[] points)
-        {
-            var panel = new GameObject(name, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
-            var rect = panel.GetComponent<RectTransform>();
-            rect.SetParent(parent, false);
-            PlaceAnchored(rect, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), position, new Vector2(540f, 460f));
-            panelBackground = panel.GetComponent<Image>();
-            panelBackground.color = background;
-            panelBackground.raycastTarget = false;
-
-            title = CreateText("Title", panel.transform, titleValue, 24f, titleColor, TextAlignmentOptions.Left, font);
-            PlaceAnchored(title.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 160f), new Vector2(480f, 40f));
-
-            badgeBackground = CreateImage("BadgeBg", panel.transform, badgeColor);
-            PlaceAnchored(badgeBackground.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 110f), new Vector2(200f, 34f));
-            badgeBackground.raycastTarget = false;
-
-            badge = CreateText("Badge", badgeBackground.transform, "LEBIH SEHAT", 16f, Color.white, TextAlignmentOptions.Center, font);
-            Stretch(badge.rectTransform, 4f, 2f, 4f, 2f);
-
-            points = new TMP_Text[3];
-            for (int i = 0; i < points.Length; i++)
-            {
-                points[i] = CreateText("Point" + (i + 1), panel.transform, "—", 18f, new Color(0.20f, 0.20f, 0.20f), TextAlignmentOptions.Left, font);
-                PlaceAnchored(points[i].rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 50f - i * 70f), new Vector2(460f, 60f));
-                points[i].textWrappingMode = TextWrappingModes.Normal;
-            }
-
-            return panel;
         }
 
         private static void BuildStartGuidePanel(Transform parent, TMP_FontAsset font)
@@ -348,30 +287,42 @@ namespace NutriPick.Editor
                 "Rules",
                 card.transform,
                 "ATURAN\n" +
-                "1. Susun 4 makanan: 1 karbohidrat, 1 protein, 1 sayur, dan 1 tambahan.\n" +
-                "2. Setiap makanan hanya punya satu kategori.\n" +
-                "3. Jangan menyajikan makanan gorengan. Jika ada, ulangi level.\n" +
-                "4. Tekan Serve untuk menilai piring.",
+                "1. Pilih kelompok: anak, dewasa, atau lansia.\n" +
+                "2. Tiap level punya 4 task: 2 komposisi + 2 ambang gizi.\n" +
+                "3. Serve aktif hanya jika keempat task terpenuhi.\n" +
+                "4. Batas natrium, gula, dan lemak ditandai di report.\n" +
+                "5. Tekan X / Tab untuk melihat gizi lengkap makanan.",
                 18f,
                 new Color(0.92f, 0.92f, 0.88f),
                 TextAlignmentOptions.TopLeft,
                 font);
-            PlaceAnchored(rules.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(245f, 20f), new Vector2(450f, 320f));
+            PlaceAnchored(rules.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(245f, 30f), new Vector2(450f, 320f));
 
-            var start = CreateButton("StartButton", card.transform, "MULAI", new Vector2(0f, -245f), new Vector2(260f, 60f), new Color(0.30f, 0.69f, 0.31f), Color.white, font);
+            var quest = CreateText(
+                "QuestSummary",
+                card.transform,
+                "QUEST AKTIF\n—",
+                14f,
+                new Color(0.72f, 0.76f, 0.78f),
+                TextAlignmentOptions.TopLeft,
+                font);
+            PlaceAnchored(quest.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -205f), new Vector2(900f, 60f));
+
+            var start = CreateButton("StartButton", card.transform, "MULAI", new Vector2(0f, -265f), new Vector2(260f, 60f), new Color(0.30f, 0.69f, 0.31f), Color.white, font);
             ConfigureFocusHighlight(start);
 
             var presenter = panel.GetComponent<StartGuidePresenter>();
             presenter.root = panel;
             presenter.controlsText = controls;
             presenter.rulesText = rules;
+            presenter.questText = quest;
             presenter.startButton = start;
             panel.SetActive(false);
         }
 
-        private static void BuildFriedWarningPanel(Transform parent, TMP_FontAsset font)
+        private static void BuildQuestSelectPanel(Transform parent, TMP_FontAsset font)
         {
-            var panel = new GameObject("FriedWarning", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(FriedWarningPresenter));
+            var panel = new GameObject("QuestSelect", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(QuestSelectPresenter));
             var panelRect = panel.GetComponent<RectTransform>();
             panelRect.SetParent(parent, false);
             Stretch(panelRect);
@@ -379,24 +330,141 @@ namespace NutriPick.Editor
             panelImage.color = new Color(0.02f, 0.03f, 0.04f, 1f);
             panelImage.raycastTarget = true;
 
-            var card = CreateImage("Card", panel.transform, new Color(0.10f, 0.08f, 0.07f, 0.98f));
-            PlaceAnchored(card.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(760f, 380f));
+            var card = CreateImage("Card", panel.transform, new Color(0.07f, 0.09f, 0.11f, 0.98f));
+            PlaceAnchored(card.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(1140f, 660f));
 
-            var title = CreateText("Title", card.transform, "COBALAH MEMILIH MAKANAN SEHAT", 28f, new Color(1f, 0.48f, 0.38f), TextAlignmentOptions.Center, font);
-            PlaceAnchored(title.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 90f), new Vector2(700f, 60f));
+            var title = CreateText("Title", card.transform, "PILIH KELOMPOK", 42f, new Color(1f, 0.78f, 0.22f), TextAlignmentOptions.Center, font);
+            PlaceAnchored(title.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 275f), new Vector2(900f, 60f));
 
-            var list = CreateText("List", card.transform, "", 17f, new Color(0.92f, 0.92f, 0.88f), TextAlignmentOptions.Center, font);
-            PlaceAnchored(list.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 5f), new Vector2(680f, 130f));
+            var subtitle = CreateText("Subtitle", card.transform, "Quest menentukan task gizi tiap level.", 16f, new Color(0.72f, 0.76f, 0.78f), TextAlignmentOptions.Center, font);
+            PlaceAnchored(subtitle.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 235f), new Vector2(900f, 26f));
 
-            var retry = CreateButton("RetryButton", card.transform, "ULANGI LEVEL", new Vector2(0f, -120f), new Vector2(270f, 60f), new Color(0.30f, 0.69f, 0.31f), Color.white, font);
-            ConfigureFocusHighlight(retry);
-
-            var presenter = panel.GetComponent<FriedWarningPresenter>();
+            var presenter = panel.GetComponent<QuestSelectPresenter>();
             presenter.root = panel;
-            presenter.bodyText = title;
-            presenter.listText = list;
-            presenter.retryButton = retry;
+            presenter.questButtons = new Button[3];
+            presenter.questTitles = new TMP_Text[3];
+            presenter.questDetails = new TMP_Text[3];
+
+            for (int i = 0; i < 3; i++)
+            {
+                float x = (i - 1) * 360f;
+                var cardObject = new GameObject("Quest" + (i + 1), typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
+                var rect = cardObject.GetComponent<RectTransform>();
+                rect.SetParent(card.transform, false);
+                rect.anchorMin = new Vector2(0.5f, 0.5f);
+                rect.anchorMax = new Vector2(0.5f, 0.5f);
+                rect.pivot = new Vector2(0.5f, 0.5f);
+                rect.anchoredPosition = new Vector2(x, -35f);
+                rect.sizeDelta = new Vector2(330f, 440f);
+
+                var image = cardObject.GetComponent<Image>();
+                image.color = new Color(0.10f, 0.12f, 0.13f, 1f);
+
+                var button = cardObject.GetComponent<Button>();
+                button.targetGraphic = image;
+                var colors = button.colors;
+                colors.normalColor = Color.white;
+                colors.highlightedColor = new Color(1f, 0.92f, 0.70f);
+                colors.selectedColor = new Color(1f, 0.92f, 0.70f);
+                colors.pressedColor = new Color(0.85f, 0.80f, 0.65f);
+                colors.fadeDuration = 0.1f;
+                button.colors = colors;
+                ConfigureFocusHighlight(button);
+
+                var cardTitle = CreateText("Title", cardObject.transform, "KELOMPOK", 24f, new Color(1f, 0.78f, 0.22f), TextAlignmentOptions.Center, font);
+                PlaceAnchored(cardTitle.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 185f), new Vector2(300f, 40f));
+
+                var details = CreateText("Details", cardObject.transform, string.Empty, 13f, new Color(0.92f, 0.92f, 0.88f), TextAlignmentOptions.TopLeft, font);
+                PlaceAnchored(details.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -15f), new Vector2(300f, 370f));
+                details.textWrappingMode = TextWrappingModes.Normal;
+
+                presenter.questButtons[i] = button;
+                presenter.questTitles[i] = cardTitle;
+                presenter.questDetails[i] = details;
+            }
+
             panel.SetActive(false);
+        }
+
+        private static void BuildCampaignSummaryPanel(Transform parent, TMP_FontAsset font)
+        {
+            var panel = new GameObject("CampaignSummary", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(CampaignSummaryPresenter));
+            var panelRect = panel.GetComponent<RectTransform>();
+            panelRect.SetParent(parent, false);
+            Stretch(panelRect);
+            var panelImage = panel.GetComponent<Image>();
+            panelImage.color = new Color(0.06f, 0.08f, 0.09f, 0.96f);
+            panelImage.raycastTarget = true;
+
+            var card = CreateImage("Card", panel.transform, new Color(0.07f, 0.09f, 0.11f, 0.98f));
+            PlaceAnchored(card.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(1140f, 700f));
+
+            var presenter = panel.GetComponent<CampaignSummaryPresenter>();
+            presenter.root = panel;
+            presenter.titleText = CreateText("Title", card.transform, "RINGKASAN KAMPANYE", 42f, new Color(1f, 0.78f, 0.22f), TextAlignmentOptions.Center, font);
+            PlaceAnchored(presenter.titleText.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 295f), new Vector2(900f, 60f));
+
+            presenter.subtitleText = CreateText("Subtitle", card.transform, "Quest", 18f, new Color(0.72f, 0.76f, 0.78f), TextAlignmentOptions.Center, font);
+            PlaceAnchored(presenter.subtitleText.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 250f), new Vector2(900f, 28f));
+
+            var levelsPanel = CreateImage("LevelsPanel", card.transform, new Color(0.10f, 0.12f, 0.13f, 1f));
+            PlaceAnchored(levelsPanel.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(-280f, -20f), new Vector2(510f, 470f));
+            levelsPanel.raycastTarget = false;
+
+            presenter.levelsText = CreateText("LevelsText", levelsPanel.transform, "HASIL PER LEVEL", 20f, new Color(0.92f, 0.92f, 0.88f), TextAlignmentOptions.TopLeft, font);
+            Stretch(presenter.levelsText.rectTransform, 24f, 20f, 24f, 20f);
+
+            var totalsPanel = CreateImage("TotalsPanel", card.transform, new Color(0.10f, 0.12f, 0.13f, 1f));
+            PlaceAnchored(totalsPanel.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(280f, -20f), new Vector2(510f, 470f));
+            totalsPanel.raycastTarget = false;
+
+            presenter.totalsText = CreateText("TotalsText", totalsPanel.transform, "TOTAL HARIAN", 16f, new Color(0.92f, 0.92f, 0.88f), TextAlignmentOptions.TopLeft, font);
+            Stretch(presenter.totalsText.rectTransform, 24f, 20f, 24f, 20f);
+
+            presenter.warningText = CreateText("Warning", card.transform, string.Empty, 14f, new Color(0.30f, 0.69f, 0.31f), TextAlignmentOptions.Center, font);
+            PlaceAnchored(presenter.warningText.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -285f), new Vector2(1000f, 40f));
+            presenter.warningText.textWrappingMode = TextWrappingModes.Normal;
+
+            presenter.restartButton = CreateButton("RestartButton", card.transform, "MAIN LAGI", new Vector2(0f, -345f), new Vector2(280f, 60f), new Color(0.30f, 0.69f, 0.31f), Color.white, font);
+            ConfigureFocusHighlight(presenter.restartButton);
+
+            presenter.inputHint = CreateText("InputHint", card.transform, "A / Enter: main lagi", 16f, new Color(0.78f, 0.82f, 0.84f), TextAlignmentOptions.Center, font);
+            PlaceAnchored(presenter.inputHint.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -395f), new Vector2(900f, 24f));
+
+            panel.SetActive(false);
+        }
+
+        private static void AdjustInfoCard(Transform root)
+        {
+            var stats = FindDeepChild(root, "FullStats");
+            if (stats != null)
+            {
+                var rect = stats as RectTransform;
+                if (rect != null)
+                {
+                    rect.sizeDelta = new Vector2(380f, 230f);
+                    rect.anchoredPosition = new Vector2(0f, 20f);
+                }
+
+                var text = stats.GetComponent<TMP_Text>();
+                if (text != null)
+                    text.fontSize = 14f;
+            }
+
+            var description = FindDeepChild(root, "FullDescription");
+            if (description != null)
+            {
+                var rect = description as RectTransform;
+                if (rect != null)
+                {
+                    rect.sizeDelta = new Vector2(380f, 100f);
+                    rect.anchoredPosition = new Vector2(0f, -175f);
+                }
+
+                var text = description.GetComponent<TMP_Text>();
+                if (text != null)
+                    text.fontSize = 13f;
+            }
         }
 
         private static void BuildSprintIndicator(Transform parent, TMP_FontAsset font)

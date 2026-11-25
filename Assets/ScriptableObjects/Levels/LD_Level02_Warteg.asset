@@ -20,12 +20,12 @@ MonoBehaviour:
   settingDescription: Makan siang di Warteg Tegal Sari
   foodPool:
   - {fileID: 11400000, guid: 357913ed32c4a134ea49e0ed16815ffb, type: 2}
-  - {fileID: 11400000, guid: f0b5a3980fba9ce439ac8eea306afc50, type: 2}
   - {fileID: 11400000, guid: c8a0304d4ab792a4e9dd67f109ac4429, type: 2}
-  - {fileID: 11400000, guid: ea91edb44b057d0408c7ee80ac71d97e, type: 2}
   - {fileID: 11400000, guid: 6db1d7fc5c135a14eba4c643e22f0b8f, type: 2}
   - {fileID: 11400000, guid: aa184732c302f99408bb00fded512297, type: 2}
-  - {fileID: 11400000, guid: b26e4c0a5e6f2a544aed9ff3a49fa3f0, type: 2}
+  - {fileID: 11400000, guid: f7e734dbd1d14394c8307b2572917df9, type: 2}
+  - {fileID: 11400000, guid: a455b5ab9ca969044b63d7f23c19450b, type: 2}
+  - {fileID: 11400000, guid: e694647bae784f14e936fea43bb999f5, type: 2}
   minItems: 4
   requiresDrink: 0
   minimumStands: 1

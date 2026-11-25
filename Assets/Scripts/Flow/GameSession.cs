@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using NutriPick.Nutrition;
+using NutriPick.Quests;
 
 namespace NutriPick.Flow
 {
@@ -10,9 +11,8 @@ namespace NutriPick.Flow
         public string levelId;
         public int levelIndex;
         public string displayName;
-        public int score;
-        public ScoreBand band;
-        public MealResult result;
+        public QuestEvaluation evaluation;
+        public NutritionTotals totals;
         public int attemptCount;
     }
 
@@ -24,12 +24,19 @@ namespace NutriPick.Flow
         public int currentLevelIndex;
         public LevelResult[] results = new LevelResult[3];
         public bool introSeen;
+        public QuestDefinition quest;
 
         public bool HasSeenIntro => introSeen;
+        public bool HasQuest => quest != null;
 
         public void MarkIntroSeen()
         {
             introSeen = true;
+        }
+
+        public void SelectQuest(QuestDefinition value)
+        {
+            quest = value;
         }
 
         private void Awake()
@@ -71,9 +78,9 @@ namespace NutriPick.Flow
             sessionActive = true;
         }
 
-        public void RecordResult(int levelIndex, MealResult result)
+        public void RecordResult(int levelIndex, QuestEvaluation evaluation)
         {
-            if (levelIndex < 1 || levelIndex > 3)
+            if (levelIndex < 1 || levelIndex > 3 || evaluation == null)
                 return;
 
             var previous = results[levelIndex - 1];
@@ -82,9 +89,8 @@ namespace NutriPick.Flow
                 levelId = "level_" + levelIndex,
                 levelIndex = levelIndex,
                 displayName = "Level " + levelIndex,
-                score = result.score,
-                band = result.band,
-                result = result,
+                evaluation = evaluation,
+                totals = evaluation.totals,
                 attemptCount = (previous != null ? previous.attemptCount : 0) + 1
             };
         }
@@ -101,27 +107,25 @@ namespace NutriPick.Flow
             return GetResult(levelIndex) != null;
         }
 
+        public NutritionTotals TotalNutrition()
+        {
+            var totals = new NutritionTotals();
+            foreach (var result in results)
+            {
+                if (result != null && result.totals != null)
+                    totals.Add(result.totals);
+            }
+
+            return totals;
+        }
+
         public void ResetSession()
         {
             sessionActive = false;
             currentLevelIndex = 0;
             results = new LevelResult[3];
             introSeen = false;
-        }
-
-        public float AverageScore()
-        {
-            int count = 0;
-            int total = 0;
-            foreach (var result in results)
-            {
-                if (result == null)
-                    continue;
-                count++;
-                total += result.score;
-            }
-
-            return count == 0 ? 0f : total / (float)count;
+            quest = null;
         }
     }
 }

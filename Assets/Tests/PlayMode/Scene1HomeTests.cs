@@ -34,7 +34,7 @@ namespace NutriPick.Tests
 
             var foods = Object.FindObjectsByType<FoodItem>(FindObjectsSortMode.None);
             Assert.AreEqual(8, foods.Select(food => food.data != null ? food.data.id : null).Distinct().Count(), "Scene 1 should have 8 food types.");
-            Assert.AreEqual(13, foods.Length, "Scene 1 should have 13 interactive food items (3 tempe + 2 ayam + 3 brokoli).");
+            Assert.AreEqual(8, foods.Length, "Scene 1 should have one interactive item on each of the eight food plates.");
             foreach (var food in foods)
             {
                 Assert.IsNotNull(food.data, $"Food {food.name} is missing FoodData.");
@@ -66,7 +66,8 @@ namespace NutriPick.Tests
             var flow = Object.FindFirstObjectByType<LevelFlowController>();
             Assert.IsNotNull(flow, "LevelFlowController missing.");
             Assert.AreEqual(8, flow.stands.Length, "Flow should know all eight food plates.");
-            Assert.IsTrue(flow.IsLevelStarted, "Scene 1 should start immediately.");
+            TestQuestUtility.StartLevel(flow);
+            Assert.IsTrue(flow.IsLevelStarted, "Scene 1 should start after a quest is chosen.");
 
             var grids = Object.FindObjectsByType<FoodCardGridPresenter>(FindObjectsInactive.Include, FindObjectsSortMode.None);
             Assert.AreEqual(1, grids.Length, "Expected exactly one food card grid.");

@@ -33,7 +33,7 @@ namespace NutriPick.Tests
 
             var foods = Object.FindObjectsByType<FoodItem>(FindObjectsSortMode.None);
             Assert.AreEqual(8, foods.Select(food => food.data != null ? food.data.id : null).Distinct().Count(), "MainVR should have 8 food types.");
-            Assert.AreEqual(13, foods.Length, "MainVR should have 13 interactive food items (3 tempe + 2 ayam + 3 brokoli).");
+            Assert.AreEqual(8, foods.Length, "MainVR should have one interactive item on each of the eight food plates.");
             yield return new WaitForSeconds(0.5f);
             foreach (var food in foods)
                 Assert.Greater(food.transform.position.y, 0.75f, $"Food {food.name} fell through the food plate.");
@@ -45,7 +45,6 @@ namespace NutriPick.Tests
             var flow = Object.FindFirstObjectByType<LevelFlowController>();
             Assert.IsNotNull(flow, "LevelFlowController missing.");
             Assert.IsNotNull(flow.infoCard, "Info card missing.");
-            Assert.IsNotNull(flow.report, "Report missing.");
             Assert.IsNotNull(flow.player, "Player missing.");
             Assert.IsNotNull(flow.reticle, "Reticle missing.");
             Assert.AreEqual(1, GameSession.Instance.currentLevelIndex);
@@ -69,7 +68,7 @@ namespace NutriPick.Tests
             yield return null;
 
             Assert.GreaterOrEqual(foods.Length, 4, "Not enough interactive food.");
-            var picks = new[] { "burger", "rendang", "brokoli", "pisang" }
+            var picks = new[] { "tahu", "telur_rebus", "pisang", "brokoli" }
                 .Select(id => foods.First(food => food.data != null && food.data.id == id))
                 .ToArray();
             for (int i = 0; i < picks.Length; i++)
@@ -82,8 +81,7 @@ namespace NutriPick.Tests
 
             Assert.IsTrue(flow.IsReportOpen, "Report did not open.");
             Assert.IsNotNull(GameSession.Instance.GetResult(1), "Level 1 result was not recorded.");
-            var resultRoot = flow.finalResult != null ? flow.finalResult.root : flow.report.root;
-            Assert.IsTrue(resultRoot.activeSelf, "Result panel is not active.");
+            Assert.IsTrue(flow.finalResult.root.activeSelf, "Result panel is not active.");
         }
 
         [UnityTest]

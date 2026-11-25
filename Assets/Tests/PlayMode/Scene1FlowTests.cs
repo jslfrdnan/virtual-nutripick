@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 using NutriPick.Flow;
 using NutriPick.Interaction;
-using NutriPick.UI;
 
 namespace NutriPick.Tests
 {
@@ -16,7 +15,7 @@ namespace NutriPick.Tests
         public void SetUp()
         {
             if (GameSession.Instance != null)
-                {
+            {
                 GameSession.Instance.ResetSession();
                 GameSession.Instance.MarkIntroSeen();
                 GameSession.Instance.sessionActive = true;
@@ -24,7 +23,7 @@ namespace NutriPick.Tests
         }
 
         [UnityTest]
-        public IEnumerator MainVRHasEightFoodsAndStartsImmediately()
+        public IEnumerator MainVRHasEightFoodsAndWaitsForQuestChoice()
         {
             SceneManager.LoadScene("MainVR");
             yield return null;
@@ -32,15 +31,23 @@ namespace NutriPick.Tests
 
             var foods = Object.FindObjectsByType<FoodItem>(FindObjectsSortMode.None);
             Assert.AreEqual(8, foods.Select(food => food.data != null ? food.data.id : null).Distinct().Count(), "MainVR should have 8 food types.");
-            Assert.AreEqual(13, foods.Length, "MainVR should have 13 interactive food items (3 tempe + 2 ayam + 3 brokoli).");
+            Assert.AreEqual(8, foods.Length, "MainVR should have one plate per food type.");
 
             var startScreen = GameObject.Find("StartScreen");
             Assert.IsNull(startScreen, "Start screen should not exist in Scene 1.");
 
             var flow = Object.FindFirstObjectByType<LevelFlowController>();
             Assert.IsNotNull(flow, "LevelFlowController missing.");
-            Assert.IsTrue(flow.IsLevelStarted, "Scene 1 should start immediately.");
+            Assert.IsFalse(flow.IsLevelStarted, "Scene 1 should wait for a quest choice.");
+            Assert.IsTrue(flow.questSelect.IsOpen, "Quest select should be open.");
             Assert.IsFalse(flow.IsReportOpen, "Report should be closed at scene start.");
+
+            flow.questSelect.questButtons[0].onClick.Invoke();
+            yield return null;
+
+            Assert.IsTrue(flow.IsLevelStarted, "Choosing a quest should start the level.");
+            Assert.IsFalse(flow.questSelect.IsOpen, "Quest select should close after choosing.");
+            Assert.IsTrue(GameSession.Instance.HasQuest, "The chosen quest should be stored.");
         }
 
         [UnityTest]
@@ -55,10 +62,10 @@ namespace NutriPick.Tests
             var flow = Object.FindFirstObjectByType<LevelFlowController>();
             Assert.IsNotNull(plate, "PlateController missing.");
             Assert.IsNotNull(flow, "LevelFlowController missing.");
-            Assert.IsNotNull(flow.report, "HealthReportPresenter missing.");
+            TestQuestUtility.StartLevel(flow);
             Assert.GreaterOrEqual(foods.Length, 4, "Not enough food for the test.");
 
-            var picks = new[] { "burger", "rendang", "brokoli", "pisang" }
+            var picks = new[] { "tahu", "telur_rebus", "pisang", "brokoli" }
                 .Select(id => foods.First(food => food.data != null && food.data.id == id))
                 .ToArray();
             for (int i = 0; i < picks.Length; i++)
@@ -70,8 +77,7 @@ namespace NutriPick.Tests
 
             Assert.IsTrue(plate.IsLocked, "Plate should lock after serving.");
             Assert.IsTrue(flow.IsReportOpen, "Report should open after serving.");
-            var resultRoot = flow.finalResult != null ? flow.finalResult.root : flow.report.root;
-            Assert.IsTrue(resultRoot.activeSelf, "Result root should be visible.");
+            Assert.IsTrue(flow.finalResult.root.activeSelf, "Result root should be visible.");
         }
     }
 }

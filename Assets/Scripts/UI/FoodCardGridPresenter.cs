@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using NutriPick.Nutrition;
 
 namespace NutriPick.UI
@@ -35,6 +36,23 @@ namespace NutriPick.UI
                 card.Bind(FoodCardModel.From(food, rules), placeholderSprite);
                 cards.Add(card);
             }
+
+            ResizeToContent();
+        }
+
+        private void ResizeToContent()
+        {
+            var root = transform as RectTransform;
+            var layout = cardContainer != null ? cardContainer.GetComponent<GridLayoutGroup>() : null;
+            if (root == null || layout == null || cards.Count == 0)
+                return;
+
+            int columns = Mathf.Max(1, layout.constraintCount);
+            int rows = Mathf.CeilToInt(cards.Count / (float)columns);
+            var padding = layout.padding;
+            float height = padding.top + padding.bottom + rows * layout.cellSize.y +
+                Mathf.Max(0, rows - 1) * layout.spacing.y;
+            root.sizeDelta = new Vector2(root.sizeDelta.x, height);
         }
 
         public void Highlight(string foodId)

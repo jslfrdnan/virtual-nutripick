@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d4b5ab6cca88af4cbf0a87068b95529, type: 3}
+  m_Name: FD_jeruk
+  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.Nutrition.FoodData
+  id: jeruk
+  displayName: Jeruk
+  description: Buah segar sumber vitamin C dan serat. Baik untuk daya tahan tubuh.
+  composition: 8
+  processing: 0
+  isFried: 0
+  isDrink: 0
+  healthyOverride: 0
+  calories: 62
+  protein: 1.2
+  carbs: 15
+  fat: 0.2
+  fiber: 3.1
+  addedSugar: 12
+  sodium: 0
+  vitaminA: 15
+  vitaminC: 70
+  vitaminD: 0
+  calcium: 60
+  iron: 0.1
+  portionLabel: 1 buah
+  proteinType: 0
+  hasProteinType: 0
+  icon: {fileID: 21300000, guid: af0f5ce13fbf0e74a86361ce7fbb475b, type: 3}
+  prefab: {fileID: 7325079356409063183, guid: 38591bedea9952b428c3ac4ccd2c0fec, type: 3}

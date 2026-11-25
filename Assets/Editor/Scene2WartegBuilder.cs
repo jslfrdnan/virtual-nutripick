@@ -43,7 +43,7 @@ namespace NutriPick.Editor
 
         private static readonly string[] FoodIds =
         {
-            "nasi_putih", "rendang", "ayam_goreng", "telur_ceplok", "tempe", "sayur_singkong", "kerupuk"
+            "nasi_putih", "ayam_goreng", "tempe", "sayur_singkong", "ikan_cakalang", "bayam", "tahu"
         };
 
         private class MatSpec
@@ -320,7 +320,9 @@ namespace NutriPick.Editor
             flow.mealStatus = hud.GetComponentInChildren<MealStatusBarPresenter>(true);
             flow.prompt = hud.GetComponentInChildren<InteractionPrompt>(true);
             flow.infoCard = hud.GetComponentInChildren<FoodInfoCardPresenter>(true);
-            flow.report = hud.GetComponentInChildren<HealthReportPresenter>(true);
+            flow.questSelect = hud.GetComponentInChildren<QuestSelectPresenter>(true);
+            flow.campaignSummary = hud.GetComponentInChildren<CampaignSummaryPresenter>(true);
+            flow.questOptions = QuestDataBuilder.LoadQuests();
             flow.finalResult = hud.GetComponentInChildren<FinalResultPresenter>(true);
             flow.pausePanel = FindDeepChild(hud.transform, "PausePanel")?.gameObject;
             flow.pauseMessage = FindDeepChild(hud.transform, "PauseMessage")?.GetComponent<TMP_Text>();

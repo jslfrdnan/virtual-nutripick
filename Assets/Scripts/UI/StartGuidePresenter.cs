@@ -12,10 +12,17 @@ namespace NutriPick.UI
         public Button startButton;
         public TMP_Text controlsText;
         public TMP_Text rulesText;
+        public TMP_Text questText;
 
         private Action onClosed;
 
         public bool IsOpen => root != null && root.activeSelf;
+
+        public void SetQuestSummary(string text)
+        {
+            if (questText != null)
+                questText.text = text;
+        }
 
         public void Show(Action onClose)
         {

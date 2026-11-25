@@ -68,7 +68,7 @@ namespace NutriPick.Tests
         }
 
         [Test]
-        public void PoolMustHaveSixToEightFoods()
+        public void PoolMustHaveAtLeastSixFoods()
         {
             var level = Level(
                 Food("a", FoodCompositionCategory.Vegetable),

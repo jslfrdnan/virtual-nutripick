@@ -1,6 +1,7 @@
+using System.Text;
 using TMPro;
 using UnityEngine;
-using NutriPick.Nutrition;
+using NutriPick.Quests;
 
 namespace NutriPick.UI
 {
@@ -9,82 +10,61 @@ namespace NutriPick.UI
         public TMP_Text statusLabel;
         public TMP_Text countsLabel;
         public Color neutralColor = new Color(0.62f, 0.62f, 0.62f);
-        public Color balancedColor = new Color(0.18f, 0.49f, 0.20f);
-        public Color warningColor = new Color(0.78f, 0.16f, 0.16f);
+        public Color doneColor = new Color(0.18f, 0.49f, 0.20f);
 
-        public void SetNeutral()
+        public void SetNeutral(QuestDefinition quest, int levelIndex)
         {
             if (statusLabel != null)
             {
-                statusLabel.text = "BELUM DINILAI";
+                statusLabel.text = Header(quest, levelIndex);
                 statusLabel.color = neutralColor;
             }
-            SetRequirements(MealRequirementState.Empty);
-        }
 
-        public void SetPreview(MealResult result)
-        {
-            Apply(result);
-        }
-
-        public void SetFinal(MealResult result)
-        {
-            Apply(result);
-        }
-
-        private void Apply(MealResult result)
-        {
-            if (result == null)
+            if (countsLabel != null)
             {
-                SetNeutral();
-                return;
+                countsLabel.text = quest != null
+                    ? "PROTEIN [ ]  BUAH/SAYUR [ ]  GIZI [ ]  GIZI [ ]"
+                    : "PILIH MAKANAN";
+                countsLabel.color = neutralColor;
             }
+        }
 
-            var color = ColorFor(result.band);
+        public void SetEvaluation(QuestEvaluation evaluation)
+        {
+            if (evaluation == null)
+                return;
+
+            bool allPassed = evaluation.AllPassed;
             if (statusLabel != null)
             {
-                statusLabel.text = LabelFor(result.band);
-                statusLabel.color = color;
+                statusLabel.text = Header(evaluation.quest, evaluation.levelIndex);
+                statusLabel.color = allPassed ? doneColor : neutralColor;
             }
-        }
 
-        public void SetRequirements(MealRequirementState requirement)
-        {
             if (countsLabel == null)
                 return;
 
-            countsLabel.text =
-                $"KARBO {Mark(requirement.carbohydrate)}  " +
-                $"PROTEIN {Mark(requirement.protein)}  " +
-                $"SAYUR {Mark(requirement.vegetable)}  " +
-                $"TAMBAHAN {Mark(requirement.extra)}";
-        }
-
-        private static string Mark(bool value)
-        {
-            return value ? "[x]" : "[ ]";
-        }
-
-        private static string LabelFor(ScoreBand band)
-        {
-            return band switch
+            var builder = new StringBuilder();
+            foreach (var task in evaluation.tasks)
             {
-                ScoreBand.Balanced => "SEIMBANG",
-                ScoreBand.Adequate => "CUKUP",
-                ScoreBand.NeedsImprovement => "PERLU PERBAIKAN",
-                _ => "BELUM DINILAI"
-            };
+                if (builder.Length > 0)
+                    builder.Append("  ");
+                builder.Append(task.ProgressLabel());
+            }
+
+            countsLabel.text = builder.ToString();
+            countsLabel.color = allPassed ? doneColor : neutralColor;
         }
 
-        private Color ColorFor(ScoreBand band)
+        private static string Header(QuestDefinition quest, int levelIndex)
         {
-            return band switch
-            {
-                ScoreBand.Balanced => balancedColor,
-                ScoreBand.Adequate => new Color(0.98f, 0.66f, 0.15f),
-                ScoreBand.NeedsImprovement => warningColor,
-                _ => neutralColor
-            };
+            if (quest == null)
+                return "QUEST";
+
+            string level = quest.levels != null && levelIndex >= 1 && levelIndex <= quest.levels.Length
+                ? quest.levels[levelIndex - 1].label
+                : "LEVEL " + levelIndex;
+            return quest.displayName.ToUpperInvariant() + " · " + level.ToUpperInvariant();
         }
     }
 }

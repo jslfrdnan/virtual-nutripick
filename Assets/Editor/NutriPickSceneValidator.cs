@@ -51,7 +51,9 @@ namespace NutriPick.Editor
                 if (flow.reticle == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing ReticleInteractor"); }
                 if (flow.prompt == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing InteractionPrompt"); }
                 if (flow.infoCard == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing FoodInfoCardPresenter"); }
-                if (flow.report == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing HealthReportPresenter"); }
+                if (flow.questSelect == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing QuestSelectPresenter"); }
+                if (flow.campaignSummary == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing CampaignSummaryPresenter"); }
+                if (flow.questOptions == null || flow.questOptions.Length < 3) { errors++; Debug.LogError($"[NutriPick] {path}: expected 3 quest options"); }
                 if (flow.pausePanel == null) { errors++; Debug.LogError($"[NutriPick] {path}: missing PausePanel"); }
 
                 var mainCamera = Camera.main;

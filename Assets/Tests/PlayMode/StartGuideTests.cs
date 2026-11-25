@@ -38,8 +38,15 @@ namespace NutriPick.Tests
             yield return null;
 
             Assert.IsFalse(flow.startGuide.IsOpen, "The guide should close after MULAI.");
-            Assert.IsTrue(flow.IsLevelStarted, "Gameplay should start after MULAI.");
+            Assert.IsFalse(flow.IsLevelStarted, "The level should wait for a quest choice.");
+            Assert.IsTrue(flow.questSelect.IsOpen, "Quest select should open after the guide.");
             Assert.IsTrue(GameSession.Instance.HasSeenIntro, "The intro should be marked as seen.");
+
+            flow.questSelect.questButtons[0].onClick.Invoke();
+            yield return null;
+
+            Assert.IsTrue(flow.IsLevelStarted, "Gameplay should start after choosing a quest.");
+            Assert.IsTrue(GameSession.Instance.HasQuest, "The chosen quest should be stored.");
 
             SceneManager.LoadScene("Level02_Warteg");
             yield return null;

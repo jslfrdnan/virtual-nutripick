@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using NutriPick.Nutrition;
+using NutriPick.Quests;
 using NutriPick.Utilities;
 
 namespace NutriPick.UI
@@ -49,17 +50,34 @@ namespace NutriPick.UI
             if (fullName != null) fullName.text = food.displayName;
             if (fullPortion != null)
             {
-                fullPortion.text = string.Empty;
-                fullPortion.gameObject.SetActive(false);
+                fullPortion.text = food.portionLabel;
+                fullPortion.gameObject.SetActive(!string.IsNullOrWhiteSpace(food.portionLabel));
             }
             if (fullBadge != null) fullBadge.text = Label(food);
             if (fullBadgeBackground != null) fullBadgeBackground.color = BadgeColor(food);
             if (fullStats != null)
             {
-                fullStats.text = string.Empty;
-                fullStats.gameObject.SetActive(false);
+                fullStats.text = Stats(food);
+                fullStats.gameObject.SetActive(true);
             }
             if (fullDescription != null) fullDescription.text = food.description;
+        }
+
+        private static string Stats(FoodData food)
+        {
+            return
+                "ENERGI: " + QuestEvaluator.FormatValue(NutrientType.Calories, food.calories) + "\n" +
+                "PROTEIN: " + QuestEvaluator.FormatValue(NutrientType.Protein, food.protein) + "\n" +
+                "KARBO: " + QuestEvaluator.FormatValue(NutrientType.Carbohydrate, food.carbs) + "\n" +
+                "LEMAK: " + QuestEvaluator.FormatValue(NutrientType.Fat, food.fat) + "\n" +
+                "SERAT: " + QuestEvaluator.FormatValue(NutrientType.Fiber, food.fiber) + "\n" +
+                "GULA: " + QuestEvaluator.FormatValue(NutrientType.AddedSugar, food.addedSugar) + "\n" +
+                "NATRIUM: " + QuestEvaluator.FormatValue(NutrientType.Sodium, food.sodium) + "\n" +
+                "VIT A: " + QuestEvaluator.FormatValue(NutrientType.VitaminA, food.vitaminA) + "\n" +
+                "VIT C: " + QuestEvaluator.FormatValue(NutrientType.VitaminC, food.vitaminC) + "\n" +
+                "VIT D: " + QuestEvaluator.FormatValue(NutrientType.VitaminD, food.vitaminD) + "\n" +
+                "KALSIUM: " + QuestEvaluator.FormatValue(NutrientType.Calcium, food.calcium) + "\n" +
+                "BESI: " + QuestEvaluator.FormatValue(NutrientType.Iron, food.iron);
         }
 
         public void Hide()

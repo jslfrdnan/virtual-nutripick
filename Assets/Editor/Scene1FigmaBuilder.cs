@@ -137,7 +137,9 @@ namespace NutriPick.Editor
             flow.mealStatus = newHud.GetComponentInChildren<MealStatusBarPresenter>(true);
             flow.prompt = newHud.GetComponentInChildren<InteractionPrompt>(true);
             flow.infoCard = newHud.GetComponentInChildren<FoodInfoCardPresenter>(true);
-            flow.report = newHud.GetComponentInChildren<HealthReportPresenter>(true);
+            flow.questSelect = newHud.GetComponentInChildren<QuestSelectPresenter>(true);
+            flow.campaignSummary = newHud.GetComponentInChildren<CampaignSummaryPresenter>(true);
+            flow.questOptions = QuestDataBuilder.LoadQuests();
             flow.finalResult = newHud.GetComponentInChildren<FinalResultPresenter>(true);
             flow.pausePanel = FindDeepChild(newHud.transform, "PausePanel")?.gameObject;
             flow.pauseMessage = FindDeepChild(newHud.transform, "PauseMessage")?.GetComponent<TMPro.TMP_Text>();

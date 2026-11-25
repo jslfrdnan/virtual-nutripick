@@ -40,8 +40,8 @@ namespace NutriPick.Tests
 
             var foodItems = Object.FindObjectsByType<FoodItem>(FindObjectsSortMode.None);
             Assert.AreEqual(120, foodItems.Length, "Level 3 should hold 120 interactive foods.");
-            Assert.AreEqual(6, foodItems.Select(food => food.data).Distinct().Count(),
-                "All six unique foods should still be available across the stalls.");
+            Assert.AreEqual(18, foodItems.Select(food => food.data).Distinct().Count(),
+                "All eighteen unique foods should be available across the stalls.");
             Assert.AreEqual(0, Object.FindObjectsByType<DecorStall>(FindObjectsSortMode.None).Length,
                 "Level 3 should not have closed decorative stalls anymore.");
 
@@ -64,8 +64,9 @@ namespace NutriPick.Tests
 
             var flow = Object.FindFirstObjectByType<LevelFlowController>();
             Assert.IsNotNull(flow, "LevelFlowController missing.");
+            TestQuestUtility.StartLevel(flow);
             Assert.AreEqual(3, flow.level.levelIndex);
-            Assert.IsTrue(flow.IsLevelStarted, "Level 3 should start immediately.");
+            Assert.IsTrue(flow.IsLevelStarted, "Level 3 should start after a quest is chosen.");
             Assert.IsFalse(flow.level.requiresDrink, "Level 3 should not require a drink.");
             Assert.AreEqual(30, flow.stands.Length, "Flow should know all thirty open stalls.");
             Assert.Less(flow.serveStation.transform.position.x, 2f, "Serving must happen outside the school campus.");
@@ -102,8 +103,9 @@ namespace NutriPick.Tests
             var foods = Object.FindObjectsByType<FoodItem>(FindObjectsSortMode.None);
             Assert.IsNotNull(plate, "Serving plate missing.");
             Assert.IsNotNull(flow, "LevelFlowController missing.");
+            TestQuestUtility.StartLevel(flow);
 
-            var picks = new[] { "brokoli", "pisang", "ayam_goreng", "burger" }
+            var picks = new[] { "tahu", "brokoli", "jeruk", "pisang" }
                 .Select(id => foods.First(food => food.data != null && food.data.id == id))
                 .ToArray();
 
@@ -113,7 +115,7 @@ namespace NutriPick.Tests
             yield return null;
             Assert.IsTrue(plate.CanServe(out string reason), reason);
             Assert.AreEqual("A: Sajikan", flow.GetServeReason(),
-                "A mixed healthy + junk plate should be serveable.");
+                "A plate that meets the dinner tasks should be serveable.");
         }
 
         [UnityTest]
@@ -131,6 +133,7 @@ namespace NutriPick.Tests
             Assert.IsNotNull(carrier, "HeldFoodCarrier missing.");
             Assert.IsNotNull(plate, "Serving plate missing.");
             Assert.IsNotNull(flow.mealStatus, "Meal status HUD missing.");
+            TestQuestUtility.StartLevel(flow);
 
             var brokoli = foods.First(food => food.data != null && food.data.id == "brokoli");
             var ayam = foods.First(food => food.data != null && food.data.id == "ayam_goreng");
@@ -218,7 +221,7 @@ namespace NutriPick.Tests
             flow.StartLevel();
             yield return null;
 
-            var picks = new[] { "burger", "telur_rebus", "brokoli", "pisang" }
+            var picks = new[] { "tahu", "brokoli", "jeruk", "pisang" }
                 .Select(id => foods.First(food => food.data.id == id))
                 .ToArray();
 

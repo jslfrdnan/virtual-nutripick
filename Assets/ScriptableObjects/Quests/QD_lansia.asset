@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f09ff4ff74c558945b67fb2f99a1ae4d, type: 3}
+  m_Name: QD_lansia
+  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.Quests.QuestDefinition
+  id: lansia
+  displayName: Lansia
+  ageRange: 60-69 tahun
+  description: 'Menjaga kekuatan tulang dan otot: protein, kalsium, vitamin D, serat.'
+  group: 2
+  dailyAkg:
+    calories: 1700
+    protein: 60
+    carbohydrate: 275
+    fat: 50
+    fiber: 25
+    addedSugar: 25
+    sodium: 1200
+    vitaminA: 600
+    vitaminC: 75
+    vitaminD: 20
+    calcium: 1000
+    iron: 9
+  levels:
+  - label: Sarapan
+    requiredA: 2
+    requiredB: 8
+    targetA:
+      nutrient: 1
+      minimum: 20
+    targetB:
+      nutrient: 10
+      minimum: 350
+  - label: Makan siang
+    requiredA: 2
+    requiredB: 1
+    targetA:
+      nutrient: 9
+      minimum: 7
+    targetB:
+      nutrient: 4
+      minimum: 8
+  - label: Makan malam
+    requiredA: 2
+    requiredB: 1
+    targetA:
+      nutrient: 1
+      minimum: 20
+    targetB:
+      nutrient: 10
+      minimum: 350

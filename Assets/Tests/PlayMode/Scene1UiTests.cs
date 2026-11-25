@@ -30,15 +30,17 @@ namespace NutriPick.Tests
             yield return null;
             yield return null;
 
+            var flow = Object.FindFirstObjectByType<LevelFlowController>();
+            TestQuestUtility.StartLevel(flow);
             var grid = Object.FindFirstObjectByType<FoodCardGridPresenter>();
             Assert.IsNotNull(grid, "FoodCardGridPresenter missing.");
             Assert.AreEqual(8, grid.CardCount, "Food card grid should contain 8 cards.");
 
             var first = grid.Cards[0];
             Assert.IsNotNull(first, "First food card missing.");
-            Assert.AreEqual("rendang", first.FoodId);
-            Assert.AreEqual("Rendang", first.nameText.text);
-            Assert.AreEqual("PROTEIN", first.categoryText.text);
+            Assert.AreEqual("nasi_putih", first.FoodId);
+            Assert.AreEqual("Nasi putih", first.nameText.text);
+            Assert.AreEqual("KARBOHIDRAT", first.categoryText.text);
             Assert.IsNull(first.transform.Find("Calories"), "Nutrition rows must be removed from the card.");
         }
 
@@ -49,33 +51,35 @@ namespace NutriPick.Tests
             yield return null;
             yield return null;
 
+            var plate = Object.FindFirstObjectByType<PlateController>();
+            var flow = Object.FindFirstObjectByType<LevelFlowController>();
+            var foods = Object.FindObjectsByType<FoodItem>(FindObjectsSortMode.None);
+            Assert.IsNotNull(plate, "PlateController missing.");
+            Assert.GreaterOrEqual(foods.Length, 4, "Not enough food.");
+            TestQuestUtility.StartLevel(flow);
+
             var grid = Object.FindFirstObjectByType<FoodCardGridPresenter>();
             var status = Object.FindFirstObjectByType<MealStatusBarPresenter>();
-            var plate = Object.FindFirstObjectByType<PlateController>();
-            var foods = Object.FindObjectsByType<FoodItem>(FindObjectsSortMode.None);
             Assert.IsNotNull(grid, "FoodCardGridPresenter missing.");
             Assert.IsNotNull(status, "MealStatusBarPresenter missing.");
-            Assert.IsNotNull(plate, "PlateController missing.");
-            Assert.GreaterOrEqual(foods.Length, 3, "Not enough food.");
 
-            grid.Focus("tempe");
-            var tempeCard = FindCard(grid, "tempe");
-            Assert.IsNotNull(tempeCard, "Tempe card missing.");
-            Assert.IsTrue(tempeCard.focusOutline.activeSelf, "Focused card outline should be active.");
+            grid.Focus("tahu");
+            var tahuCard = FindCard(grid, "tahu");
+            Assert.IsNotNull(tahuCard, "Tahu card missing.");
+            Assert.IsTrue(tahuCard.focusOutline.activeSelf, "Focused card outline should be active.");
 
-            Assert.AreEqual("BELUM DINILAI", status.statusLabel.text);
-            var picks = new[] { "burger", "rendang", "brokoli", "pisang" }
+            StringAssert.Contains("ANAK-ANAK", status.statusLabel.text);
+            StringAssert.Contains("SARAPAN", status.statusLabel.text);
+            var picks = new[] { "tahu", "telur_rebus", "pisang", "brokoli" }
                 .Select(id => foods.First(food => food.data != null && food.data.id == id))
                 .ToArray();
             for (int i = 0; i < picks.Length; i++)
                 Assert.IsTrue(plate.slots[i].TryPlace(picks[i]), "Could not place " + picks[i].data.id);
 
             yield return null;
-            Assert.AreNotEqual("BELUM DINILAI", status.statusLabel.text);
-            StringAssert.Contains("KARBO [x]", status.countsLabel.text);
             StringAssert.Contains("PROTEIN [x]", status.countsLabel.text);
-            StringAssert.Contains("SAYUR [x]", status.countsLabel.text);
-            StringAssert.Contains("TAMBAHAN [x]", status.countsLabel.text);
+            StringAssert.Contains("BUAH [x]", status.countsLabel.text);
+            StringAssert.Contains("KALSIUM", status.countsLabel.text);
         }
 
         private static FoodCardView FindCard(FoodCardGridPresenter grid, string foodId)

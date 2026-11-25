@@ -36,14 +36,14 @@ namespace NutriPick.Editor
 
         private static readonly Dictionary<string, string> FoodFbx = new()
         {
-            { "rendang", "Assets/Models/Food/Home/Food_rendang.fbx" },
-            { "burger", "Assets/Models/Food/Home/Food_burger.fbx" },
+            { "nasi_putih", "Assets/Models/Food/Home/Food_nasi_putih.fbx" },
             { "telur_rebus", "Assets/Models/Food/Home/Food_telur_rebus.fbx" },
-            { "telur_ceplok", "Assets/Models/Food/Home/Food_telur_ceplok.fbx" },
-            { "tempe", "Assets/Models/Food/Home/Food_tempe.fbx" },
             { "brokoli", "Assets/Models/Food/Home/Food_brokoli.fbx" },
             { "pisang", "Assets/Models/Food/Home/Food_pisang.fbx" },
-            { "mie_goreng", "Assets/Models/Food/Home/Food_mie_goreng.fbx" },
+            { "ubi_jalar", "Assets/Models/Food/Home/Food_ubi_jalar.fbx" },
+            { "tahu", "Assets/Models/Food/Home/Food_tahu.fbx" },
+            { "wortel", "Assets/Models/Food/Home/Food_wortel.fbx" },
+            { "jeruk", "Assets/Models/Food/Home/Food_jeruk.fbx" },
         };
 
         private class MatSpec
@@ -486,7 +486,9 @@ namespace NutriPick.Editor
             flow.mealStatus = hud.GetComponentInChildren<MealStatusBarPresenter>(true);
             flow.prompt = hud.GetComponentInChildren<InteractionPrompt>(true);
             flow.infoCard = hud.GetComponentInChildren<FoodInfoCardPresenter>(true);
-            flow.report = hud.GetComponentInChildren<HealthReportPresenter>(true);
+            flow.questSelect = hud.GetComponentInChildren<QuestSelectPresenter>(true);
+            flow.campaignSummary = hud.GetComponentInChildren<CampaignSummaryPresenter>(true);
+            flow.questOptions = QuestDataBuilder.LoadQuests();
             flow.finalResult = hud.GetComponentInChildren<FinalResultPresenter>(true);
             flow.pausePanel = FindDeepChild(hud.transform, "PausePanel")?.gameObject;
             flow.pauseMessage = FindDeepChild(hud.transform, "PauseMessage")?.GetComponent<TMP_Text>();

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using NutriPick.Nutrition;
+using NutriPick.Quests;
 
 namespace NutriPick.Interaction
 {
@@ -10,6 +11,8 @@ namespace NutriPick.Interaction
         public PlateSlot[] slots;
         public int minItems = 4;
         public bool requiresDrink;
+        public QuestDefinition quest;
+        public int questLevelIndex = 1;
         public bool IsLocked { get; private set; }
 
         public event Action PlateChanged;
@@ -33,6 +36,8 @@ namespace NutriPick.Interaction
         }
 
         public int Count => Foods.Count;
+
+        public QuestEvaluation Evaluation => QuestEvaluator.Evaluate(Foods, quest, questLevelIndex);
 
         private void Awake()
         {
@@ -74,18 +79,30 @@ namespace NutriPick.Interaction
                 return false;
             }
 
-            var requirement = MealRequirement.Evaluate(Foods);
-            if (!requirement.IsComplete)
+            if (slots != null && slots.Length > 0 && Count < slots.Length)
             {
-                reason = requirement.MissingReason;
+                reason = $"Tambahkan {slots.Length - Count} makanan lagi";
+                return false;
+            }
+
+            if (quest != null)
+            {
+                var evaluation = Evaluation;
+                if (!evaluation.AllPassed)
+                {
+                    reason = evaluation.MissingReason;
+                    return false;
+                }
+            }
+            else if (Count < minItems)
+            {
+                reason = $"Tambahkan {minItems - Count} makanan lagi";
                 return false;
             }
 
             reason = string.Empty;
             return true;
         }
-
-        public MealRequirementState Requirement => MealRequirement.Evaluate(Foods);
 
         public void Lock()
         {

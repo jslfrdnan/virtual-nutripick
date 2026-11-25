@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d4b5ab6cca88af4cbf0a87068b95529, type: 3}
+  m_Name: FD_ikan_cakalang
+  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.Nutrition.FoodData
+  id: ikan_cakalang
+  displayName: Ikan cakalang
+  description: Ikan laut kaya protein, vitamin D, dan lemak baik.
+  composition: 2
+  processing: 0
+  isFried: 0
+  isDrink: 0
+  healthyOverride: 0
+  calories: 130
+  protein: 22
+  carbs: 0
+  fat: 4.5
+  fiber: 0
+  addedSugar: 0
+  sodium: 90
+  vitaminA: 10
+  vitaminC: 0
+  vitaminD: 5.5
+  calcium: 30
+  iron: 1.2
+  portionLabel: 100 g
+  proteinType: 0
+  hasProteinType: 1
+  icon: {fileID: 21300000, guid: e997cb82d8ab6fa4a8706f626126d42c, type: 3}
+  prefab: {fileID: 7391263166700314708, guid: 70aeadc4730d30b428034e32e2230f35, type: 3}

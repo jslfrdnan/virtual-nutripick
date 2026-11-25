@@ -27,6 +27,11 @@ MonoBehaviour:
   fiber: 2
   addedSugar: 8
   sodium: 900
+  vitaminA: 40
+  vitaminC: 2
+  vitaminD: 0.5
+  calcium: 90
+  iron: 2.5
   portionLabel: 1 buah (200 g)
   proteinType: 0
   hasProteinType: 1

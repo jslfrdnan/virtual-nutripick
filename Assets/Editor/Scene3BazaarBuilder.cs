@@ -49,17 +49,12 @@ namespace NutriPick.Editor
         private static readonly Vector3 JunkStandPosition = new(-3.5f, 0f, -23f);
         private const float JunkStandYaw = -90f;
 
-        private struct FoodPair
+        private static readonly string[] StallFoodOrder =
         {
-            public readonly string first;
-            public readonly string second;
-
-            public FoodPair(string first, string second)
-            {
-                this.first = first;
-                this.second = second;
-            }
-        }
+            "nasi_putih", "telur_rebus", "tempe", "brokoli", "pisang", "tahu",
+            "wortel", "jeruk", "ubi_jalar", "ikan_cakalang", "bayam", "rendang",
+            "ayam_goreng", "telur_ceplok", "sayur_singkong", "burger", "mie_goreng", "kerupuk"
+        };
 
         private struct StallPlacement
         {
@@ -72,25 +67,6 @@ namespace NutriPick.Editor
                 this.yaw = yaw;
             }
         }
-
-        private static readonly FoodPair[] StallMenus =
-        {
-            new FoodPair("burger", "ayam_goreng"),
-            new FoodPair("burger", "telur_rebus"),
-            new FoodPair("burger", "tempe"),
-            new FoodPair("burger", "brokoli"),
-            new FoodPair("burger", "pisang"),
-            new FoodPair("ayam_goreng", "telur_rebus"),
-            new FoodPair("ayam_goreng", "tempe"),
-            new FoodPair("ayam_goreng", "brokoli"),
-            new FoodPair("ayam_goreng", "pisang"),
-            new FoodPair("telur_rebus", "tempe"),
-            new FoodPair("telur_rebus", "brokoli"),
-            new FoodPair("telur_rebus", "pisang"),
-            new FoodPair("tempe", "brokoli"),
-            new FoodPair("tempe", "pisang"),
-            new FoodPair("brokoli", "pisang")
-        };
 
         private static readonly Vector3[] ClosedStandPositions =
         {
@@ -279,6 +255,20 @@ namespace NutriPick.Editor
             level.displayName = "Level 3 - Bazaar Flamboyant";
             level.settingDescription = "Makan malam di bazar Flamboyant";
             level.learningFocus = new[] { "variasi", "pilihan seimbang" };
+
+            var foods = new List<FoodData>();
+            foreach (var id in StallFoodOrder)
+            {
+                var food = AssetDatabase.LoadAssetAtPath<FoodData>($"Assets/ScriptableObjects/Food/FD_{id}.asset");
+                if (food != null)
+                    foods.Add(food);
+                else
+                    Debug.LogError($"[Scene3Bazaar] Missing food asset for {id}.");
+            }
+
+            level.foodPool = foods.ToArray();
+            level.minItems = 4;
+            level.requiresDrink = false;
             EditorUtility.SetDirty(level);
         }
 
@@ -388,7 +378,9 @@ namespace NutriPick.Editor
             flow.mealStatus = hud.GetComponentInChildren<MealStatusBarPresenter>(true);
             flow.prompt = hud.GetComponentInChildren<InteractionPrompt>(true);
             flow.infoCard = hud.GetComponentInChildren<FoodInfoCardPresenter>(true);
-            flow.report = hud.GetComponentInChildren<HealthReportPresenter>(true);
+            flow.questSelect = hud.GetComponentInChildren<QuestSelectPresenter>(true);
+            flow.campaignSummary = hud.GetComponentInChildren<CampaignSummaryPresenter>(true);
+            flow.questOptions = QuestDataBuilder.LoadQuests();
             flow.finalResult = hud.GetComponentInChildren<FinalResultPresenter>(true);
             flow.pausePanel = FindDeepChild(hud.transform, "PausePanel")?.gameObject;
             flow.pauseMessage = FindDeepChild(hud.transform, "PauseMessage")?.GetComponent<TMP_Text>();
@@ -543,10 +535,11 @@ namespace NutriPick.Editor
             var stands = new List<FoodStand>();
             for (int i = 0; i < placements.Count; i++)
             {
-                var menu = StallMenus[i % StallMenus.Length];
-                if (!byId.TryGetValue(menu.first, out var first) || !byId.TryGetValue(menu.second, out var second))
+                string firstId = StallFoodOrder[(i * 2) % StallFoodOrder.Length];
+                string secondId = StallFoodOrder[(i * 2 + 1) % StallFoodOrder.Length];
+                if (!byId.TryGetValue(firstId, out var first) || !byId.TryGetValue(secondId, out var second))
                 {
-                    Debug.LogError($"[Scene3Bazaar] Missing stall food {menu.first}/{menu.second}.");
+                    Debug.LogError($"[Scene3Bazaar] Missing stall food {firstId}/{secondId}.");
                     continue;
                 }
 

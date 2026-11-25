@@ -37,6 +37,7 @@ namespace NutriPick.Tests
             Assert.IsNotNull(flow, "LevelFlowController missing.");
             Assert.IsNotNull(plate, "PlateController missing.");
             Assert.IsNotNull(finalResult, "FinalResultPresenter missing.");
+            TestQuestUtility.StartLevel(flow);
 
             var original = flow.level;
             var temp = ScriptableObject.CreateInstance<LevelDefinition>();
@@ -61,7 +62,7 @@ namespace NutriPick.Tests
             Assert.AreEqual(temp.foodPool[0].id, grid.Cards[0].FoodId, "Card order should follow the swapped level pool.");
 
             var foods = Object.FindObjectsByType<FoodItem>(FindObjectsSortMode.None);
-            var picks = new[] { "burger", "rendang", "brokoli", "pisang" }
+            var picks = new[] { "tahu", "telur_rebus", "pisang", "brokoli" }
                 .Select(id => foods.First(food => food.data != null && food.data.id == id))
                 .ToArray();
             for (int i = 0; i < picks.Length; i++)

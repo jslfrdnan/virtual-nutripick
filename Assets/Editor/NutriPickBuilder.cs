@@ -706,20 +706,6 @@ namespace NutriPick.Editor
             info.fullRoot = full;
             full.SetActive(false);
 
-            var reportController = CreateUIRoot("ReportController", hud.transform, Zero, One, Center, Vector2.zero, Vector2.zero);
-            var report = reportController.AddComponent<HealthReportPresenter>();
-            report.root = CreateReport(hud.transform, out var reportRefs);
-            report.titleText = reportRefs.title;
-            report.scoreText = reportRefs.score;
-            report.bandText = reportRefs.band;
-            report.strengthsText = reportRefs.strengths;
-            report.improvementText = reportRefs.improvement;
-            report.dimensionsText = reportRefs.dimensions;
-            report.warningText = reportRefs.warning;
-            report.disclaimerText = reportRefs.disclaimer;
-            report.retryButton = reportRefs.retry;
-            report.nextButton = reportRefs.next;
-
             var pauseController = CreateUIRoot("PauseController", hud.transform, Zero, One, Center, Vector2.zero, Vector2.zero);
             CreatePause(hud.transform);
 
@@ -728,44 +714,6 @@ namespace NutriPick.Editor
             var prefab = PrefabUtility.SaveAsPrefabAsset(hud, $"{UIPrefabFolder}/HUD.prefab");
             UnityEngine.Object.DestroyImmediate(hud);
             return prefab;
-        }
-
-        private class ReportRefs
-        {
-            public TMP_Text title;
-            public TMP_Text score;
-            public TMP_Text band;
-            public TMP_Text strengths;
-            public TMP_Text improvement;
-            public TMP_Text dimensions;
-            public TMP_Text warning;
-            public TMP_Text disclaimer;
-            public Button retry;
-            public Button next;
-        }
-
-        private static GameObject CreateReport(Transform parent, out ReportRefs refs)
-        {
-            var root = CreateModal(parent, "ReportRoot", new Vector2(1200f, 760f));
-            var panel = FindDeepChild(root.transform, "Panel");
-            var ink = new Color(0.13f, 0.13f, 0.13f, 1f);
-            var muted = new Color(0.38f, 0.38f, 0.38f, 1f);
-            var red = new Color(0.78f, 0.16f, 0.16f, 1f);
-
-            refs = new ReportRefs
-            {
-                title = AddText(panel, "Title", "Laporan Level", 44, ink, TextAlignmentOptions.Center, new Vector2(0f, 310f), new Vector2(1000f, 60f)),
-                score = AddText(panel, "Score", "0", 72, ink, TextAlignmentOptions.Center, new Vector2(-400f, 190f), new Vector2(200f, 100f)),
-                band = AddText(panel, "Band", "Cukup", 28, muted, TextAlignmentOptions.Center, new Vector2(-400f, 120f), new Vector2(240f, 40f)),
-                strengths = AddText(panel, "Strengths", string.Empty, 24, ink, TextAlignmentOptions.TopLeft, new Vector2(100f, 180f), new Vector2(700f, 140f)),
-                improvement = AddText(panel, "Improvement", string.Empty, 24, ink, TextAlignmentOptions.TopLeft, new Vector2(100f, 50f), new Vector2(700f, 60f)),
-                dimensions = AddText(panel, "Dimensions", string.Empty, 22, ink, TextAlignmentOptions.TopLeft, new Vector2(0f, -80f), new Vector2(1000f, 160f)),
-                warning = AddText(panel, "Warning", string.Empty, 22, red, TextAlignmentOptions.Center, new Vector2(0f, -190f), new Vector2(1000f, 40f)),
-                disclaimer = AddText(panel, "Disclaimer", "Ini adalah game edukasi, bukan nasihat medis. Nilai gizi adalah perkiraan.", 18, muted, TextAlignmentOptions.Center, new Vector2(0f, -240f), new Vector2(1000f, 40f)),
-                retry = CreateButton(panel, "RetryButton", "Ulangi level", new Vector2(-250f, -320f), new Vector2(220f, 56f)),
-                next = CreateButton(panel, "NextButton", "Lanjut", new Vector2(0f, -320f), new Vector2(220f, 56f))
-            };
-            return root;
         }
 
         private static GameObject CreatePause(Transform parent)
@@ -943,7 +891,9 @@ namespace NutriPick.Editor
             flow.reticle = player.GetComponent<ReticleInteractor>();
             flow.prompt = hud.GetComponentInChildren<InteractionPrompt>(true);
             flow.infoCard = hud.GetComponentInChildren<FoodInfoCardPresenter>(true);
-            flow.report = hud.GetComponentInChildren<HealthReportPresenter>(true);
+            flow.questSelect = hud.GetComponentInChildren<QuestSelectPresenter>(true);
+            flow.campaignSummary = hud.GetComponentInChildren<CampaignSummaryPresenter>(true);
+            flow.questOptions = QuestDataBuilder.LoadQuests();
             flow.pausePanel = FindDeepChild(hud.transform, "PausePanel")?.gameObject;
             flow.pauseMessage = FindDeepChild(hud.transform, "PauseMessage")?.GetComponent<TMP_Text>();
             flow.pauseResumeButton = FindDeepChild(hud.transform, "ResumeButton")?.GetComponent<Button>();

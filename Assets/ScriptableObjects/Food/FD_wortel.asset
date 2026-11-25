@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d4b5ab6cca88af4cbf0a87068b95529, type: 3}
+  m_Name: FD_wortel
+  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.Nutrition.FoodData
+  id: wortel
+  displayName: Wortel
+  description: Sayur oranye kaya vitamin A untuk mata dan kulit.
+  composition: 1
+  processing: 0
+  isFried: 0
+  isDrink: 0
+  healthyOverride: 0
+  calories: 41
+  protein: 0.9
+  carbs: 10
+  fat: 0.2
+  fiber: 2.8
+  addedSugar: 0
+  sodium: 70
+  vitaminA: 830
+  vitaminC: 6
+  vitaminD: 0
+  calcium: 33
+  iron: 0.3
+  portionLabel: 100 g
+  proteinType: 0
+  hasProteinType: 0
+  icon: {fileID: 21300000, guid: 9f17da2f3174d3d468777386f3254e0b, type: 3}
+  prefab: {fileID: 6586459886099006569, guid: 110c4578495feb44d904b6fccab9412d, type: 3}

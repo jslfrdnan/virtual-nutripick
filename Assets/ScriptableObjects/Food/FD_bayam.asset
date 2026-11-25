@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d4b5ab6cca88af4cbf0a87068b95529, type: 3}
+  m_Name: FD_bayam
+  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.Nutrition.FoodData
+  id: bayam
+  displayName: Bayam
+  description: Sayur hijau sumber zat besi, kalsium, dan vitamin A.
+  composition: 1
+  processing: 0
+  isFried: 0
+  isDrink: 0
+  healthyOverride: 0
+  calories: 23
+  protein: 2.9
+  carbs: 3.6
+  fat: 0.4
+  fiber: 2.2
+  addedSugar: 0
+  sodium: 80
+  vitaminA: 290
+  vitaminC: 28
+  vitaminD: 0
+  calcium: 99
+  iron: 2.7
+  portionLabel: 100 g
+  proteinType: 0
+  hasProteinType: 0
+  icon: {fileID: 21300000, guid: 93b84fafb9df785499b7e0a0fecbf183, type: 3}
+  prefab: {fileID: 4225755552850297334, guid: 97d78091cfdb2c84bb3296c29c1f4c07, type: 3}

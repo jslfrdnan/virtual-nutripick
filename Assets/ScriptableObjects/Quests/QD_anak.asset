@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f09ff4ff74c558945b67fb2f99a1ae4d, type: 3}
+  m_Name: QD_anak
+  m_EditorClassIdentifier: NutriPick.Runtime::NutriPick.Quests.QuestDefinition
+  id: anak
+  displayName: Anak-anak
+  ageRange: 7-9 tahun
+  description: 'Masa pertumbuhan: kalsium, vitamin D, protein, dan vitamin A.'
+  group: 0
+  dailyAkg:
+    calories: 1850
+    protein: 45
+    carbohydrate: 280
+    fat: 60
+    fiber: 26
+    addedSugar: 25
+    sodium: 1200
+    vitaminA: 600
+    vitaminC: 45
+    vitaminD: 15
+    calcium: 1000
+    iron: 10
+  levels:
+  - label: Sarapan
+    requiredA: 2
+    requiredB: 8
+    targetA:
+      nutrient: 1
+      minimum: 15
+    targetB:
+      nutrient: 10
+      minimum: 330
+  - label: Makan siang
+    requiredA: 2
+    requiredB: 1
+    targetA:
+      nutrient: 7
+      minimum: 200
+    targetB:
+      nutrient: 4
+      minimum: 8
+  - label: Makan malam
+    requiredA: 2
+    requiredB: 1
+    targetA:
+      nutrient: 10
+      minimum: 330
+    targetB:
+      nutrient: 8
+      minimum: 15

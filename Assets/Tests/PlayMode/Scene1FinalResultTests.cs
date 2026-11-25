@@ -18,7 +18,7 @@ namespace NutriPick.Tests
         public void SetUp()
         {
             if (GameSession.Instance != null)
-                {
+            {
                 GameSession.Instance.ResetSession();
                 GameSession.Instance.MarkIntroSeen();
                 GameSession.Instance.sessionActive = true;
@@ -26,7 +26,7 @@ namespace NutriPick.Tests
         }
 
         [UnityTest]
-        public IEnumerator FinalResultShowsTwoPanelsAndActions()
+        public IEnumerator FinalResultShowsTasksNutritionAndActions()
         {
             SceneManager.LoadScene("MainVR");
             yield return null;
@@ -39,9 +39,10 @@ namespace NutriPick.Tests
             Assert.IsNotNull(plate, "PlateController missing.");
             Assert.IsNotNull(flow, "LevelFlowController missing.");
             Assert.IsNotNull(finalResult, "FinalResultPresenter missing.");
+            TestQuestUtility.StartLevel(flow);
             Assert.GreaterOrEqual(foods.Length, 4, "Not enough food.");
 
-            var picks = new[] { "burger", "rendang", "brokoli", "pisang" }
+            var picks = new[] { "tahu", "telur_rebus", "pisang", "brokoli" }
                 .Select(id => foods.First(food => food.data != null && food.data.id == id))
                 .ToArray();
             for (int i = 0; i < picks.Length; i++)
@@ -52,16 +53,12 @@ namespace NutriPick.Tests
 
             Assert.IsTrue(flow.IsReportOpen, "Report state should be open.");
             Assert.IsTrue(finalResult.root.activeSelf, "Final Result root should be visible.");
-            Assert.AreEqual("FINAL RESULT", finalResult.titleText.text);
-            Assert.AreEqual("LEBIH SEHAT", finalResult.balancedBadgeText.text);
-            Assert.AreEqual("PERLU DIUBAH", finalResult.lessBalancedBadgeText.text);
-            Assert.AreEqual(3, finalResult.balancedPointTexts.Length);
-            Assert.AreEqual(3, finalResult.lessBalancedPointTexts.Length);
-
-            foreach (var point in finalResult.balancedPointTexts)
-                Assert.IsFalse(string.IsNullOrWhiteSpace(point.text));
-            foreach (var point in finalResult.lessBalancedPointTexts)
-                Assert.IsFalse(string.IsNullOrWhiteSpace(point.text));
+            Assert.AreEqual("HASIL LEVEL", finalResult.titleText.text);
+            StringAssert.Contains("Anak-anak", finalResult.subtitleText.text);
+            StringAssert.Contains("[x]", finalResult.taskText.text);
+            StringAssert.Contains("PROTEIN", finalResult.taskText.text);
+            StringAssert.Contains("GIZI PIRING", finalResult.nutritionText.text);
+            StringAssert.Contains("PROTEIN:", finalResult.nutritionText.text);
 
             Assert.IsTrue(finalResult.retryButton.gameObject.activeSelf, "Retry should be visible.");
             Assert.IsTrue(finalResult.nextButton.gameObject.activeSelf, "Next should be visible.");
@@ -81,8 +78,9 @@ namespace NutriPick.Tests
             Assert.IsNotNull(plate, "PlateController missing.");
             Assert.IsNotNull(flow, "LevelFlowController missing.");
             Assert.IsNotNull(finalResult, "FinalResultPresenter missing.");
+            TestQuestUtility.StartLevel(flow);
 
-            var picks = new[] { "burger", "rendang", "brokoli", "pisang" }
+            var picks = new[] { "tahu", "telur_rebus", "pisang", "brokoli" }
                 .Select(id => foods.First(food => food.data != null && food.data.id == id))
                 .ToArray();
             for (int i = 0; i < picks.Length; i++)
