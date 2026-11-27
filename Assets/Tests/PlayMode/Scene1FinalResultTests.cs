@@ -40,9 +40,9 @@ namespace NutriPick.Tests
             Assert.IsNotNull(flow, "LevelFlowController missing.");
             Assert.IsNotNull(finalResult, "FinalResultPresenter missing.");
             TestQuestUtility.StartLevel(flow);
-            Assert.GreaterOrEqual(foods.Length, 4, "Not enough food.");
+            Assert.GreaterOrEqual(foods.Length, 5, "Not enough food.");
 
-            var picks = new[] { "tahu", "telur_rebus", "pisang", "brokoli" }
+            var picks = new[] { "tahu", "telur_rebus", "pisang", "brokoli", "nasi_putih" }
                 .Select(id => foods.First(food => food.data != null && food.data.id == id))
                 .ToArray();
             for (int i = 0; i < picks.Length; i++)
@@ -65,7 +65,7 @@ namespace NutriPick.Tests
         }
 
         [UnityTest]
-        public IEnumerator FinalResultFocusesRetryAndSupportsControllerNavigation()
+        public IEnumerator FinalResultFocusesNextAndSupportsControllerNavigation()
         {
             SceneManager.LoadScene("MainVR");
             yield return null;
@@ -80,7 +80,7 @@ namespace NutriPick.Tests
             Assert.IsNotNull(finalResult, "FinalResultPresenter missing.");
             TestQuestUtility.StartLevel(flow);
 
-            var picks = new[] { "tahu", "telur_rebus", "pisang", "brokoli" }
+            var picks = new[] { "tahu", "telur_rebus", "pisang", "brokoli", "nasi_putih" }
                 .Select(id => foods.First(food => food.data != null && food.data.id == id))
                 .ToArray();
             for (int i = 0; i < picks.Length; i++)
@@ -90,8 +90,8 @@ namespace NutriPick.Tests
             yield return new WaitForSeconds(1.2f);
 
             Assert.IsNotNull(EventSystem.current, "EventSystem missing.");
-            Assert.AreEqual(finalResult.retryButton.gameObject, EventSystem.current.currentSelectedGameObject,
-                "Retry should receive the initial controller focus.");
+            Assert.AreEqual(finalResult.nextButton.gameObject, EventSystem.current.currentSelectedGameObject,
+                "Next should receive the initial controller focus after a successful serve.");
 
             var retryNavigation = finalResult.retryButton.navigation;
             Assert.AreEqual(Navigation.Mode.Explicit, retryNavigation.mode, "Retry navigation should be explicit.");
@@ -100,6 +100,8 @@ namespace NutriPick.Tests
                 "Next left should return to Retry.");
             Assert.AreEqual(finalResult.nextButton, finalResult.retryButton.FindSelectableOnRight(),
                 "Controller right should select Next.");
+            Assert.AreEqual(finalResult.retryButton, finalResult.nextButton.FindSelectableOnLeft(),
+                "Controller left from Next should select Retry.");
 
             var colors = finalResult.retryButton.colors;
             Assert.Greater(colors.selectedColor.grayscale - colors.normalColor.grayscale, 0.15f,

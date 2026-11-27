@@ -49,7 +49,7 @@ namespace NutriPick.Tests
             level.levelIndex = 1;
             level.settingDescription = "Test";
             level.foodPool = foods;
-            level.minItems = 4;
+            level.minItems = 5;
             return level;
         }
 

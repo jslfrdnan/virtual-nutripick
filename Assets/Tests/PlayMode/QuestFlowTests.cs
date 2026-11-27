@@ -78,7 +78,7 @@ namespace NutriPick.Tests
             Assert.IsNotNull(plate, "Plate missing.");
             TestQuestUtility.StartLevel(flow);
 
-            var picks = new[] { "tahu", "brokoli", "jeruk", "pisang" }
+            var picks = new[] { "tahu", "brokoli", "jeruk", "pisang", "nasi_putih" }
                 .Select(id => foods.First(food => food.data != null && food.data.id == id))
                 .ToArray();
             for (int i = 0; i < picks.Length; i++)

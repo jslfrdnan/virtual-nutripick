@@ -40,7 +40,7 @@ namespace NutriPick.Tests
 
             var plate = Object.FindFirstObjectByType<PlateController>();
             Assert.IsNotNull(plate, "PlateController missing.");
-            Assert.AreEqual(4, plate.slots.Length, "Plate should have 4 slots.");
+            Assert.AreEqual(6, plate.slots.Length, "Plate should have 6 slots.");
 
             var flow = Object.FindFirstObjectByType<LevelFlowController>();
             Assert.IsNotNull(flow, "LevelFlowController missing.");
@@ -67,21 +67,42 @@ namespace NutriPick.Tests
             flow.StartLevel();
             yield return null;
 
-            Assert.GreaterOrEqual(foods.Length, 4, "Not enough interactive food.");
-            var picks = new[] { "tahu", "telur_rebus", "pisang", "brokoli" }
+            Assert.GreaterOrEqual(foods.Length, 5, "Not enough interactive food.");
+            var picks = new[] { "tahu", "telur_rebus", "pisang", "brokoli", "nasi_putih" }
                 .Select(id => foods.First(food => food.data != null && food.data.id == id))
                 .ToArray();
             for (int i = 0; i < picks.Length; i++)
                 Assert.IsTrue(plate.slots[i].TryPlace(picks[i]), "Could not place " + picks[i].data.id);
 
             yield return null;
-            Assert.AreEqual(4, plate.Count, "Plate should contain 4 items.");
+            Assert.AreEqual(5, plate.Count, "Plate should contain 5 items.");
             flow.TryServe();
             yield return new WaitForSeconds(1.4f);
 
             Assert.IsTrue(flow.IsReportOpen, "Report did not open.");
             Assert.IsNotNull(GameSession.Instance.GetResult(1), "Level 1 result was not recorded.");
             Assert.IsTrue(flow.finalResult.root.activeSelf, "Result panel is not active.");
+        }
+
+        [UnityTest]
+        public IEnumerator MainVRPlateAcceptsSixFoods()
+        {
+            SceneManager.LoadScene("MainVR");
+            yield return null;
+            yield return null;
+
+            var foods = Object.FindObjectsByType<FoodItem>(FindObjectsSortMode.None);
+            var plate = Object.FindFirstObjectByType<PlateController>();
+            Assert.IsNotNull(plate, "No plate.");
+            Assert.AreEqual(6, plate.slots.Length, "Plate should have 6 slots.");
+
+            var picks = new[] { "tahu", "telur_rebus", "pisang", "brokoli", "nasi_putih", "jeruk" }
+                .Select(id => foods.First(food => food.data != null && food.data.id == id))
+                .ToArray();
+            for (int i = 0; i < picks.Length; i++)
+                Assert.IsTrue(plate.slots[i].TryPlace(picks[i]), "Could not place " + picks[i].data.id);
+
+            Assert.AreEqual(6, plate.Count, "Plate should accept all 6 foods.");
         }
 
         [UnityTest]
@@ -143,7 +164,7 @@ namespace NutriPick.Tests
             Assert.AreEqual(3, flow.level.levelIndex);
             Assert.IsFalse(flow.level.requiresDrink, "Level 3 should not require a drink.");
             Assert.IsNotNull(flow.plate, "Plate missing.");
-            Assert.AreEqual(4, flow.plate.slots.Length);
+            Assert.AreEqual(6, flow.plate.slots.Length);
         }
     }
 }

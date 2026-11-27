@@ -267,7 +267,7 @@ namespace NutriPick.Editor
             }
 
             level.foodPool = foods.ToArray();
-            level.minItems = 4;
+            level.minItems = 5;
             level.requiresDrink = false;
             EditorUtility.SetDirty(level);
         }

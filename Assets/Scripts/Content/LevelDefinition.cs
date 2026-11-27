@@ -18,7 +18,7 @@ namespace NutriPick.Content
 
         [Header("Content")]
         public FoodData[] foodPool;
-        public int minItems = 4;
+        public int minItems = 5;
         public bool requiresDrink;
         public int minimumStands = 1;
 
@@ -97,9 +97,9 @@ namespace NutriPick.Content
                 return false;
             }
 
-            if (minItems < 3 || minItems > 4 || minItems > foodPool.Length)
+            if (minItems < 5 || minItems > 6 || minItems > foodPool.Length)
             {
-                error = "minItems must be 3-4 and no larger than the pool";
+                error = "minItems must be 5-6 and no larger than the pool";
                 return false;
             }
 

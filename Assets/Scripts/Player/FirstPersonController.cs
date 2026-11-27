@@ -39,8 +39,13 @@ namespace NutriPick.Player
 
         private void Start()
         {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            // LevelFlow disables control while the Start Guide / quest menu is open.
+            // Do not re-lock the cursor in that case, otherwise the menu cannot be clicked.
+            if (controlEnabled)
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
         }
 
         private void OnDisable()

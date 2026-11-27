@@ -55,7 +55,7 @@ namespace NutriPick.Tests
             var flow = Object.FindFirstObjectByType<LevelFlowController>();
             var foods = Object.FindObjectsByType<FoodItem>(FindObjectsSortMode.None);
             Assert.IsNotNull(plate, "PlateController missing.");
-            Assert.GreaterOrEqual(foods.Length, 4, "Not enough food.");
+            Assert.GreaterOrEqual(foods.Length, 5, "Not enough food.");
             TestQuestUtility.StartLevel(flow);
 
             var grid = Object.FindFirstObjectByType<FoodCardGridPresenter>();
@@ -70,7 +70,7 @@ namespace NutriPick.Tests
 
             StringAssert.Contains("ANAK-ANAK", status.statusLabel.text);
             StringAssert.Contains("SARAPAN", status.statusLabel.text);
-            var picks = new[] { "tahu", "telur_rebus", "pisang", "brokoli" }
+            var picks = new[] { "tahu", "telur_rebus", "pisang", "brokoli", "nasi_putih" }
                 .Select(id => foods.First(food => food.data != null && food.data.id == id))
                 .ToArray();
             for (int i = 0; i < picks.Length; i++)

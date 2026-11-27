@@ -24,7 +24,7 @@ namespace NutriPick.Tests
         }
 
         [UnityTest]
-        public IEnumerator FourFoodsAreRequiredBeforeServe()
+        public IEnumerator FiveFoodsAreRequiredBeforeServe()
         {
             SceneManager.LoadScene("MainVR");
             yield return null;
@@ -40,6 +40,7 @@ namespace NutriPick.Tests
             var pisang = foods.First(food => food.data != null && food.data.id == "pisang");
             var telur = foods.First(food => food.data != null && food.data.id == "telur_rebus");
             var brokoli = foods.First(food => food.data != null && food.data.id == "brokoli");
+            var nasi = foods.First(food => food.data != null && food.data.id == "nasi_putih");
 
             Assert.IsTrue(plate.slots[0].TryPlace(tahu));
             Assert.IsTrue(plate.slots[1].TryPlace(pisang));
@@ -47,11 +48,17 @@ namespace NutriPick.Tests
             yield return null;
 
             Assert.IsFalse(plate.CanServe(out string threeItemReason), "Three items must not be serveable.");
-            StringAssert.Contains("Tambahkan 1 makanan", threeItemReason);
+            StringAssert.Contains("Tambahkan 2 makanan", threeItemReason);
 
             Assert.IsTrue(plate.slots[3].TryPlace(brokoli));
             yield return null;
-            Assert.IsTrue(plate.CanServe(out string fourItemReason), fourItemReason);
+
+            Assert.IsFalse(plate.CanServe(out string fourItemReason), "Four items must not be serveable.");
+            StringAssert.Contains("Tambahkan 1 makanan", fourItemReason);
+
+            Assert.IsTrue(plate.slots[4].TryPlace(nasi));
+            yield return null;
+            Assert.IsTrue(plate.CanServe(out string fiveItemReason), fiveItemReason);
         }
 
         [UnityTest]
@@ -71,11 +78,13 @@ namespace NutriPick.Tests
             var telur = foods.First(food => food.data != null && food.data.id == "telur_rebus");
             var brokoli = foods.First(food => food.data != null && food.data.id == "brokoli");
             var wortel = foods.First(food => food.data != null && food.data.id == "wortel");
+            var nasi = foods.First(food => food.data != null && food.data.id == "nasi_putih");
 
             Assert.IsTrue(plate.slots[0].TryPlace(tahu));
             Assert.IsTrue(plate.slots[1].TryPlace(telur));
             Assert.IsTrue(plate.slots[2].TryPlace(brokoli));
             Assert.IsTrue(plate.slots[3].TryPlace(wortel));
+            Assert.IsTrue(plate.slots[4].TryPlace(nasi));
             yield return null;
 
             Assert.IsFalse(plate.CanServe(out string reason), "A plate without fruit must not be serveable.");
@@ -99,11 +108,13 @@ namespace NutriPick.Tests
             var telur = foods.First(food => food.data != null && food.data.id == "telur_rebus");
             var pisang = foods.First(food => food.data != null && food.data.id == "pisang");
             var brokoli = foods.First(food => food.data != null && food.data.id == "brokoli");
+            var wortel = foods.First(food => food.data != null && food.data.id == "wortel");
 
             Assert.IsTrue(plate.slots[0].TryPlace(nasi));
             Assert.IsTrue(plate.slots[1].TryPlace(telur));
             Assert.IsTrue(plate.slots[2].TryPlace(pisang));
             Assert.IsTrue(plate.slots[3].TryPlace(brokoli));
+            Assert.IsTrue(plate.slots[4].TryPlace(wortel));
             yield return null;
 
             Assert.IsFalse(plate.CanServe(out string reason), "A low-fiber plate must not be serveable.");
@@ -111,7 +122,7 @@ namespace NutriPick.Tests
         }
 
         [UnityTest]
-        public IEnumerator HealthyFourItemPlateShowsFinalResult()
+        public IEnumerator HealthyFiveItemPlateShowsFinalResult()
         {
             SceneManager.LoadScene("MainVR");
             yield return null;
@@ -128,11 +139,13 @@ namespace NutriPick.Tests
             var pisang = foods.First(food => food.data != null && food.data.id == "pisang");
             var telur = foods.First(food => food.data != null && food.data.id == "telur_rebus");
             var brokoli = foods.First(food => food.data != null && food.data.id == "brokoli");
+            var nasi = foods.First(food => food.data != null && food.data.id == "nasi_putih");
 
             Assert.IsTrue(plate.slots[0].TryPlace(tahu));
             Assert.IsTrue(plate.slots[1].TryPlace(pisang));
             Assert.IsTrue(plate.slots[2].TryPlace(telur));
             Assert.IsTrue(plate.slots[3].TryPlace(brokoli));
+            Assert.IsTrue(plate.slots[4].TryPlace(nasi));
 
             flow.TryServe();
             yield return new WaitForSeconds(1.2f);

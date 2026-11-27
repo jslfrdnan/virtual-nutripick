@@ -26,7 +26,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f7e734dbd1d14394c8307b2572917df9, type: 2}
   - {fileID: 11400000, guid: a455b5ab9ca969044b63d7f23c19450b, type: 2}
   - {fileID: 11400000, guid: e694647bae784f14e936fea43bb999f5, type: 2}
-  minItems: 4
+  minItems: 5
   requiresDrink: 0
   minimumStands: 1
   isFinalLevel: 0

@@ -143,11 +143,20 @@ namespace NutriPick.UI
 
         private void SelectInitialButton()
         {
-            if (EventSystem.current == null || retryButton == null)
+            if (EventSystem.current == null)
+                return;
+
+            // After a successful serve, continue is the expected default action.
+            // Retry remains reachable by navigating left.
+            var target = nextButton != null && nextButton.gameObject.activeSelf
+                ? nextButton
+                : retryButton;
+
+            if (target == null)
                 return;
 
             EventSystem.current.SetSelectedGameObject(null);
-            EventSystem.current.SetSelectedGameObject(retryButton.gameObject);
+            EventSystem.current.SetSelectedGameObject(target.gameObject);
         }
 
         private static void EnsureFocusHighlight(Button button)

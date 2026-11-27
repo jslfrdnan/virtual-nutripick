@@ -9,7 +9,7 @@ namespace NutriPick.Interaction
     public class PlateController : MonoBehaviour
     {
         public PlateSlot[] slots;
-        public int minItems = 4;
+        public int minItems = 5;
         public bool requiresDrink;
         public QuestDefinition quest;
         public int questLevelIndex = 1;
@@ -79,9 +79,13 @@ namespace NutriPick.Interaction
                 return false;
             }
 
-            if (slots != null && slots.Length > 0 && Count < slots.Length)
+            int required = slots != null && slots.Length > 0
+                ? Mathf.Clamp(minItems, 1, slots.Length)
+                : Mathf.Max(1, minItems);
+
+            if (Count < required)
             {
-                reason = $"Tambahkan {slots.Length - Count} makanan lagi";
+                reason = $"Tambahkan {required - Count} makanan lagi";
                 return false;
             }
 

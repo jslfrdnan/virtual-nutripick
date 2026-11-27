@@ -55,6 +55,8 @@ namespace NutriPick.Flow
         private bool isServing;
         private bool disconnectPaused;
         private bool levelStarted;
+        private string serveHint;
+        private bool serveHintDirty = true;
 
         private void Start()
         {
@@ -202,8 +204,15 @@ namespace NutriPick.Flow
 
             plate.quest = quest;
             plate.questLevelIndex = level != null ? level.levelIndex : 1;
-            plate.minItems = level != null ? level.minItems : 4;
+            plate.minItems = level != null ? level.minItems : 5;
             plate.requiresDrink = level != null && level.requiresDrink;
+            InvalidateServeHint();
+        }
+
+        private void InvalidateServeHint()
+        {
+            serveHintDirty = true;
+            serveHint = null;
         }
 
         private QuestDefinition ResolveDefaultQuest()
@@ -445,6 +454,7 @@ namespace NutriPick.Flow
 
         private void OnPlateChanged()
         {
+            InvalidateServeHint();
             RefreshPreview();
         }
 
@@ -481,10 +491,10 @@ namespace NutriPick.Flow
             if (isServing || IsReportOpen || plate == null)
                 return;
 
-            if (!plate.CanServe(out var reason))
+            if (!plate.CanServe(out _))
             {
                 if (prompt != null)
-                    prompt.Show(reason);
+                    prompt.Show(GetServeReason());
                 return;
             }
 
@@ -651,7 +661,22 @@ namespace NutriPick.Flow
         {
             if (plate == null)
                 return "A: Sajikan";
-            return plate.CanServe(out var reason) ? "A: Sajikan" : reason;
+
+            if (plate.CanServe(out var reason))
+            {
+                InvalidateServeHint();
+                return "A: Sajikan";
+            }
+
+            if (serveHintDirty || string.IsNullOrEmpty(serveHint))
+            {
+                serveHint = QuestHintBuilder.Build(plate.Evaluation, level, plate.Foods);
+                if (string.IsNullOrWhiteSpace(serveHint))
+                    serveHint = reason;
+                serveHintDirty = false;
+            }
+
+            return serveHint;
         }
 
         public void PlayPickup()

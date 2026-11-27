@@ -51,7 +51,7 @@ namespace NutriPick.Tests
         }
 
         [UnityTest]
-        public IEnumerator ServeFourFoodsShowsReport()
+        public IEnumerator ServeFiveFoodsShowsReport()
         {
             SceneManager.LoadScene("MainVR");
             yield return null;
@@ -63,15 +63,15 @@ namespace NutriPick.Tests
             Assert.IsNotNull(plate, "PlateController missing.");
             Assert.IsNotNull(flow, "LevelFlowController missing.");
             TestQuestUtility.StartLevel(flow);
-            Assert.GreaterOrEqual(foods.Length, 4, "Not enough food for the test.");
+            Assert.GreaterOrEqual(foods.Length, 5, "Not enough food for the test.");
 
-            var picks = new[] { "tahu", "telur_rebus", "pisang", "brokoli" }
+            var picks = new[] { "tahu", "telur_rebus", "pisang", "brokoli", "nasi_putih" }
                 .Select(id => foods.First(food => food.data != null && food.data.id == id))
                 .ToArray();
             for (int i = 0; i < picks.Length; i++)
                 Assert.IsTrue(plate.slots[i].TryPlace(picks[i]), "Could not place " + picks[i].data.id);
 
-            Assert.AreEqual(4, plate.Count);
+            Assert.AreEqual(5, plate.Count);
             flow.TryServe();
             yield return new WaitForSeconds(1.2f);
 

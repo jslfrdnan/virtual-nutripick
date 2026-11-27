@@ -22,22 +22,23 @@ namespace NutriPick.Editor
 
             var root = new GameObject("ServingPlate");
             var controller = root.AddComponent<PlateController>();
-            controller.minItems = 4;
+            controller.minItems = 5;
             controller.requiresDrink = false;
 
             var visual = (GameObject)PrefabUtility.InstantiatePrefab(plateModel, root.transform);
             visual.name = "PlateVisual";
             visual.transform.localPosition = Vector3.zero;
             visual.transform.localRotation = Quaternion.Euler(-90f, 0f, 0f);
+            visual.transform.localScale = Vector3.one * 145f;
 
             var highlightMaterial = AssetDatabase.LoadAssetAtPath<Material>(HighlightMaterialPath);
-            var positions = new[]
+            float radius = 0.10f;
+            var positions = new Vector3[6];
+            for (int i = 0; i < positions.Length; i++)
             {
-                new Vector3(0.06f, 0.02f, 0.06f),
-                new Vector3(-0.06f, 0.02f, 0.06f),
-                new Vector3(0.06f, 0.02f, -0.06f),
-                new Vector3(-0.06f, 0.02f, -0.06f)
-            };
+                float angle = i * 60f * Mathf.Deg2Rad;
+                positions[i] = new Vector3(Mathf.Cos(angle) * radius, 0.02f, Mathf.Sin(angle) * radius);
+            }
 
             var slots = new PlateSlot[positions.Length];
             for (int i = 0; i < positions.Length; i++)

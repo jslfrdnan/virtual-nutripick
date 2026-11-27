@@ -47,7 +47,7 @@ namespace NutriPick.Tests
             temp.nextSceneName = "Level02_Warteg";
             temp.levelIndex = 1;
             temp.foodPool = original.foodPool.Reverse().ToArray();
-            temp.minItems = 4;
+            temp.minItems = 5;
             temp.requiresDrink = false;
             temp.minimumStands = 1;
             flow.RebindLevel(temp);
@@ -62,7 +62,7 @@ namespace NutriPick.Tests
             Assert.AreEqual(temp.foodPool[0].id, grid.Cards[0].FoodId, "Card order should follow the swapped level pool.");
 
             var foods = Object.FindObjectsByType<FoodItem>(FindObjectsSortMode.None);
-            var picks = new[] { "tahu", "telur_rebus", "pisang", "brokoli" }
+            var picks = new[] { "tahu", "telur_rebus", "pisang", "brokoli", "nasi_putih" }
                 .Select(id => foods.First(food => food.data != null && food.data.id == id))
                 .ToArray();
             for (int i = 0; i < picks.Length; i++)

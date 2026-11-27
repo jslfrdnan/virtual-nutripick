@@ -47,7 +47,7 @@ namespace NutriPick.Tests
 
             var plate = Object.FindFirstObjectByType<PlateController>();
             Assert.IsNotNull(plate, "Serving plate missing.");
-            Assert.AreEqual(4, plate.slots.Length, "Serving plate should have four slots.");
+            Assert.AreEqual(6, plate.slots.Length, "Serving plate should have six slots.");
             Assert.That(plate.transform.position.x, Is.EqualTo(-8.35f).Within(0.2f));
             Assert.That(plate.transform.position.y, Is.EqualTo(0.652f).Within(0.02f));
             Assert.That(plate.transform.position.z, Is.EqualTo(3.65f).Within(0.2f));
@@ -105,7 +105,7 @@ namespace NutriPick.Tests
             Assert.IsNotNull(flow, "LevelFlowController missing.");
             TestQuestUtility.StartLevel(flow);
 
-            var picks = new[] { "tahu", "brokoli", "jeruk", "pisang" }
+            var picks = new[] { "tahu", "brokoli", "jeruk", "pisang", "nasi_putih" }
                 .Select(id => foods.First(food => food.data != null && food.data.id == id))
                 .ToArray();
 
@@ -221,7 +221,7 @@ namespace NutriPick.Tests
             flow.StartLevel();
             yield return null;
 
-            var picks = new[] { "tahu", "brokoli", "jeruk", "pisang" }
+            var picks = new[] { "tahu", "brokoli", "jeruk", "pisang", "nasi_putih" }
                 .Select(id => foods.First(food => food.data.id == id))
                 .ToArray();
 
@@ -229,7 +229,7 @@ namespace NutriPick.Tests
                 Assert.IsTrue(plate.slots[i].TryPlace(picks[i]), $"Could not place {picks[i].data.id}.");
 
             yield return null;
-            Assert.AreEqual(4, plate.Count, "Plate should contain four items.");
+            Assert.AreEqual(5, plate.Count, "Plate should contain five items.");
             flow.TryServe();
             yield return new WaitForSeconds(1.4f);
 

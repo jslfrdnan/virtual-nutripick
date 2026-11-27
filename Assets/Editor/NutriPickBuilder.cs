@@ -99,10 +99,10 @@ namespace NutriPick.Editor
 
             var level1 = CreateLevel("level_01_warteg", "Level 1 — Warteg", "MainVR", "Level02_Warteg", 1,
                 "Sarapan di warteg", new[] { "rendang", "burger", "telur_rebus", "telur_ceplok", "tempe", "brokoli", "pisang", "mie_goreng" },
-                4, false, 1, false, new[] { "piring dasar", "pilih sayur dan protein" }, foods);
+                5, false, 1, false, new[] { "piring dasar", "pilih sayur dan protein" }, foods);
             var level3 = CreateLevel("level_03_bazaar", "Level 3 — Bazaar", "Level03_Bazaar", string.Empty, 3,
                 "Makan malam di bazaar", new[] { "mie_goreng", "burger", "telur_rebus", "tempe", "brokoli", "pisang" },
-                4, false, 2, true, new[] { "variasi", "pilihan seimbang" }, foods);
+                5, false, 2, true, new[] { "variasi", "pilihan seimbang" }, foods);
 
             AssetDatabase.SaveAssets();
 
