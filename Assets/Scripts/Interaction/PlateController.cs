@@ -15,7 +15,25 @@ namespace NutriPick.Interaction
         public int questLevelIndex = 1;
         public bool IsLocked { get; private set; }
 
+        public int Capacity => slots != null ? slots.Length : 0;
+
+        public int RequiredItems
+        {
+            get
+            {
+                if (slots != null && slots.Length > 0)
+                    return Mathf.Clamp(minItems, 1, slots.Length);
+
+                return Mathf.Max(1, minItems);
+            }
+        }
+
+        public float VisualScale { get; private set; } = 1f;
+
         public event Action PlateChanged;
+
+        private Transform plateVisual;
+        private Vector3 plateVisualBaseScale;
 
         public IReadOnlyList<FoodData> Foods
         {
@@ -44,6 +62,10 @@ namespace NutriPick.Interaction
             if (slots == null || slots.Length == 0)
                 slots = GetComponentsInChildren<PlateSlot>(true);
 
+            plateVisual = transform.Find("PlateVisual");
+            if (plateVisual != null)
+                plateVisualBaseScale = plateVisual.localScale;
+
             foreach (var slot in slots)
             {
                 if (slot == null)
@@ -52,6 +74,16 @@ namespace NutriPick.Interaction
                 slot.plate = this;
                 slot.Changed += OnSlotChanged;
             }
+        }
+
+        public void SetVisualScale(float scale)
+        {
+            if (scale <= 0f)
+                scale = 1f;
+
+            VisualScale = scale;
+            if (plateVisual != null && plateVisualBaseScale != Vector3.zero)
+                plateVisual.localScale = plateVisualBaseScale * scale;
         }
 
         private void OnDestroy()
@@ -79,9 +111,7 @@ namespace NutriPick.Interaction
                 return false;
             }
 
-            int required = slots != null && slots.Length > 0
-                ? Mathf.Clamp(minItems, 1, slots.Length)
-                : Mathf.Max(1, minItems);
+            int required = RequiredItems;
 
             if (Count < required)
             {
@@ -98,9 +128,9 @@ namespace NutriPick.Interaction
                     return false;
                 }
             }
-            else if (Count < minItems)
+            else if (Count < RequiredItems)
             {
-                reason = $"Tambahkan {minItems - Count} makanan lagi";
+                reason = $"Tambahkan {RequiredItems - Count} makanan lagi";
                 return false;
             }
 

@@ -17,6 +17,8 @@ MonoBehaviour:
   ageRange: 7-9 tahun
   description: 'Masa pertumbuhan: kalsium, vitamin D, protein, dan vitamin A.'
   group: 0
+  plateMinItems: 4
+  plateScale: 0.8
   dailyAkg:
     calories: 1850
     protein: 45
@@ -36,25 +38,25 @@ MonoBehaviour:
     requiredB: 8
     targetA:
       nutrient: 1
-      minimum: 15
+      minimum: 13
     targetB:
       nutrient: 10
-      minimum: 330
+      minimum: 280
   - label: Makan siang
     requiredA: 2
     requiredB: 1
     targetA:
       nutrient: 7
-      minimum: 200
+      minimum: 170
     targetB:
       nutrient: 4
-      minimum: 8
+      minimum: 7
   - label: Makan malam
     requiredA: 2
     requiredB: 1
     targetA:
       nutrient: 10
-      minimum: 330
+      minimum: 280
     targetB:
       nutrient: 8
-      minimum: 15
+      minimum: 13

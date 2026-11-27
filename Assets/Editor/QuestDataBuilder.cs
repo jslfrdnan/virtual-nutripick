@@ -94,12 +94,15 @@ namespace NutriPick.Editor
                 new[]
                 {
                     Level("Sarapan", FoodCompositionCategory.Protein, FoodCompositionCategory.Fruit,
-                        NutrientType.Protein, 15f, NutrientType.Calcium, 330f),
+                        NutrientType.Protein, 13f, NutrientType.Calcium, 280f),
                     Level("Makan siang", FoodCompositionCategory.Protein, FoodCompositionCategory.Vegetable,
-                        NutrientType.VitaminA, 200f, NutrientType.Fiber, 8f),
+                        NutrientType.VitaminA, 170f, NutrientType.Fiber, 7f),
                     Level("Makan malam", FoodCompositionCategory.Protein, FoodCompositionCategory.Vegetable,
-                        NutrientType.Calcium, 330f, NutrientType.VitaminC, 15f)
+                        NutrientType.Calcium, 280f, NutrientType.VitaminC, 13f)
                 });
+            anak.plateMinItems = 4;
+            anak.plateScale = 0.8f;
+            EditorUtility.SetDirty(anak);
 
             var dewasa = CreateQuest(
                 "dewasa",
@@ -170,6 +173,8 @@ namespace NutriPick.Editor
             quest.ageRange = ageRange;
             quest.description = description;
             quest.group = group;
+            quest.plateMinItems = 0;
+            quest.plateScale = 1f;
             quest.dailyAkg = akg;
             quest.levels = levels;
             EditorUtility.SetDirty(quest);

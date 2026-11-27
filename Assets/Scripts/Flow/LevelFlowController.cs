@@ -112,11 +112,7 @@ namespace NutriPick.Flow
                 carrier.Changed += RefreshPreview;
 
             if (plate != null)
-            {
-                plate.minItems = level.minItems;
-                plate.requiresDrink = level.requiresDrink;
                 plate.PlateChanged += OnPlateChanged;
-            }
 
             if (serveStation != null)
                 serveStation.onServe.AddListener(TryServe);
@@ -204,9 +200,18 @@ namespace NutriPick.Flow
 
             plate.quest = quest;
             plate.questLevelIndex = level != null ? level.levelIndex : 1;
-            plate.minItems = level != null ? level.minItems : 5;
+            plate.minItems = ResolvePlateMinItems();
             plate.requiresDrink = level != null && level.requiresDrink;
+            plate.SetVisualScale(quest != null ? quest.plateScale : 1f);
             InvalidateServeHint();
+        }
+
+        private int ResolvePlateMinItems()
+        {
+            if (quest != null && quest.plateMinItems > 0)
+                return quest.plateMinItems;
+
+            return level != null ? level.minItems : 5;
         }
 
         private void InvalidateServeHint()
@@ -470,7 +475,7 @@ namespace NutriPick.Flow
                     foods.Add(food);
             }
 
-            bool hasRoom = plate == null || plate.slots == null || plate.Count < plate.slots.Length;
+            bool hasRoom = plate == null || plate.Count < plate.Capacity;
             if (hasRoom && carrier != null && carrier.Current != null && carrier.Current.data != null)
                 foods.Add(carrier.Current.data);
 
@@ -670,7 +675,8 @@ namespace NutriPick.Flow
 
             if (serveHintDirty || string.IsNullOrEmpty(serveHint))
             {
-                serveHint = QuestHintBuilder.Build(plate.Evaluation, level, plate.Foods);
+                serveHint = QuestHintBuilder.Build(
+                    plate.Evaluation, level, plate.Foods, plate.RequiredItems);
                 if (string.IsNullOrWhiteSpace(serveHint))
                     serveHint = reason;
                 serveHintDirty = false;

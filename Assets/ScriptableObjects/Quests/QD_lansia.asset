@@ -17,6 +17,8 @@ MonoBehaviour:
   ageRange: 60-69 tahun
   description: 'Menjaga kekuatan tulang dan otot: protein, kalsium, vitamin D, serat.'
   group: 2
+  plateMinItems: 0
+  plateScale: 1
   dailyAkg:
     calories: 1700
     protein: 60

@@ -15,11 +15,10 @@ namespace NutriPick.Tests
             var level = LoadAsset<LevelDefinition>("Assets/ScriptableObjects/Levels/LD_Level02_Warteg.asset");
             var plate = new[]
             {
+                Food("nasi_putih"),
                 Food("ayam_goreng"),
                 Food("tempe"),
-                Food("sayur_singkong"),
-                Food("bayam"),
-                Food("ikan_cakalang")
+                Food("bayam")
             };
 
             var evaluation = QuestEvaluator.Evaluate(plate, quest, 2);
@@ -29,9 +28,10 @@ namespace NutriPick.Tests
             Assert.IsNotNull(failing);
             Assert.AreEqual("SERAT", failing.label);
 
-            var hint = QuestHintBuilder.Build(evaluation, level, plate);
+            var hint = QuestHintBuilder.Build(evaluation, level, plate, 4);
             StringAssert.Contains("SERAT", hint);
-            StringAssert.Contains("7,9", hint);
+            StringAssert.Contains("4,5", hint);
+            StringAssert.Contains("7 g", hint);
             StringAssert.Contains("Coba:", hint);
             StringAssert.Contains("Bayam", hint);
             StringAssert.Contains("Sayur singkong", hint);

@@ -2,6 +2,7 @@ using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
 using NutriPick.Interaction;
+using NutriPick.Quests;
 
 namespace NutriPick.Tests
 {
@@ -30,12 +31,38 @@ namespace NutriPick.Tests
         }
 
         [Test]
-        public void ServingPlateStillRequiresFiveItems()
+        public void ServingPlateStillRequiresFiveItemsByDefault()
         {
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(
                 "Assets/Prefabs/Interaction/ServingPlate.prefab");
             var plate = prefab.GetComponent<PlateController>();
-            Assert.AreEqual(5, plate.minItems, "Minimum items should remain five.");
+            Assert.AreEqual(5, plate.minItems, "Minimum items should remain five by default.");
+        }
+
+        [Test]
+        public void AnakQuestUsesFourItemMinimumAndSmallerPlate()
+        {
+            var quest = AssetDatabase.LoadAssetAtPath<QuestDefinition>(
+                "Assets/ScriptableObjects/Quests/QD_anak.asset");
+            Assert.IsNotNull(quest, "Anak quest missing.");
+            Assert.AreEqual(4, quest.plateMinItems, "Anak quest should require four foods.");
+            Assert.AreEqual(0.8f, quest.plateScale, 0.001f, "Anak plate should be 80% size.");
+        }
+
+        [Test]
+        public void OtherQuestsKeepFiveItemPlateAndFullSize()
+        {
+            foreach (var path in new[]
+            {
+                "Assets/ScriptableObjects/Quests/QD_dewasa.asset",
+                "Assets/ScriptableObjects/Quests/QD_lansia.asset"
+            })
+            {
+                var quest = AssetDatabase.LoadAssetAtPath<QuestDefinition>(path);
+                Assert.IsNotNull(quest, "Quest missing: " + path);
+                Assert.AreEqual(0, quest.plateMinItems, path + " should use the level minimum.");
+                Assert.AreEqual(1f, quest.plateScale, 0.001f, path + " should keep the full plate size.");
+            }
         }
     }
 }

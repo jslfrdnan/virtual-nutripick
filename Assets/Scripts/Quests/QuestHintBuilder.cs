@@ -16,7 +16,8 @@ namespace NutriPick.Quests
         public static string Build(
             QuestEvaluation evaluation,
             LevelDefinition level,
-            IReadOnlyList<FoodData> plateFoods)
+            IReadOnlyList<FoodData> plateFoods,
+            int requiredItems = 0)
         {
             if (evaluation == null || evaluation.quest == null || level == null || level.foodPool == null)
                 return string.Empty;
@@ -34,7 +35,8 @@ namespace NutriPick.Quests
             if (failing == null)
                 return string.Empty;
 
-            int required = Mathf.Clamp(level.minItems, 1, Mathf.Max(1, CountDistinct(level.foodPool)));
+            int requested = requiredItems > 0 ? requiredItems : level.minItems;
+            int required = Mathf.Clamp(requested, 1, Mathf.Max(1, CountDistinct(level.foodPool)));
             var combo = FindCombo(evaluation, level, plateFoods, failing, required);
             var builder = new StringBuilder();
             builder.Append("Task belum lengkap: ").Append(failing.label);

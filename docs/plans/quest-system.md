@@ -14,7 +14,8 @@ Pemain memilih satu kelompok di Scene 1. Pilihan berlaku untuk seluruh kampanye,
 
 ## Aturan serve
 
-- Piring selalu 4 slot dan harus terisi 4 makanan.
+- Anak-anak memakai piring 80% dengan minimum 4 makanan.
+- Dewasa dan Lansia memakai piring ukuran penuh dengan minimum 5 makanan.
 - Tiap level punya 4 task: 2 komposisi + 2 ambang gizi minimum.
 - Serve terkunci sampai keempat task lulus.
 - Natrium, gula, dan lemak tidak mengunci serve; nilainya dibandingkan dengan 1/3 AKG per level dan 100% AKG di ringkasan akhir.
@@ -53,6 +54,6 @@ Referensi: `References/Quest_Foods/`.
 
 ## Verifikasi
 
-- EditMode: 36/36
-- PlayMode: 40/40
+- EditMode: 41/41
+- PlayMode: 42/42
 - Scene validator: lulus

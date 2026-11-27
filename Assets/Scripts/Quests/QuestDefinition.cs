@@ -14,6 +14,13 @@ namespace NutriPick.Quests
         [Header("Group")]
         public QuestGroup group;
 
+        [Header("Plate Rules")]
+        [Tooltip("Minimum foods required on the serving plate. 0 uses the level's minItems.")]
+        public int plateMinItems;
+
+        [Tooltip("Visual scale of the serving plate. 1 = normal size.")]
+        [Range(0.5f, 1.5f)] public float plateScale = 1f;
+
         [Header("Daily AKG")]
         public AkgProfile dailyAkg = new AkgProfile();
 

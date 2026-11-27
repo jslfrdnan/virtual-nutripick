@@ -17,6 +17,8 @@ MonoBehaviour:
   ageRange: 19-29 tahun
   description: 'Produktivitas harian: protein, serat, vitamin C, dan zat besi.'
   group: 1
+  plateMinItems: 0
+  plateScale: 1
   dailyAkg:
     calories: 2250
     protein: 60

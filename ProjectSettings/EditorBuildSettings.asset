@@ -6,13 +6,15 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Scene 2.unity
-    guid: 99c9720ab356a0642a771bea13969a05
-  - enabled: 1
-    path: Assets/Scenes/Scene 1.unity
+    path: Assets/Scenes/MainVR.unity
     guid: 0ff241830396f64429dcdf243582a081
+  - enabled: 1
+    path: Assets/Scenes/Level02_Warteg.unity
+    guid: 002306d6e28ea2d4f9c0b51f2991dacc
+  - enabled: 1
+    path: Assets/Scenes/Level03_Bazaar.unity
+    guid: d27e88ea2ebc82b458de4d6150c29271
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 5641cc6de2f3f01468d616dc58d1f5e0, type: 2}
     com.unity.xr.openxr.settings4: {fileID: 11400000, guid: af57fda8e9fabd347959f51802fbf696, type: 2}
-  m_UseUCBPForAssetBundles: 0

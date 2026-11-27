@@ -24,7 +24,7 @@ namespace NutriPick.Tests
         }
 
         [UnityTest]
-        public IEnumerator FiveFoodsAreRequiredBeforeServe()
+        public IEnumerator KidsQuestRequiresFourFoodsBeforeServe()
         {
             SceneManager.LoadScene("MainVR");
             yield return null;
@@ -34,13 +34,20 @@ namespace NutriPick.Tests
             var flow = Object.FindFirstObjectByType<LevelFlowController>();
             var foods = Object.FindObjectsByType<FoodItem>(FindObjectsSortMode.None);
             Assert.IsNotNull(plate, "Plate missing.");
+            var plateVisual = plate.transform.Find("PlateVisual");
+            Assert.IsNotNull(plateVisual, "PlateVisual missing.");
+            var basePlateScale = plateVisual.localScale;
             TestQuestUtility.StartLevel(flow);
+
+            Assert.AreEqual(4, plate.RequiredItems, "The kids quest should require four foods.");
+            Assert.AreEqual(0.8f, plate.VisualScale, 0.001f, "The kids plate should be 80% size.");
+            Assert.AreEqual(basePlateScale.x * 0.8f, plateVisual.localScale.x, 0.01f,
+                "The kids plate visual should actually shrink.");
 
             var tahu = foods.First(food => food.data != null && food.data.id == "tahu");
             var pisang = foods.First(food => food.data != null && food.data.id == "pisang");
             var telur = foods.First(food => food.data != null && food.data.id == "telur_rebus");
             var brokoli = foods.First(food => food.data != null && food.data.id == "brokoli");
-            var nasi = foods.First(food => food.data != null && food.data.id == "nasi_putih");
 
             Assert.IsTrue(plate.slots[0].TryPlace(tahu));
             Assert.IsTrue(plate.slots[1].TryPlace(pisang));
@@ -48,17 +55,12 @@ namespace NutriPick.Tests
             yield return null;
 
             Assert.IsFalse(plate.CanServe(out string threeItemReason), "Three items must not be serveable.");
-            StringAssert.Contains("Tambahkan 2 makanan", threeItemReason);
+            StringAssert.Contains("Tambahkan 1 makanan", threeItemReason);
 
             Assert.IsTrue(plate.slots[3].TryPlace(brokoli));
             yield return null;
 
-            Assert.IsFalse(plate.CanServe(out string fourItemReason), "Four items must not be serveable.");
-            StringAssert.Contains("Tambahkan 1 makanan", fourItemReason);
-
-            Assert.IsTrue(plate.slots[4].TryPlace(nasi));
-            yield return null;
-            Assert.IsTrue(plate.CanServe(out string fiveItemReason), fiveItemReason);
+            Assert.IsTrue(plate.CanServe(out string fourItemReason), fourItemReason);
         }
 
         [UnityTest]
@@ -102,7 +104,15 @@ namespace NutriPick.Tests
             var flow = Object.FindFirstObjectByType<LevelFlowController>();
             var foods = Object.FindObjectsByType<FoodItem>(FindObjectsSortMode.None);
             Assert.IsNotNull(plate, "Plate missing.");
+            var plateVisual = plate.transform.Find("PlateVisual");
+            Assert.IsNotNull(plateVisual, "PlateVisual missing.");
+            var basePlateScale = plateVisual.localScale;
             TestQuestUtility.StartLevel(flow, "dewasa");
+
+            Assert.AreEqual(5, plate.RequiredItems, "The adult quest should still require five foods.");
+            Assert.AreEqual(1f, plate.VisualScale, 0.001f, "The adult plate should keep its full size.");
+            Assert.AreEqual(basePlateScale.x, plateVisual.localScale.x, 0.01f,
+                "The adult plate visual should keep its original size.");
 
             var nasi = foods.First(food => food.data != null && food.data.id == "nasi_putih");
             var telur = foods.First(food => food.data != null && food.data.id == "telur_rebus");

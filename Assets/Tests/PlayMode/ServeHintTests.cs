@@ -30,13 +30,15 @@ namespace NutriPick.Tests
 
             TestQuestUtility.StartLevel(flow, "anak");
 
-            string[] picks = { "ayam_goreng", "tempe", "sayur_singkong", "bayam", "ikan_cakalang" };
+            string[] picks = { "nasi_putih", "ayam_goreng", "tempe", "bayam" };
             for (int i = 0; i < picks.Length; i++)
             {
                 var item = foods.FirstOrDefault(food => food.data != null && food.data.id == picks[i]);
                 Assert.IsNotNull(item, "Missing food: " + picks[i]);
                 Assert.IsTrue(plate.slots[i].TryPlace(item), "Could not place " + picks[i]);
             }
+
+            Assert.AreEqual(4, plate.RequiredItems, "The kids quest should require four foods.");
 
             flow.TryServe();
 
@@ -46,7 +48,7 @@ namespace NutriPick.Tests
             Assert.IsTrue(prompt.root.activeSelf, "The hint prompt should be visible.");
             StringAssert.Contains("SERAT", prompt.text.text);
             StringAssert.Contains("Coba:", prompt.text.text);
-            StringAssert.Contains("7,9", prompt.text.text);
+            StringAssert.Contains("4,5", prompt.text.text);
         }
     }
 }
