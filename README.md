@@ -69,6 +69,12 @@ The project includes an editor builder that creates the ScriptableObjects, food 
 
 The Windows build is written to `Builds/Windows/NutriPick.exe`.
 
+## Referensi
+
+- Gizi, AKG, dan dasar task komposisi: `docs/references/nutrition.md`
+- Referensi visual Scene 1 (Wikimedia + lisensi): `References/Scene1_Home/sources.md`
+- Catatan desain quest: `docs/plans/quest-system.md`
+
 ## Tests
 
 - **EditMode**: 45 tests covering classification, meal evaluation, session state, level validation, campaign chain, protein types, quest evaluation, AKG warnings, quest plate rules, food-card formatting, food texture assignment, food asset quality, icon presence, and polygon budget.

@@ -57,3 +57,8 @@ Referensi: `References/Quest_Foods/`.
 - EditMode: 45/45
 - PlayMode: 42/42
 - Scene validator: lulus
+
+## Referensi
+
+- Gizi, AKG, dan dasar task: `docs/references/nutrition.md`
+- Referensi visual Scene 1: `References/Scene1_Home/sources.md`
