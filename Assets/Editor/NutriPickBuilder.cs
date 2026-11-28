@@ -656,7 +656,7 @@ namespace NutriPick.Editor
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             var scaler = hud.GetComponent<CanvasScaler>();
             scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            scaler.referenceResolution = new Vector2(1920f, 1080f);
+            scaler.referenceResolution = new Vector2(1600f, 900f);
             scaler.matchWidthOrHeight = 0.5f;
 
             var eventGo = new GameObject("EventSystem", typeof(EventSystem), typeof(InputSystemUIInputModule));

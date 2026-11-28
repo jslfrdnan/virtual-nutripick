@@ -27,6 +27,12 @@ namespace NutriPick.Editor
             }
 
             root.name = "FigmaHUD";
+            var scaler = root.GetComponent<CanvasScaler>();
+            if (scaler != null)
+            {
+                scaler.referenceResolution = new Vector2(1600f, 900f);
+                scaler.matchWidthOrHeight = 0.5f;
+            }
             var font = FindFont(root);
             var placeholder = AssetDatabase.LoadAssetAtPath<Sprite>(PlaceholderPath);
 
@@ -50,14 +56,14 @@ namespace NutriPick.Editor
             var grid = (GameObject)PrefabUtility.InstantiatePrefab(gridPrefab, root.transform);
             grid.name = "FoodCardGrid";
             var gridRect = grid.GetComponent<RectTransform>();
-            PlaceAnchored(gridRect, new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(-24f, 0f), new Vector2(420f, 760f));
+            PlaceAnchored(gridRect, new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(-24f, 55f), new Vector2(634f, 760f));
             gridRect.pivot = new Vector2(1f, 0.5f);
-            gridRect.anchoredPosition = new Vector2(-24f, 0f);
+            gridRect.anchoredPosition = new Vector2(-24f, 55f);
 
             var status = (GameObject)PrefabUtility.InstantiatePrefab(statusPrefab, root.transform);
             status.name = "StatusMakanan";
             var statusRect = status.GetComponent<RectTransform>();
-            PlaceAnchored(statusRect, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 24f), new Vector2(720f, 64f));
+            PlaceAnchored(statusRect, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 24f), new Vector2(760f, 68f));
             statusRect.pivot = new Vector2(0.5f, 0f);
             statusRect.anchoredPosition = new Vector2(0f, 24f);
 
@@ -77,7 +83,13 @@ namespace NutriPick.Editor
 
             var prompt = FindDeepChild(root.transform, "Prompt") as RectTransform;
             if (prompt != null)
+            {
                 prompt.anchoredPosition = new Vector2(0f, 120f);
+                prompt.sizeDelta = new Vector2(680f, 48f);
+                var promptText = prompt.GetComponentInChildren<TMP_Text>(true);
+                if (promptText != null)
+                    promptText.fontSize = 26f;
+            }
 
             PrefabUtility.SaveAsPrefabAsset(root, TargetHudPath);
             PrefabUtility.UnloadPrefabContents(root);
@@ -90,7 +102,7 @@ namespace NutriPick.Editor
         {
             var root = new GameObject("FoodCard", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(FoodCardView));
             var rect = root.GetComponent<RectTransform>();
-            rect.sizeDelta = new Vector2(180f, 96f);
+            rect.sizeDelta = new Vector2(190f, 100f);
 
             var background = root.GetComponent<Image>();
             background.color = new Color(1f, 1f, 1f, 0.96f);
@@ -117,20 +129,20 @@ namespace NutriPick.Editor
             view.healthAccent = accent;
 
             var iconBackground = CreateImage("IconBackground", root.transform, new Color(0.90f, 0.95f, 0.88f, 1f));
-            PlaceTopLeft(iconBackground.rectTransform, new Vector2(12f, -12f), new Vector2(56f, 56f));
+            PlaceTopLeft(iconBackground.rectTransform, new Vector2(12f, -12f), new Vector2(58f, 58f));
             iconBackground.raycastTarget = false;
 
             var icon = CreateImage("Icon", root.transform, Color.white);
-            PlaceTopLeft(icon.rectTransform, new Vector2(12f, -12f), new Vector2(56f, 56f));
+            PlaceTopLeft(icon.rectTransform, new Vector2(12f, -12f), new Vector2(58f, 58f));
             icon.preserveAspect = true;
             icon.raycastTarget = false;
             view.iconImage = icon;
 
-            view.nameText = CreateText("Name", root.transform, "Food", 18f, new Color(0.16f, 0.16f, 0.16f), TextAlignmentOptions.Left, font);
-            PlaceTopLeft(view.nameText.rectTransform, new Vector2(78f, -14f), new Vector2(92f, 26f));
+            view.nameText = CreateText("Name", root.transform, "Food", 19f, new Color(0.16f, 0.16f, 0.16f), TextAlignmentOptions.Left, font);
+            PlaceTopLeft(view.nameText.rectTransform, new Vector2(80f, -14f), new Vector2(100f, 26f));
 
-            view.categoryText = CreateText("Category", root.transform, "KARBOHIDRAT", 12f, new Color(0.18f, 0.49f, 0.20f), TextAlignmentOptions.Left, font);
-            PlaceTopLeft(view.categoryText.rectTransform, new Vector2(78f, -40f), new Vector2(92f, 18f));
+            view.categoryText = CreateText("Category", root.transform, "KARBOHIDRAT", 13f, new Color(0.18f, 0.49f, 0.20f), TextAlignmentOptions.Left, font);
+            PlaceTopLeft(view.categoryText.rectTransform, new Vector2(80f, -42f), new Vector2(100f, 18f));
 
             PrefabUtility.SaveAsPrefabAsset(root, FoodCardPath);
             Object.DestroyImmediate(root);
@@ -141,7 +153,7 @@ namespace NutriPick.Editor
         {
             var root = new GameObject("FoodCardGrid", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(FoodCardGridPresenter));
             var rect = root.GetComponent<RectTransform>();
-            rect.sizeDelta = new Vector2(420f, 760f);
+            rect.sizeDelta = new Vector2(634f, 760f);
             var background = root.GetComponent<Image>();
             background.color = new Color(0.06f, 0.08f, 0.09f, 0.78f);
             background.raycastTarget = false;
@@ -151,11 +163,11 @@ namespace NutriPick.Editor
             containerRect.SetParent(root.transform, false);
             Stretch(containerRect, 8f, 8f, 8f, 8f);
             var layout = container.AddComponent<GridLayoutGroup>();
-            layout.cellSize = new Vector2(180f, 96f);
+            layout.cellSize = new Vector2(190f, 100f);
             layout.spacing = new Vector2(12f, 12f);
             layout.padding = new RectOffset(12, 12, 12, 12);
             layout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-            layout.constraintCount = 2;
+            layout.constraintCount = 3;
             layout.childAlignment = TextAnchor.UpperCenter;
 
             var presenter = root.GetComponent<FoodCardGridPresenter>();
@@ -172,17 +184,17 @@ namespace NutriPick.Editor
         {
             var root = new GameObject("StatusMakanan", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(MealStatusBarPresenter));
             var rect = root.GetComponent<RectTransform>();
-            rect.sizeDelta = new Vector2(720f, 64f);
+            rect.sizeDelta = new Vector2(760f, 68f);
             var background = root.GetComponent<Image>();
             background.color = new Color(0.06f, 0.08f, 0.09f, 0.85f);
             background.raycastTarget = false;
 
             var presenter = root.GetComponent<MealStatusBarPresenter>();
-            presenter.statusLabel = CreateText("StatusLabel", root.transform, "ANAK-ANAK · SARAPAN", 18f, Color.white, TextAlignmentOptions.Left, font);
-            PlaceTopLeft(presenter.statusLabel.rectTransform, new Vector2(16f, -8f), new Vector2(420f, 26f));
+            presenter.statusLabel = CreateText("StatusLabel", root.transform, "ANAK-ANAK · SARAPAN", 19f, Color.white, TextAlignmentOptions.Left, font);
+            PlaceTopLeft(presenter.statusLabel.rectTransform, new Vector2(16f, -8f), new Vector2(460f, 26f));
 
-            presenter.countsLabel = CreateText("CountsLabel", root.transform, "PROTEIN [ ]  BUAH [ ]  PROTEIN 0/15 g [ ]  KALSIUM 0/330 mg [ ]", 12f, new Color(0.72f, 0.76f, 0.78f), TextAlignmentOptions.Left, font);
-            PlaceTopLeft(presenter.countsLabel.rectTransform, new Vector2(16f, -38f), new Vector2(688f, 18f));
+            presenter.countsLabel = CreateText("CountsLabel", root.transform, "PROTEIN [ ]  BUAH [ ]  PROTEIN 0/15 g [ ]  KALSIUM 0/330 mg [ ]", 13f, new Color(0.72f, 0.76f, 0.78f), TextAlignmentOptions.Left, font);
+            PlaceTopLeft(presenter.countsLabel.rectTransform, new Vector2(16f, -40f), new Vector2(728f, 20f));
 
             PrefabUtility.SaveAsPrefabAsset(root, StatusMakananPath);
             Object.DestroyImmediate(root);
@@ -201,13 +213,13 @@ namespace NutriPick.Editor
             var presenter = root.GetComponent<FinalResultPresenter>();
             presenter.root = root;
             presenter.titleText = CreateText("Title", root.transform, "HASIL LEVEL", 48f, Color.white, TextAlignmentOptions.Center, font);
-            PlaceAnchored(presenter.titleText.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 380f), new Vector2(900f, 70f));
+            PlaceAnchored(presenter.titleText.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 350f), new Vector2(900f, 70f));
 
             presenter.subtitleText = CreateText("Subtitle", root.transform, "Quest · Level", 20f, new Color(0.72f, 0.76f, 0.78f), TextAlignmentOptions.Center, font);
-            PlaceAnchored(presenter.subtitleText.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 330f), new Vector2(900f, 30f));
+            PlaceAnchored(presenter.subtitleText.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 305f), new Vector2(900f, 30f));
 
             var taskPanel = CreateImage("TaskPanel", root.transform, new Color(0.10f, 0.12f, 0.13f, 1f));
-            PlaceAnchored(taskPanel.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(-300f, -30f), new Vector2(520f, 500f));
+            PlaceAnchored(taskPanel.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(-300f, -5f), new Vector2(520f, 420f));
             taskPanel.raycastTarget = false;
 
             presenter.taskText = CreateText("TaskText", taskPanel.transform, "TASK", 20f, new Color(0.92f, 0.92f, 0.88f), TextAlignmentOptions.TopLeft, font);
@@ -215,7 +227,7 @@ namespace NutriPick.Editor
             presenter.taskText.textWrappingMode = TextWrappingModes.Normal;
 
             var nutritionPanel = CreateImage("NutritionPanel", root.transform, new Color(0.10f, 0.12f, 0.13f, 1f));
-            PlaceAnchored(nutritionPanel.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(300f, -30f), new Vector2(520f, 500f));
+            PlaceAnchored(nutritionPanel.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(300f, -5f), new Vector2(520f, 420f));
             nutritionPanel.raycastTarget = false;
 
             presenter.nutritionText = CreateText("NutritionText", nutritionPanel.transform, "GIZI PIRING", 18f, new Color(0.92f, 0.92f, 0.88f), TextAlignmentOptions.TopLeft, font);
@@ -223,20 +235,20 @@ namespace NutriPick.Editor
             presenter.nutritionText.textWrappingMode = TextWrappingModes.Normal;
 
             presenter.warningText = CreateText("Warning", root.transform, string.Empty, 16f, new Color(0.30f, 0.69f, 0.31f), TextAlignmentOptions.Center, font);
-            PlaceAnchored(presenter.warningText.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -318f), new Vector2(1000f, 44f));
+            PlaceAnchored(presenter.warningText.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -250f), new Vector2(1000f, 44f));
             presenter.warningText.textWrappingMode = TextWrappingModes.Normal;
 
             presenter.closingText = CreateText("Closing", root.transform, "PILIHAN KECIL, DAMPAK BESAR!", 22f, new Color(0.18f, 0.49f, 0.20f), TextAlignmentOptions.Center, font);
-            PlaceAnchored(presenter.closingText.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -358f), new Vector2(900f, 30f));
+            PlaceAnchored(presenter.closingText.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -288f), new Vector2(900f, 30f));
 
             presenter.disclaimerText = CreateText("Disclaimer", root.transform, "Game edukasi, bukan nasihat medis. Nilai gizi adalah perkiraan.", 12f, new Color(0.72f, 0.76f, 0.78f), TextAlignmentOptions.Center, font);
-            PlaceAnchored(presenter.disclaimerText.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -390f), new Vector2(900f, 24f));
+            PlaceAnchored(presenter.disclaimerText.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -318f), new Vector2(900f, 24f));
 
-            presenter.retryButton = CreateButton("RetryButton", root.transform, "ULANGI LEVEL", new Vector2(-160f, -440f), new Vector2(280f, 60f), new Color(0.30f, 0.69f, 0.31f), Color.white, font);
-            presenter.nextButton = CreateButton("NextButton", root.transform, "NEXT LEVEL", new Vector2(160f, -440f), new Vector2(280f, 60f), new Color(0.30f, 0.69f, 0.31f), Color.white, font);
+            presenter.retryButton = CreateButton("RetryButton", root.transform, "ULANGI LEVEL", new Vector2(-160f, -370f), new Vector2(280f, 60f), new Color(0.30f, 0.69f, 0.31f), Color.white, font);
+            presenter.nextButton = CreateButton("NextButton", root.transform, "NEXT LEVEL", new Vector2(160f, -370f), new Vector2(280f, 60f), new Color(0.30f, 0.69f, 0.31f), Color.white, font);
 
             presenter.inputHint = CreateText("InputHint", root.transform, "D-pad / left stick: pilih · A / Enter: konfirmasi", 16f, new Color(0.78f, 0.82f, 0.84f), TextAlignmentOptions.Center, font);
-            PlaceAnchored(presenter.inputHint.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -480f), new Vector2(900f, 24f));
+            PlaceAnchored(presenter.inputHint.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -415f), new Vector2(900f, 24f));
 
             ConfigureFocusHighlight(presenter.retryButton);
             ConfigureFocusHighlight(presenter.nextButton);
@@ -448,7 +460,7 @@ namespace NutriPick.Editor
 
                 var text = stats.GetComponent<TMP_Text>();
                 if (text != null)
-                    text.fontSize = 14f;
+                    text.fontSize = 15f;
             }
 
             var description = FindDeepChild(root, "FullDescription");
@@ -463,14 +475,14 @@ namespace NutriPick.Editor
 
                 var text = description.GetComponent<TMP_Text>();
                 if (text != null)
-                    text.fontSize = 13f;
+                    text.fontSize = 14f;
             }
         }
 
         private static void BuildSprintIndicator(Transform parent, TMP_FontAsset font)
         {
-            var label = CreateText("SprintIndicator", parent, "SPRINT ON", 16f, new Color(1f, 0.78f, 0.22f), TextAlignmentOptions.Left, font);
-            PlaceTopLeft(label.rectTransform, new Vector2(24f, -24f), new Vector2(180f, 24f));
+            var label = CreateText("SprintIndicator", parent, "SPRINT ON", 17f, new Color(1f, 0.78f, 0.22f), TextAlignmentOptions.Left, font);
+            PlaceTopLeft(label.rectTransform, new Vector2(24f, -24f), new Vector2(190f, 28f));
             label.gameObject.SetActive(false);
         }
 

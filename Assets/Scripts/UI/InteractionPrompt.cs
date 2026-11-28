@@ -52,13 +52,13 @@ namespace NutriPick.UI
                 root.SetActive(true);
                 var rect = root.GetComponent<RectTransform>();
                 if (rect != null)
-                    rect.sizeDelta = new Vector2(defaultRootSize.x, 112f);
+                    rect.sizeDelta = new Vector2(defaultRootSize.x, 124f);
             }
 
             if (text != null)
             {
-                text.fontSize = 17f;
-                text.rectTransform.sizeDelta = new Vector2(defaultTextSize.x, 108f);
+                text.fontSize = 18f;
+                text.rectTransform.sizeDelta = new Vector2(defaultTextSize.x, 120f);
                 text.text = message;
             }
         }
