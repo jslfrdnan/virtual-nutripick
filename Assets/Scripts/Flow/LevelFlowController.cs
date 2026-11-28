@@ -430,7 +430,7 @@ namespace NutriPick.Flow
 
             if (input.PausePressed)
             {
-                Pause(false, "Jeda");
+                Pause(false, "Permainan dijeda");
                 return;
             }
 

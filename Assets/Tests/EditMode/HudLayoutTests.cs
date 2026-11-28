@@ -18,18 +18,18 @@ namespace NutriPick.Tests
         }
 
         [Test]
-        public void FoodCardAndGridUseTheEnlargedThreeColumnLayout()
+        public void FoodCardAndGridUseTheTwoColumnLayout()
         {
             var card = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/UI/FoodCard.prefab");
             var grid = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/UI/FoodCardGrid.prefab");
             Assert.IsNotNull(card, "FoodCard prefab missing.");
             Assert.IsNotNull(grid, "FoodCardGrid prefab missing.");
 
-            Assert.AreEqual(new Vector2(190f, 100f), card.GetComponent<RectTransform>().sizeDelta);
+            Assert.AreEqual(new Vector2(180f, 82f), card.GetComponent<RectTransform>().sizeDelta);
             var layout = grid.GetComponentInChildren<GridLayoutGroup>();
             Assert.IsNotNull(layout, "GridLayoutGroup missing.");
-            Assert.AreEqual(new Vector2(190f, 100f), layout.cellSize);
-            Assert.AreEqual(3, layout.constraintCount);
+            Assert.AreEqual(new Vector2(180f, 82f), layout.cellSize);
+            Assert.AreEqual(2, layout.constraintCount);
 
             int rows = Mathf.CeilToInt(18f / layout.constraintCount);
             float height = layout.padding.top + layout.padding.bottom +
@@ -42,7 +42,28 @@ namespace NutriPick.Tests
         {
             var status = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/UI/StatusMakanan.prefab");
             Assert.IsNotNull(status, "StatusMakanan prefab missing.");
-            Assert.AreEqual(new Vector2(760f, 68f), status.GetComponent<RectTransform>().sizeDelta);
+            Assert.AreEqual(new Vector2(700f, 84f), status.GetComponent<RectTransform>().sizeDelta);
+        }
+
+        [Test]
+        public void PauseMenuButtonsStayInsideThePanel()
+        {
+            var hud = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/UI/FigmaHUD.prefab");
+            var pause = hud.transform.Find("PausePanel");
+            Assert.IsNotNull(pause, "PausePanel missing.");
+            var panel = pause.Find("Panel") as RectTransform;
+            Assert.IsNotNull(panel, "Pause panel card missing.");
+            Assert.AreEqual(new Vector2(620f, 460f), panel.sizeDelta);
+
+            foreach (var name in new[] { "ResumeButton", "HelpButton", "QuitButton" })
+            {
+                var button = panel.Find(name) as RectTransform;
+                Assert.IsNotNull(button, $"{name} missing.");
+                float top = button.anchoredPosition.y + button.sizeDelta.y * 0.5f;
+                float bottom = button.anchoredPosition.y - button.sizeDelta.y * 0.5f;
+                Assert.LessOrEqual(Mathf.Abs(top), panel.sizeDelta.y * 0.5f, $"{name} pokes above the panel.");
+                Assert.LessOrEqual(Mathf.Abs(bottom), panel.sizeDelta.y * 0.5f, $"{name} pokes below the panel.");
+            }
         }
     }
 }

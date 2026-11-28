@@ -71,7 +71,7 @@ The Windows build is written to `Builds/Windows/NutriPick.exe`.
 
 ## Tests
 
-- **EditMode**: 44 tests covering classification, meal evaluation, session state, level validation, campaign chain, protein types, quest evaluation, AKG warnings, quest plate rules, food-card formatting, food texture assignment, food asset quality, icon presence, and polygon budget.
+- **EditMode**: 45 tests covering classification, meal evaluation, session state, level validation, campaign chain, protein types, quest evaluation, AKG warnings, quest plate rules, food-card formatting, food texture assignment, food asset quality, icon presence, and polygon budget.
 - **PlayMode**: 42 tests covering quest selection, the four-task serve gate, the four-food kids plate, HUD progress, info-card micronutrients, level report, campaign summary, Scene 1 food plates/start guide/card grid/focus highlight/replication, MainVR plate-and-serve, Scene 2 Warteg display/21 portions/shophouse world/NPC cast, Scene 3 30-stall layout/120 foods/intersection/coffee shops/no drinks/NPC cast/spawn at the plate, serving plate seating, held-food follow, food portion separation, camera height, pause navigation/highlight, sprint toggle, Level 2/3 smoke tests, and gamepad/generic-joystick/keyboard input. The current run is 42 passed, 0 skipped, 0 failed.
 
 Run them from **Window → General → Test Runner**, or headlessly:

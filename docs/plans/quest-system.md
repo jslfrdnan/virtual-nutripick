@@ -54,6 +54,6 @@ Referensi: `References/Quest_Foods/`.
 
 ## Verifikasi
 
-- EditMode: 44/44
+- EditMode: 45/45
 - PlayMode: 42/42
 - Scene validator: lulus
